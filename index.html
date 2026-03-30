@@ -634,11 +634,15 @@ function renderResp(){
 
 function exportarCSV(){
   if(!allRespuestas.length){toast('Sin respuestas');return;}
-  var csv='#,Nombre,Telefono,Comercio,Estrellas,Comentario,Fecha
-';
-  allRespuestas.forEach(function(r,i){var com=(r.comentario||'').replace(/"/g,'""');csv+=[i+1,r.nombre||'Anonimo',r.telefono||'',r.comercio_code||'',r.estrellas||0,'"'+com+'"',r.fecha||''].join(',')+'
-';});
-  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='respuestas.csv';a.click();toast('CSV descargado');
+  var csv='#,Nombre,Telefono,Comercio,Estrellas,Comentario,Fecha\n';
+  allRespuestas.forEach(function(r,i){
+    var com=(r.comentario||'').split('"').join('""');
+    csv+=[i+1,r.nombre||'Anonimo',r.telefono||'',r.comercio_code||'',r.estrellas||0,'"'+com+'"',r.fecha||''].join(',')+String.fromCharCode(10);
+  });
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='respuestas.csv';a.click();
+  toast('CSV descargado');
 }
 
 function renderStats(){
