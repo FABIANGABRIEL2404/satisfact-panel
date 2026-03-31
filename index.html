@@ -484,7 +484,7 @@ async function cargarForm(code){
   var c=allClientes.find(function(x){return x.code===code;});
   if(c){set('id-nombre',c.nombre);set('id-code',c.code);}
   var lbox=document.getElementById('id-link-box');
-  if(lbox){var url=window.location.origin+'/satisfactq-encuesta/?cliente='+code;lbox.textContent=url;lbox.dataset.url=url;}
+  if(lbox){var url='https://menteactiva.com.ar/satisfactq-encuesta/?cliente='+code;lbox.textContent=url;lbox.dataset.url=url;}
   var res=await sb.from('sq_formularios').select('*').eq('comercio_code',code).single();
   var data=res.data;
   document.getElementById('f-nombre').value=data?(data.nombre||''):'';
