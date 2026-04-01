@@ -191,12 +191,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
       <div class="tb"><div class="tb-title">Respuestas</div><button class="btn" onclick="exportarCSV()">Exportar CSV</button></div>
       <div class="ct">
         <div class="fbar">
-          <select id="f-resp-cli" onchange="renderResp()" style="width:auto"><option value="">Todos</option></select>
+          <select id="f-resp-cli" onchange="renderResp()" style="width:auto"><option value="">Todos los clientes</option></select>
           <input type="text" id="f-resp-q" placeholder="Buscar..." oninput="renderResp()">
         </div>
         <div class="card"><div class="tbl">
-          <table><thead><tr><th>#</th><th>Nombre</th><th>Telefono</th><th>Comercio</th><th>Estrellas</th><th>Emocion</th><th>Comentario</th><th>Fecha</th></tr></thead>
-          <tbody id="resp-tbody"><tr><td colspan="8" class="loading">Cargando...</td></tr></tbody></table>
+          <table id="resp-table">
+            <thead id="resp-thead"><tr><th>#</th><th>Nombre</th><th>Telefono</th><th>Comercio</th><th>Estrellas</th><th>Emocion</th><th>Comentario</th><th>Fecha</th></tr></thead>
+            <tbody id="resp-tbody"><tr><td colspan="8" class="loading">Cargando...</td></tr></tbody>
+          </table>
         </div></div>
       </div>
     </div>
@@ -383,7 +385,7 @@ function iniciarApp(){
 }
 
 async function cargarTodo(){
-  await Promise.all([cargarClientes(),cargarRespuestas(),cargarCompras()]);
+  await Promise.all([cargarClientes(),cargarRespuestas(),cargarCompras(),cargarFormularios()]);
   renderDash();renderResp();renderStats();renderCompras();poblarSelects();renderFormSelector();
   if(currentUser.rol==='superadmin')cargarUsuarios();
 }
@@ -563,26 +565,95 @@ function crearQ(type,texto,opciones){
 function copiarLink(){var lb=document.getElementById('id-link-box');var url=lb&&lb.dataset.url?lb.dataset.url:'';if(!url){toast('Selecciona un cliente');return;}if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){toast('Link copiado');});else{var t=document.createElement('input');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);toast('Link copiado');}}
 function enviarWA(){var lb=document.getElementById('id-link-box');if(lb&&lb.dataset.url)window.open('https://wa.me/?text='+encodeURIComponent('Tu opinion nos importa: '+lb.dataset.url),'_blank');}
 
+var allFormularios={};
+
+async function cargarFormularios(){
+  var res=await sb.from('sq_formularios').select('*');
+  (res.data||[]).forEach(function(f){allFormularios[f.comercio_code]=f;});
+}
+
 function renderResp(){
-  var tb=document.getElementById('resp-tbody');if(!tb)return;
+  var tb=document.getElementById('resp-tbody');
+  var thead=document.getElementById('resp-thead');
+  if(!tb||!thead)return;
   var fC=(document.getElementById('f-resp-cli')||{}).value||'';
   var fQ=((document.getElementById('f-resp-q')||{}).value||'').toLowerCase();
-  var fil=allRespuestas.filter(function(r){if(fC&&r.comercio_code!==fC)return false;if(fQ&&![(r.nombre||''),(r.comentario||''),(r.comercio_code||'')].join(' ').toLowerCase().includes(fQ))return false;return true;});
+  var fil=allRespuestas.filter(function(r){
+    if(fC&&r.comercio_code!==fC)return false;
+    if(fQ&&![(r.nombre||''),(r.comentario||''),(r.comercio_code||'')].join(' ').toLowerCase().includes(fQ))return false;
+    return true;
+  });
+
+  // Get form questions for selected client
+  var preguntas=[];
+  if(fC&&allFormularios[fC]&&allFormularios[fC].preguntas){
+    preguntas=allFormularios[fC].preguntas;
+  }
+
+  // Build dynamic header
+  thead.innerHTML='';
+  var trh=document.createElement('tr');
+  var baseHeaders=['#','Nombre','Telefono','Comercio','Fecha'];
+  baseHeaders.forEach(function(h){var th=document.createElement('th');th.textContent=h;trh.appendChild(th);});
+  preguntas.forEach(function(q){var th=document.createElement('th');th.style.maxWidth='160px';th.textContent=q.texto||q.tipo;trh.appendChild(th);});
+  // If no specific client selected, show generic columns
+  if(!preguntas.length){
+    ['Estrellas','Emocion','Comentario'].forEach(function(h){var th=document.createElement('th');th.textContent=h;trh.appendChild(th);});
+  }
+  thead.appendChild(trh);
+
   tb.innerHTML='';
-  if(!fil.length){var tr=document.createElement('tr');var td=document.createElement('td');td.colSpan=8;td.style.cssText='text-align:center;color:var(--tx3);padding:20px';td.textContent=allRespuestas.length?'Sin resultados.':'Sin respuestas.';tr.appendChild(td);tb.appendChild(tr);return;}
+  var colSpan=baseHeaders.length+(preguntas.length||3);
+  if(!fil.length){
+    var tr=document.createElement('tr');var td=document.createElement('td');
+    td.colSpan=colSpan;td.style.cssText='text-align:center;color:var(--tx3);padding:20px';
+    td.textContent=allRespuestas.length?'Sin resultados.':'Sin respuestas.';
+    tr.appendChild(td);tb.appendChild(tr);return;
+  }
+
   var em={1:':(', 2:':|', 3:':)', 4:':D', 5:':D!'};
+  var starStr=function(n){var s='';for(var i=0;i<(n||0);i++)s+='*';return s;};
+
   fil.forEach(function(r,i){
     var tr=document.createElement('tr');
-    var s='<span style="color:#1D9E75">'+'*'.repeat(r.estrellas||0)+'</span>';
+
+    // Fixed columns
     var td1=document.createElement('td');td1.style.color='var(--tx3)';td1.textContent='#'+(i+1);
-    var td2=document.createElement('td');td2.textContent=r.nombre||'Anonimo';
+    var td2=document.createElement('td');td2.style.fontWeight='500';td2.textContent=r.nombre||'Anonimo';
     var td3=document.createElement('td');td3.style.color='var(--tx2)';td3.textContent=r.telefono||'-';
     var td4=document.createElement('td');var sp=document.createElement('span');sp.className='badge bg';sp.textContent=r.comercio_code||'-';td4.appendChild(sp);
-    var td5=document.createElement('td');td5.innerHTML=s;
-    var td6=document.createElement('td');td6.textContent=em[r.emocion]||'-';
-    var td7=document.createElement('td');td7.style.cssText='max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)';td7.textContent=r.comentario||'-';
-    var td8=document.createElement('td');td8.style.color='var(--tx3)';td8.textContent=r.fecha||'-';
-    tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);tr.appendChild(td5);tr.appendChild(td6);tr.appendChild(td7);tr.appendChild(td8);
+    var td5=document.createElement('td');td5.style.color='var(--tx3)';td5.textContent=r.fecha||'-';
+    tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);tr.appendChild(td5);
+
+    if(preguntas.length){
+      // Show answer for each form question
+      preguntas.forEach(function(q,qi){
+        var tdq=document.createElement('td');tdq.style.maxWidth='180px';
+        var tipo=q.tipo||'';
+        var val='';
+        if(tipo==='Estrellas'){
+          val=starStr(r.estrellas)+' ('+( r.estrellas||0)+'/5)';
+          tdq.style.color='#EF9F27';
+        } else if(tipo==='Emoticones'){
+          val=em[r.emocion]||'-';
+          tdq.style.fontSize='16px';
+        } else if(tipo.indexOf('cerrada')>-1||tipo==='Opcion cerrada'){
+          val=(r.cerradas&&r.cerradas[qi])||'-';
+        } else if(tipo==='Respuesta abierta'){
+          val=(r.abiertas&&r.abiertas[qi])||(r.comentario||'-');
+          tdq.style.cssText='max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)';
+        }
+        tdq.textContent=val||'-';
+        tr.appendChild(tdq);
+      });
+    } else {
+      // Generic columns when no client selected
+      var tde=document.createElement('td');tde.style.color='#EF9F27';tde.textContent=starStr(r.estrellas)+' ('+(r.estrellas||0)+')';
+      var tdem=document.createElement('td');tdem.textContent=em[r.emocion]||'-';
+      var tdc=document.createElement('td');tdc.style.cssText='max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)';tdc.textContent=r.comentario||'-';
+      tr.appendChild(tde);tr.appendChild(tdem);tr.appendChild(tdc);
+    }
+
     tb.appendChild(tr);
   });
 }
