@@ -194,12 +194,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
           <select id="f-resp-cli" onchange="renderResp()" style="width:auto"><option value="">Todos los clientes</option></select>
           <input type="text" id="f-resp-q" placeholder="Buscar..." oninput="renderResp()">
         </div>
-        <div class="card"><div class="tbl">
-          <table id="resp-table">
-            <thead id="resp-thead"><tr><th>#</th><th>Nombre</th><th>Telefono</th><th>Comercio</th><th>Estrellas</th><th>Emocion</th><th>Comentario</th><th>Fecha</th></tr></thead>
-            <tbody id="resp-tbody"><tr><td colspan="8" class="loading">Cargando...</td></tr></tbody>
-          </table>
-        </div></div>
+        <div id="resp-container"></div>
       </div>
     </div>
 
@@ -566,6 +561,7 @@ function copiarLink(){var lb=document.getElementById('id-link-box');var url=lb&&
 function enviarWA(){var lb=document.getElementById('id-link-box');if(lb&&lb.dataset.url)window.open('https://wa.me/?text='+encodeURIComponent('Tu opinion nos importa: '+lb.dataset.url),'_blank');}
 
 var allFormularios={};
+var emojiFull={1:'😢 Muy mal',2:'😐 Regular',3:'😊 Bien',4:'😄 Muy bien',5:'🤩 Excelente'};
 
 async function cargarFormularios(){
   var res=await sb.from('sq_formularios').select('*');
@@ -573,9 +569,7 @@ async function cargarFormularios(){
 }
 
 function renderResp(){
-  var tb=document.getElementById('resp-tbody');
-  var thead=document.getElementById('resp-thead');
-  if(!tb||!thead)return;
+  var cont=document.getElementById('resp-container');if(!cont)return;
   var fC=(document.getElementById('f-resp-cli')||{}).value||'';
   var fQ=((document.getElementById('f-resp-q')||{}).value||'').toLowerCase();
   var fil=allRespuestas.filter(function(r){
@@ -584,77 +578,93 @@ function renderResp(){
     return true;
   });
 
-  // Get form questions for selected client
-  var preguntas=[];
-  if(fC&&allFormularios[fC]&&allFormularios[fC].preguntas){
-    preguntas=allFormularios[fC].preguntas;
-  }
+  cont.innerHTML='';
 
-  // Build dynamic header
-  thead.innerHTML='';
-  var trh=document.createElement('tr');
-  var baseHeaders=['#','Nombre','Telefono','Comercio','Fecha'];
-  baseHeaders.forEach(function(h){var th=document.createElement('th');th.textContent=h;trh.appendChild(th);});
-  preguntas.forEach(function(q){var th=document.createElement('th');th.style.maxWidth='160px';th.textContent=q.texto||q.tipo;trh.appendChild(th);});
-  // If no specific client selected, show generic columns
-  if(!preguntas.length){
-    ['Estrellas','Emocion','Comentario'].forEach(function(h){var th=document.createElement('th');th.textContent=h;trh.appendChild(th);});
-  }
-  thead.appendChild(trh);
-
-  tb.innerHTML='';
-  var colSpan=baseHeaders.length+(preguntas.length||3);
   if(!fil.length){
-    var tr=document.createElement('tr');var td=document.createElement('td');
-    td.colSpan=colSpan;td.style.cssText='text-align:center;color:var(--tx3);padding:20px';
-    td.textContent=allRespuestas.length?'Sin resultados.':'Sin respuestas.';
-    tr.appendChild(td);tb.appendChild(tr);return;
+    cont.innerHTML='<div class="card" style="text-align:center;padding:30px;color:var(--tx3)">'+(allRespuestas.length?'Sin resultados para los filtros.':'Aun no hay respuestas.')+'</div>';
+    return;
   }
 
-  var em={1:':(', 2:':|', 3:':)', 4:':D', 5:':D!'};
-  var starStr=function(n){var s='';for(var i=0;i<(n||0);i++)s+='*';return s;};
+  var preguntas=fC&&allFormularios[fC]&&allFormularios[fC].preguntas?allFormularios[fC].preguntas:[];
+  var starStr=function(n){var s='';for(var i=0;i<(n||0);i++)s+='★';for(var j=(n||0);j<5;j++)s+='☆';return s;};
 
   fil.forEach(function(r,i){
-    var tr=document.createElement('tr');
+    var card=document.createElement('div');
+    card.className='card';
+    card.style.marginBottom='10px';
 
-    // Fixed columns
-    var td1=document.createElement('td');td1.style.color='var(--tx3)';td1.textContent='#'+(i+1);
-    var td2=document.createElement('td');td2.style.fontWeight='500';td2.textContent=r.nombre||'Anonimo';
-    var td3=document.createElement('td');td3.style.color='var(--tx2)';td3.textContent=r.telefono||'-';
-    var td4=document.createElement('td');var sp=document.createElement('span');sp.className='badge bg';sp.textContent=r.comercio_code||'-';td4.appendChild(sp);
-    var td5=document.createElement('td');td5.style.color='var(--tx3)';td5.textContent=r.fecha||'-';
-    tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);tr.appendChild(td5);
+    // Header row
+    var head=document.createElement('div');
+    head.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px';
+
+    var left=document.createElement('div');
+    left.style.cssText='display:flex;align-items:center;gap:10px';
+    var num=document.createElement('span');num.style.cssText='color:var(--tx3);font-size:12px';num.textContent='#'+(i+1);
+    var nombre=document.createElement('span');nombre.style.fontWeight='600';nombre.textContent=r.nombre||'Anonimo';
+    var tel=document.createElement('span');tel.style.cssText='color:var(--tx2);font-size:12px';tel.textContent=r.telefono||'';
+    left.appendChild(num);left.appendChild(nombre);if(r.telefono)left.appendChild(tel);
+
+    var right=document.createElement('div');
+    right.style.cssText='display:flex;align-items:center;gap:8px';
+    var badge=document.createElement('span');badge.className='badge bg';badge.textContent=r.comercio_code||'-';
+    var fecha=document.createElement('span');fecha.style.cssText='color:var(--tx3);font-size:12px';fecha.textContent=r.fecha||'';
+    right.appendChild(badge);right.appendChild(fecha);
+
+    head.appendChild(left);head.appendChild(right);
+    card.appendChild(head);
+
+    // Divider
+    var div=document.createElement('div');div.style.cssText='border-top:.5px solid var(--bd);margin-bottom:10px';
+    card.appendChild(div);
+
+    // Answers grid
+    var grid=document.createElement('div');
+    grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px';
 
     if(preguntas.length){
-      // Show answer for each form question
       preguntas.forEach(function(q,qi){
-        var tdq=document.createElement('td');tdq.style.maxWidth='180px';
+        var cell=document.createElement('div');
+        cell.style.cssText='background:var(--bg2);border-radius:var(--r);padding:10px 12px';
+        var qlbl=document.createElement('div');
+        qlbl.style.cssText='font-size:11px;color:var(--tx2);margin-bottom:5px;font-weight:500';
+        qlbl.textContent=q.texto||q.tipo;
+        var qval=document.createElement('div');
+        qval.style.cssText='font-size:14px;font-weight:500';
         var tipo=q.tipo||'';
-        var val='';
         if(tipo==='Estrellas'){
-          val=starStr(r.estrellas)+' ('+( r.estrellas||0)+'/5)';
-          tdq.style.color='#EF9F27';
+          qval.style.color='#EF9F27';
+          qval.textContent=starStr(r.estrellas)+' ('+( r.estrellas||0)+'/5)';
         } else if(tipo==='Emoticones'){
-          val=em[r.emocion]||'-';
-          tdq.style.fontSize='16px';
+          qval.style.fontSize='13px';
+          qval.textContent=emojiFull[r.emocion]||'-';
         } else if(tipo.indexOf('cerrada')>-1||tipo==='Opcion cerrada'){
-          val=(r.cerradas&&r.cerradas[qi])||'-';
+          qval.style.color='var(--ad)';
+          qval.textContent=(r.cerradas&&r.cerradas[qi])||'-';
         } else if(tipo==='Respuesta abierta'){
-          val=(r.abiertas&&r.abiertas[qi])||(r.comentario||'-');
-          tdq.style.cssText='max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)';
+          qval.style.cssText='font-size:13px;color:var(--tx2);font-weight:400;line-height:1.4';
+          qval.textContent=(r.abiertas&&r.abiertas[qi])||(r.comentario||'-');
         }
-        tdq.textContent=val||'-';
-        tr.appendChild(tdq);
+        cell.appendChild(qlbl);cell.appendChild(qval);
+        grid.appendChild(cell);
       });
     } else {
-      // Generic columns when no client selected
-      var tde=document.createElement('td');tde.style.color='#EF9F27';tde.textContent=starStr(r.estrellas)+' ('+(r.estrellas||0)+')';
-      var tdem=document.createElement('td');tdem.textContent=em[r.emocion]||'-';
-      var tdc=document.createElement('td');tdc.style.cssText='max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)';tdc.textContent=r.comentario||'-';
-      tr.appendChild(tde);tr.appendChild(tdem);tr.appendChild(tdc);
+      // Generic view when no client filter
+      var cells=[
+        {l:'Estrellas',v:starStr(r.estrellas)+' ('+(r.estrellas||0)+'/5)',c:'#EF9F27'},
+        {l:'Emocion',v:emojiFull[r.emocion]||'-',c:'var(--tx)'},
+        {l:'Comentario',v:r.comentario||'-',c:'var(--tx2)'}
+      ];
+      cells.forEach(function(item){
+        var cell=document.createElement('div');
+        cell.style.cssText='background:var(--bg2);border-radius:var(--r);padding:10px 12px';
+        var lbl=document.createElement('div');lbl.style.cssText='font-size:11px;color:var(--tx2);margin-bottom:5px;font-weight:500';lbl.textContent=item.l;
+        var val=document.createElement('div');val.style.cssText='font-size:13px;font-weight:500;color:'+item.c;val.textContent=item.v;
+        cell.appendChild(lbl);cell.appendChild(val);grid.appendChild(cell);
+      });
     }
 
-    tb.appendChild(tr);
+    card.appendChild(grid);
+    cont.appendChild(card);
   });
 }
 
