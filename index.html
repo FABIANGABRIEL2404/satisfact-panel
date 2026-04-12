@@ -741,6 +741,31 @@ async function cargarUsuarios(){
 // Cerrar modales al hacer clic afuera
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
+ async function guardarUsuario(){
+  var nombre=document.getElementById('usr-nombre').value.trim();
+  var email=document.getElementById('usr-email').value.trim();
+  var pass=document.getElementById('usr-pass').value.trim();
+  var rol=document.getElementById('usr-rol').value;
+  var comercio=document.getElementById('usr-comercio').value||null;
+  if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
+  var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true});
+  if(res.error){toast('Error: '+res.error.message);return;}
+  if(rol==='comercio'){
+    var cNombre=nombre;
+    if(comercio){var cli=await sb.from('sq_clientes').select('nombre').eq('code',comercio).single();if(cli.data)cNombre=cli.data.nombre;}
+    try{
+      await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer sb_publishable_i7kbu8TUS9Uqja-CSlSEgA_9GV4VQ70'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
+      toast('Usuario creado. Email enviado a '+email);
+    }catch(e){toast('Usuario creado (email no enviado)');}
+  } else {toast('Usuario creado: '+email);}
+  document.getElementById('modal-usuario').classList.remove('open');
+  document.getElementById('usr-nombre').value='';
+  document.getElementById('usr-email').value='';
+  cargarUsuarios();
+}
+async function eliminarUsuario(id){if(!confirm('Eliminar este usuario?'))return;await sb.from('sq_usuarios').delete().eq('id',id);cargarUsuarios();toast('Usuario eliminado');}
+// Cerrar modales al hacer clic afuera
+document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});}); 
 // Iniciar
 var savedUser=sessionStorage.getItem('sq_user');
 if(savedUser){try{currentUser=JSON.parse(savedUser);iniciarApp();}catch(e){sessionStorage.removeItem('sq_user');}}
