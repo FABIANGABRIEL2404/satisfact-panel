@@ -737,21 +737,7 @@ async function cargarUsuarios(){
   });
 }
 
-async function guardarUsuario(){
-  var nombre=document.getElementById('usr-nombre').value.trim();
-  var email=document.getElementById('usr-email').value.trim();
-  var pass=document.getElementById('usr-pass').value.trim();
-  var rol=document.getElementById('usr-rol').value;
-  var comercio=document.getElementById('usr-comercio').value||null;
-  if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
-  var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true});
-  if(res.error){toast('Error: '+res.error.message);return;}
-  document.getElementById('modal-usuario').classList.remove('open');
-  document.getElementById('usr-nombre').value='';
-  document.getElementById('usr-email').value='';
-  cargarUsuarios();
-  toast('Usuario creado: '+email);
-}
+
 // Cerrar modales al hacer clic afuera
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
