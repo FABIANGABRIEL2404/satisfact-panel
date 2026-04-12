@@ -743,18 +743,15 @@ async function guardarUsuario(){
   var pass=document.getElementById('usr-pass').value.trim();
   var rol=document.getElementById('usr-rol').value;
   var comercio=document.getElementById('usr-comercio').value||null;
-  if(!nombre||!email||!pass){toast('Completá todos los campos');return;}
-  var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true}).select().single();
+  if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
+  var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true});
   if(res.error){toast('Error: '+res.error.message);return;}
-  if(rol==='comercio'){
-    var comercioNombre=nombre;
-    if(comercio){var cli=await sb.from('sq_clientes').select('nombre').eq('code',comercio).single();if(cli.data)comercioNombre=cli.data.nombre;}
-    try{
-      await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','A
-async function eliminarUsuario(id){if(!confirm('Eliminar este usuario?'))return;await sb.from('sq_usuarios').delete().eq('id',id);cargarUsuarios();toast('Usuario eliminado');}
-
+  document.getElementById('modal-usuario').classList.remove('open');
+  document.getElementById('usr-nombre').value='';
+  document.getElementById('usr-email').value='';
+  cargarUsuarios();
+  toast('Usuario creado: '+email);
+}
 // Cerrar modales al hacer clic afuera
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
