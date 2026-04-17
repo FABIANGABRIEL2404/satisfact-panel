@@ -358,9 +358,12 @@ tr:hover td { background: #f8fafc; }
 
     <!-- TICKETS -->
     <div class="page-section" id="page-tickets">
-      <div class="page-title">Tickets escaneados</div>
-      <div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
-      <div class="card">
+     <div class="page-title">Tickets escaneados</div>
+<div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
+<div style="margin-bottom:16px">
+  <button class="btn btn-outline" onclick="exportarTicketsCSV()">⬇️ Exportar CSV</button>
+</div>
+<div class="card">
         <div class="tbl-wrap">
           <table>
             <thead>
@@ -381,7 +384,31 @@ tr:hover td { background: #f8fafc; }
         </div>
       </div>
     </div>
-
+function exportarTicketsCSV() {
+  const tbody = document.getElementById('tickets-tbody');
+  const filas = tbody ? tbody.querySelectorAll('tr') : [];
+  if (!filas.length) { showToast('No hay tickets para exportar', true); return; }
+  let csv = 'Fecha,Cliente,Producto,Cantidad,Precio unitario,Subtotal\n';
+  filas.forEach(tr => {
+    const celdas = tr.querySelectorAll('td');
+    if (celdas.length < 6) return;
+    const fila = [
+      celdas[0].textContent.trim(),
+      celdas[1].textContent.trim(),
+      celdas[2].textContent.trim(),
+      celdas[3].textContent.trim(),
+      celdas[4].textContent.trim(),
+      celdas[5].textContent.trim()
+    ].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
+    csv += fila + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'tickets.csv';
+  a.click();
+  showToast('CSV descargado');
+}
+    
     <!-- COMPRAS -->
     <div class="page-section" id="page-compras">
       <div class="page-title">Base de Compras</div>
