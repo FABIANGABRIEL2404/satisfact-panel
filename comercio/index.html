@@ -360,6 +360,9 @@ tr:hover td { background: #f8fafc; }
     <div class="page-section" id="page-tickets">
       <div class="page-title">Tickets escaneados</div>
       <div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
+      <div style="margin-bottom:16px">
+        <button class="btn btn-outline" onclick="exportarTicketsCSV()">⬇️ Exportar CSV</button>
+      </div>
       <div class="card">
         <div class="tbl-wrap">
           <table>
@@ -677,6 +680,31 @@ async function cargarTickets() {
     const url = t.archivo_url ? '<a href="' + t.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver</a>' : '-';
     return '<tr><td>' + (t.encuesta_fecha || '-') + '</td><td>' + (t.cliente_nombre || 'Anónimo') + '</td><td>' + (item.producto || '-') + '</td><td>' + (item.cantidad || 1) + '</td><td>$' + (item.precio_unitario || 0) + '</td><td>$' + (item.subtotal || 0) + '</td><td>' + url + '</td></tr>';
   }).join('');
+}
+
+function exportarTicketsCSV() {
+  const tbody = document.getElementById('tickets-tbody');
+  const filas = tbody ? tbody.querySelectorAll('tr') : [];
+  if (!filas.length) { showToast('No hay tickets para exportar', true); return; }
+  let csv = 'Fecha,Cliente,Producto,Cantidad,Precio unitario,Subtotal\n';
+  filas.forEach(tr => {
+    const celdas = tr.querySelectorAll('td');
+    if (celdas.length < 6) return;
+    const fila = [
+      celdas[0].textContent.trim(),
+      celdas[1].textContent.trim(),
+      celdas[2].textContent.trim(),
+      celdas[3].textContent.trim(),
+      celdas[4].textContent.trim(),
+      celdas[5].textContent.trim()
+    ].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
+    csv += fila + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'tickets.csv';
+  a.click();
+  showToast('CSV descargado');
 }
 
 function renderCompras() {
