@@ -24,7 +24,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* LOGIN */
 #login-screen {
   min-height: 100vh;
   display: flex;
@@ -40,85 +39,48 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
   max-width: 400px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
-.login-logo {
-  text-align: center;
-  margin-bottom: 32px;
-}
+.login-logo { text-align: center; margin-bottom: 32px; }
 .login-logo .logo-icon {
-  width: 64px;
-  height: 64px;
+  width: 64px; height: 64px;
   background: linear-gradient(135deg, #2563eb, #10b981);
   border-radius: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin-bottom: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 28px; margin-bottom: 12px;
 }
 .login-logo h1 { font-size: 22px; font-weight: 700; color: var(--text); }
 .login-logo p { color: var(--text-2); font-size: 14px; margin-top: 4px; }
 .login-card label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
 .login-card input {
-  width: 100%;
-  padding: 11px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color .2s;
-  margin-bottom: 16px;
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: inherit; outline: none;
+  transition: border-color .2s; margin-bottom: 16px;
 }
 .login-card input:focus { border-color: var(--primary); }
 .btn-login {
-  width: 100%;
-  padding: 13px;
+  width: 100%; padding: 13px;
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: opacity .2s;
+  color: white; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: opacity .2s;
 }
 .btn-login:hover { opacity: .9; }
-.login-error {
-  color: var(--danger);
-  font-size: 13px;
-  text-align: center;
-  margin-top: 12px;
-  display: none;
-}
+.login-error { color: var(--danger); font-size: 13px; text-align: center; margin-top: 12px; display: none; }
 
-/* APP */
 #app { display: none; min-height: 100vh; }
 
-/* SIDEBAR */
 .sidebar {
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: #1e293b;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w); background: #1e293b;
+  color: white; display: flex; flex-direction: column; z-index: 100;
 }
-.sidebar-brand {
-  padding: 24px 20px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
+.sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
 .sidebar-brand .brand-icon {
   width: 36px; height: 36px;
   background: linear-gradient(135deg, #2563eb, #10b981);
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  margin-bottom: 8px;
+  border-radius: 8px; display: inline-flex;
+  align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 8px;
 }
 .sidebar-brand h2 { font-size: 15px; font-weight: 700; }
 .sidebar-brand p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
@@ -127,87 +89,52 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
   background: rgba(37,99,235,0.2);
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.sidebar-comercio .com-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.sidebar-comercio .com-badge { display: flex; align-items: center; gap: 10px; }
 .com-icon {
   width: 32px; height: 32px;
   background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
+  border-radius: 8px; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
 }
 .com-name { font-size: 13px; font-weight: 600; }
 .com-code { font-size: 11px; color: rgba(255,255,255,0.5); }
 .sidebar-nav { padding: 12px 0; flex: 1; overflow-y: auto; }
 .nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px; cursor: pointer;
+  font-size: 13px; font-weight: 500;
   color: rgba(255,255,255,0.65);
-  transition: all .15s;
-  border-left: 3px solid transparent;
+  transition: all .15s; border-left: 3px solid transparent;
 }
 .nav-item:hover { background: rgba(255,255,255,0.06); color: white; }
 .nav-item.active { background: rgba(37,99,235,0.25); color: white; border-left-color: #2563eb; }
 .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
-.sidebar-footer {
-  padding: 16px 20px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
 .btn-logout {
-  width: 100%;
-  padding: 9px;
-  background: rgba(239,68,68,0.15);
-  color: #fca5a5;
-  border: 1px solid rgba(239,68,68,0.25);
-  border-radius: 7px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all .2s;
+  width: 100%; padding: 9px;
+  background: rgba(239,68,68,0.15); color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.25); border-radius: 7px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all .2s;
 }
 .btn-logout:hover { background: rgba(239,68,68,0.25); }
 
-/* MAIN */
 .main { margin-left: var(--sidebar-w); padding: 28px 32px; }
 .page-section { display: none; }
 .page-section.active { display: block; }
 .page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
 .page-sub { color: var(--text-2); font-size: 14px; margin-bottom: 24px; }
 
-/* CARDS */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.stat-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 20px;
-  border: 1px solid var(--border);
-}
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); }
 .stat-card .stat-label { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
 .stat-card .stat-val { font-size: 32px; font-weight: 700; }
 .stat-card .stat-icon { font-size: 22px; margin-bottom: 8px; }
 
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 20px;
-  margin-bottom: 20px;
-}
+.card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; }
 .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
 
-/* TABLE */
 .tbl-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: left; padding: 10px 12px; background: #f8fafc; color: var(--text-2); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); }
@@ -215,32 +142,19 @@ td { padding: 11px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; 
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #f8fafc; }
 
-/* BADGE */
-.badge {
-  display: inline-block;
-  padding: 3px 9px;
-  border-radius: 99px;
-  font-size: 11px;
-  font-weight: 600;
-}
+.badge { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; }
 .badge-green { background: #dcfce7; color: #166534; }
 .badge-red { background: #fee2e2; color: #991b1b; }
 .badge-yellow { background: #fef9c3; color: #854d0e; }
 .badge-blue { background: #dbeafe; color: #1e40af; }
 
-/* FORM EDITOR */
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
 .form-group input, .form-group select, .form-group textarea {
-  width: 100%;
-  padding: 10px 13px;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color .2s;
-  background: white;
+  width: 100%; padding: 10px 13px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: inherit; outline: none;
+  transition: border-color .2s; background: white;
 }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -253,40 +167,10 @@ tr:hover td { background: #f8fafc; }
 .btn-outline { background: white; color: var(--text); border: 1.5px solid var(--border); }
 .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-/* PREGUNTA EDITOR */
-.pregunta-bloque {
-  background: #f8fafc;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 12px;
-  position: relative;
-}
+.pregunta-bloque { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; position: relative; }
 .pregunta-bloque .preg-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.pregunta-bloque .preg-num {
-  width: 28px; height: 28px;
-  background: var(--primary);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-.preg-del {
-  position: absolute;
-  top: 12px; right: 12px;
-  background: none;
-  border: none;
-  color: var(--text-2);
-  cursor: pointer;
-  font-size: 16px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all .15s;
-}
+.pregunta-bloque .preg-num { width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.preg-del { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--text-2); cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 4px; transition: all .15s; }
 .preg-del:hover { background: #fee2e2; color: var(--danger); }
 .opciones-list { margin-top: 10px; }
 .opcion-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
@@ -296,14 +180,7 @@ tr:hover td { background: #f8fafc; }
 .add-opcion { background: none; border: 1.5px dashed var(--border); color: var(--text-2); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; width: 100%; margin-top: 4px; transition: all .2s; }
 .add-opcion:hover { border-color: var(--primary); color: var(--primary); }
 
-/* RESPUESTAS */
-.resp-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 20px;
-  margin-bottom: 12px;
-}
+.resp-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; }
 .resp-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .resp-nombre { font-weight: 700; font-size: 15px; }
 .resp-fecha { font-size: 12px; color: var(--text-2); }
@@ -314,34 +191,12 @@ tr:hover td { background: #f8fafc; }
 .stars-display { color: #f59e0b; font-size: 18px; }
 .emoji-display { font-size: 22px; }
 
-/* ALERT BANNER */
-.alert-banner {
-  background: #fef3c7;
-  border: 1px solid #fcd34d;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: #92400e;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.alert-banner { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: #92400e; display: flex; align-items: center; gap: 8px; }
 
-/* FILTERS */
 .filters-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
-.filters-bar select, .filters-bar input {
-  padding: 8px 12px;
-  border: 1.5px solid var(--border);
-  border-radius: 7px;
-  font-size: 13px;
-  font-family: inherit;
-  outline: none;
-  background: white;
-}
+.filters-bar select, .filters-bar input { padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 13px; font-family: inherit; outline: none; background: white; }
 .filters-bar select:focus, .filters-bar input:focus { border-color: var(--primary); }
 
-/* CHARTS */
 .chart-bar-wrap { margin-top: 8px; }
 .chart-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .chart-label { font-size: 13px; min-width: 90px; text-align: right; }
@@ -349,50 +204,16 @@ tr:hover td { background: #f8fafc; }
 .chart-bar-fill { height: 10px; border-radius: 99px; background: linear-gradient(90deg, #2563eb, #10b981); transition: width .4s; }
 .chart-count { font-size: 12px; color: var(--text-2); min-width: 30px; }
 
-/* EMPTY STATE */
 .empty { text-align: center; padding: 48px 20px; color: var(--text-2); }
 .empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty p { font-size: 14px; }
 
-/* TOAST */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: #1e293b;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 9999;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all .3s;
-  pointer-events: none;
-}
+.toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 9999; opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateY(0); }
 
-/* MODAL */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 500;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
-.modal-box {
-  background: white;
-  border-radius: 14px;
-  padding: 28px;
-  max-width: 500px;
-  width: 95%;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+.modal-box { background: white; border-radius: 14px; padding: 28px; max-width: 500px; width: 95%; max-height: 90vh; overflow-y: auto; }
 .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
@@ -445,21 +266,12 @@ tr:hover td { background: #f8fafc; }
       </div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-item active" onclick="showPage('dashboard')">
-        <span class="nav-icon">📊</span> Dashboard
-      </div>
-      <div class="nav-item" onclick="showPage('formulario')">
-        <span class="nav-icon">📝</span> Mi Formulario
-      </div>
-      <div class="nav-item" onclick="showPage('respuestas')">
-        <span class="nav-icon">💬</span> Respuestas
-      </div>
-      <div class="nav-item" onclick="showPage('estadisticas')">
-        <span class="nav-icon">📈</span> Estadísticas
-      </div>
-      <div class="nav-item" onclick="showPage('compras')">
-        <span class="nav-icon">🛍️</span> Compras
-      </div>
+      <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+      <div class="nav-item" onclick="showPage('formulario')"><span class="nav-icon">📝</span> Mi Formulario</div>
+      <div class="nav-item" onclick="showPage('respuestas')"><span class="nav-icon">💬</span> Respuestas</div>
+      <div class="nav-item" onclick="showPage('estadisticas')"><span class="nav-icon">📈</span> Estadísticas</div>
+      <div class="nav-item" onclick="showPage('compras')"><span class="nav-icon">🛍️</span> Compras</div>
+      <div class="nav-item" onclick="showPage('tickets')"><span class="nav-icon">🧾</span> Tickets</div>
     </nav>
     <div class="sidebar-footer">
       <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
@@ -503,7 +315,7 @@ tr:hover td { background: #f8fafc; }
         </div>
         <div class="form-group">
           <label>Mensaje de bienvenida</label>
-          <textarea id="form-bienvenida" rows="2" placeholder="¡Hola! Tu opinión nos importa. Por favor completá esta breve encuesta."></textarea>
+          <textarea id="form-bienvenida" rows="2" placeholder="¡Hola! Tu opinión nos importa."></textarea>
         </div>
         <div id="preguntas-container" style="margin-bottom:16px"></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
@@ -544,6 +356,32 @@ tr:hover td { background: #f8fafc; }
       <div id="estadisticas-content"></div>
     </div>
 
+    <!-- TICKETS -->
+    <div class="page-section" id="page-tickets">
+      <div class="page-title">Tickets escaneados</div>
+      <div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unit.</th>
+                <th>Subtotal</th>
+                <th>Ticket</th>
+              </tr>
+            </thead>
+            <tbody id="tickets-tbody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- COMPRAS -->
     <div class="page-section" id="page-compras">
       <div class="page-title">Base de Compras</div>
@@ -566,14 +404,8 @@ tr:hover td { background: #f8fafc; }
           <table>
             <thead>
               <tr>
-                <th>Cliente</th>
-                <th>Producto</th>
-                <th>Proveedor</th>
-                <th>Monto</th>
-                <th>Método</th>
-                <th>Ticket</th>
-                <th>Fecha</th>
-                <th></th>
+                <th>Cliente</th><th>Producto</th><th>Proveedor</th>
+                <th>Monto</th><th>Método</th><th>Ticket</th><th>Fecha</th><th></th>
               </tr>
             </thead>
             <tbody id="compras-tbody"></tbody>
@@ -588,27 +420,14 @@ tr:hover td { background: #f8fafc; }
 <div class="modal-overlay" id="modal-compra">
   <div class="modal-box">
     <div class="modal-title">Nueva compra</div>
-    <div class="form-group">
-      <label>Nombre del cliente</label>
-      <input type="text" id="mc-cliente" placeholder="Nombre completo">
+    <div class="form-group"><label>Nombre del cliente</label><input type="text" id="mc-cliente" placeholder="Nombre completo"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Producto / Artículo</label><input type="text" id="mc-producto" placeholder="Nombre del producto"></div>
+      <div class="form-group"><label>Proveedor</label><input type="text" id="mc-proveedor" placeholder="Proveedor"></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Producto / Artículo</label>
-        <input type="text" id="mc-producto" placeholder="Nombre del producto">
-      </div>
-      <div class="form-group">
-        <label>Proveedor</label>
-        <input type="text" id="mc-proveedor" placeholder="Proveedor">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Monto ($)</label>
-        <input type="number" id="mc-monto" placeholder="0.00">
-      </div>
-      <div class="form-group">
-        <label>Método de pago</label>
+      <div class="form-group"><label>Monto ($)</label><input type="number" id="mc-monto" placeholder="0.00"></div>
+      <div class="form-group"><label>Método de pago</label>
         <select id="mc-metodo">
           <option value="efectivo">Efectivo</option>
           <option value="debito">Débito</option>
@@ -619,14 +438,8 @@ tr:hover td { background: #f8fafc; }
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label>Nº Ticket / Factura</label>
-        <input type="text" id="mc-ticket" placeholder="Nº de comprobante">
-      </div>
-      <div class="form-group">
-        <label>Fecha</label>
-        <input type="date" id="mc-fecha">
-      </div>
+      <div class="form-group"><label>Nº Ticket / Factura</label><input type="text" id="mc-ticket" placeholder="Nº de comprobante"></div>
+      <div class="form-group"><label>Fecha</label><input type="date" id="mc-fecha"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="cerrarModal('modal-compra')">Cancelar</button>
@@ -642,35 +455,18 @@ const SUPA_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
 const SUPA_KEY = 'sb_publishable_i7kbu8TUS9Uqja-CSlSEgA_9GV4VQ70';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-let currentUser = null;
-let currentComercio = null;
-let allRespuestas = [];
-let allCompras = [];
-let currentFormulario = null;
-let preguntas = [];
+let currentUser = null, currentComercio = null;
+let allRespuestas = [], allCompras = [];
+let currentFormulario = null, preguntas = [];
 
-// ─── AUTH ─────────────────────────────────────────────────────────────────
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
   const errEl = document.getElementById('login-err');
   errEl.style.display = 'none';
-
   if (!email || !pass) { errEl.style.display = 'block'; errEl.textContent = 'Completá todos los campos'; return; }
-
-  const { data, error } = await sb.from('sq_usuarios')
-    .select('*')
-    .eq('email', email)
-    .eq('password_hash', pass)
-    .eq('rol', 'comercio')
-    .eq('activo', true)
-    .single();
-
-  if (error || !data) {
-    errEl.style.display = 'block';
-    errEl.textContent = 'Email o contraseña incorrectos, o no tenés acceso como comercio';
-    return;
-  }
+  const { data, error } = await sb.from('sq_usuarios').select('*').eq('email', email).eq('password_hash', pass).eq('rol', 'comercio').eq('activo', true).single();
+  if (error || !data) { errEl.style.display = 'block'; return; }
   currentUser = data;
   await cargarComercio();
   iniciarApp();
@@ -686,9 +482,8 @@ function iniciarApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   const nombre = currentComercio ? currentComercio.nombre : currentUser.nombre;
-  const code = currentUser.comercio_code || '';
   document.getElementById('com-name').textContent = nombre;
-  document.getElementById('com-code').textContent = code;
+  document.getElementById('com-code').textContent = currentUser.comercio_code || '';
   document.getElementById('com-icon').textContent = currentComercio ? (currentComercio.emoji || '🏪') : '🏪';
   cargarTodo();
 }
@@ -700,7 +495,6 @@ function doLogout() {
   document.getElementById('login-screen').style.display = 'flex';
 }
 
-// ─── DATA LOAD ─────────────────────────────────────────────────────────────
 async function cargarTodo() {
   const code = currentUser.comercio_code;
   if (!code) return;
@@ -716,40 +510,33 @@ async function cargarTodo() {
   if (currentFormulario) cargarFormularioEditor();
 }
 
-// ─── DASHBOARD ─────────────────────────────────────────────────────────────
 function renderDashboard() {
   const nombre = currentComercio ? currentComercio.nombre : currentUser.nombre;
   document.getElementById('dash-sub').textContent = 'Panel de ' + nombre;
-
   const total = allRespuestas.length;
   const estrellas = allRespuestas.filter(r => r.estrellas > 0);
   const avgStars = estrellas.length ? (estrellas.reduce((a, r) => a + r.estrellas, 0) / estrellas.length).toFixed(1) : '-';
-  const bajas = allRespuestas.filter(r => r.estrellas > 0 && r.estrellas <= 2 || r.emocion > 0 && r.emocion <= 2);
-
+  const bajas = allRespuestas.filter(r => (r.estrellas > 0 && r.estrellas <= 2) || (r.emocion > 0 && r.emocion <= 2));
   document.getElementById('dash-stats').innerHTML =
     statCard('📋', 'Total Respuestas', total) +
     statCard('⭐', 'Prom. Estrellas', avgStars) +
     statCard('⚠️', 'Alertas', bajas.length, bajas.length > 0 ? '#fee2e2' : '') +
     statCard('🛍️', 'Compras', allCompras.length);
-
-  // Alertas
   const alertEl = document.getElementById('dash-alertas');
   if (bajas.length === 0) {
     alertEl.innerHTML = '<div class="empty"><div class="empty-icon">✅</div><p>Sin alertas. Todo bien por ahora.</p></div>';
   } else {
     alertEl.innerHTML = bajas.slice(0, 5).map(r => {
-      const puntos = r.estrellas <= 2 && r.estrellas > 0 ? r.estrellas + ' ⭐' : r.emocion <= 2 && r.emocion > 0 ? emojiFromVal(r.emocion) : '';
-      return '<div class="alert-banner">⚠️ <strong>' + (r.nombre || 'Anónimo') + '</strong> — Puntuación: ' + puntos + ' — ' + (r.fecha || r.created_at?.slice(0,10) || '') + '</div>';
+      const puntos = r.estrellas <= 2 && r.estrellas > 0 ? r.estrellas + ' ⭐' : emojiFromVal(r.emocion);
+      return '<div class="alert-banner">⚠️ <strong>' + (r.nombre || 'Anónimo') + '</strong> — Puntuación: ' + puntos + ' — ' + (r.fecha || '') + '</div>';
     }).join('');
   }
-
-  // Últimas respuestas
   const ulEl = document.getElementById('dash-ultimas');
   if (allRespuestas.length === 0) {
     ulEl.innerHTML = '<div class="empty"><div class="empty-icon">💬</div><p>Aún no hay respuestas.</p></div>';
   } else {
     ulEl.innerHTML = '<div class="tbl-wrap"><table><thead><tr><th>Cliente</th><th>Estrellas</th><th>Emoción</th><th>Comentario</th><th>Fecha</th></tr></thead><tbody>' +
-      allRespuestas.slice(0, 8).map(r => '<tr><td>' + (r.nombre || 'Anónimo') + '</td><td>' + (r.estrellas > 0 ? '⭐'.repeat(r.estrellas) : '-') + '</td><td>' + (r.emocion > 0 ? emojiFromVal(r.emocion) : '-') + '</td><td>' + (r.comentario ? r.comentario.slice(0, 60) + (r.comentario.length > 60 ? '…' : '') : '-') + '</td><td>' + (r.fecha || r.created_at?.slice(0,10) || '') + '</td></tr>').join('') +
+      allRespuestas.slice(0, 8).map(r => '<tr><td>' + (r.nombre || 'Anónimo') + '</td><td>' + (r.estrellas > 0 ? '⭐'.repeat(r.estrellas) : '-') + '</td><td>' + (r.emocion > 0 ? emojiFromVal(r.emocion) : '-') + '</td><td>' + (r.comentario ? r.comentario.slice(0, 60) + (r.comentario.length > 60 ? '…' : '') : '-') + '</td><td>' + (r.fecha || '') + '</td></tr>').join('') +
       '</tbody></table></div>';
   }
 }
@@ -757,12 +544,8 @@ function renderDashboard() {
 function statCard(icon, label, val, bg) {
   return '<div class="stat-card"' + (bg ? ' style="background:' + bg + '"' : '') + '><div class="stat-icon">' + icon + '</div><div class="stat-label">' + label + '</div><div class="stat-val">' + val + '</div></div>';
 }
+function emojiFromVal(v) { return ['', '😞', '😕', '😐', '😊', '🤩'][v] || ''; }
 
-function emojiFromVal(v) {
-  return ['', '😞', '😕', '😐', '😊', '🤩'][v] || '';
-}
-
-// ─── FORMULARIO ────────────────────────────────────────────────────────────
 function cargarFormularioEditor() {
   if (!currentFormulario) return;
   document.getElementById('form-nombre').value = currentFormulario.nombre || '';
@@ -782,10 +565,8 @@ function buildPreguntaBloque(p, i) {
   const tipos = { estrellas: '⭐ Estrellas', emociones: '😊 Emoticones', cerrada: '🔘 Opción cerrada', abierta: '💬 Texto libre' };
   let extra = '';
   if (p.tipo === 'cerrada') {
-    const opts = (p.opciones || ['Opción 1', 'Opción 2', 'Opción 3']);
-    extra = '<div class="opciones-list">' +
-      opts.map((op, oi) => '<div class="opcion-row"><input type="text" value="' + op.replace(/"/g, '&quot;') + '" oninput="updateOpcion(' + i + ',' + oi + ',this.value)" placeholder="Opción ' + (oi+1) + '"><button class="del-op" onclick="delOpcion(' + i + ',' + oi + ')">✕</button></div>').join('') +
-      '<button class="add-opcion" onclick="addOpcion(' + i + ')">+ Agregar opción</button></div>';
+    const opts = p.opciones || ['Opción 1', 'Opción 2', 'Opción 3'];
+    extra = '<div class="opciones-list">' + opts.map((op, oi) => '<div class="opcion-row"><input type="text" value="' + op.replace(/"/g, '&quot;') + '" oninput="updateOpcion(' + i + ',' + oi + ',this.value)" placeholder="Opción ' + (oi+1) + '"><button class="del-op" onclick="delOpcion(' + i + ',' + oi + ')">✕</button></div>').join('') + '<button class="add-opcion" onclick="addOpcion(' + i + ')">+ Agregar opción</button></div>';
   }
   return '<div class="pregunta-bloque"><div class="preg-header"><div class="preg-num">' + (i+1) + '</div><span style="font-size:12px;color:var(--text-2)">' + (tipos[p.tipo] || p.tipo) + '</span></div><div class="form-group" style="margin:0"><label>Texto de la pregunta</label><input type="text" value="' + (p.texto || '').replace(/"/g, '&quot;') + '" oninput="updatePregunta(' + i + ',this.value)" placeholder="Escribí tu pregunta..."></div>' + extra + '<button class="preg-del" onclick="delPregunta(' + i + ')">✕</button></div>';
 }
@@ -804,14 +585,7 @@ function delPregunta(i) { preguntas.splice(i, 1); renderPreguntas(); }
 
 async function guardarFormulario() {
   const code = currentUser.comercio_code;
-  const datos = {
-    comercio_code: code,
-    nombre: document.getElementById('form-nombre').value || 'Encuesta',
-    bienvenida: document.getElementById('form-bienvenida').value,
-    lang: document.getElementById('form-lang').value,
-    preguntas: preguntas,
-    updated_at: new Date().toISOString()
-  };
+  const datos = { comercio_code: code, nombre: document.getElementById('form-nombre').value || 'Encuesta', bienvenida: document.getElementById('form-bienvenida').value, lang: document.getElementById('form-lang').value, preguntas, updated_at: new Date().toISOString() };
   let res;
   if (currentFormulario && currentFormulario.id) {
     res = await sb.from('sq_formularios').update(datos).eq('id', currentFormulario.id);
@@ -824,50 +598,34 @@ async function guardarFormulario() {
 }
 
 function copiarLink() {
-  const code = currentUser.comercio_code;
-  const url = 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + code;
+  const url = 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + currentUser.comercio_code;
   navigator.clipboard.writeText(url).then(() => showToast('Link copiado al portapapeles'));
   const box = document.getElementById('link-box');
-  box.style.display = 'block';
-  box.textContent = url;
+  box.style.display = 'block'; box.textContent = url;
 }
 
-// ─── RESPUESTAS ────────────────────────────────────────────────────────────
 function renderRespuestas() {
   const dias = parseInt(document.getElementById('resp-filtro-fecha').value) || 0;
   const busca = (document.getElementById('resp-buscar').value || '').toLowerCase();
   const el = document.getElementById('respuestas-lista');
-
   let lista = allRespuestas.filter(r => {
     if (busca && !(r.nombre || '').toLowerCase().includes(busca)) return false;
-    if (dias > 0) {
-      const fecha = new Date(r.created_at);
-      const limite = new Date(); limite.setDate(limite.getDate() - dias);
-      if (fecha < limite) return false;
-    }
+    if (dias > 0) { const fecha = new Date(r.created_at); const limite = new Date(); limite.setDate(limite.getDate() - dias); if (fecha < limite) return false; }
     return true;
   });
-
   if (lista.length === 0) { el.innerHTML = '<div class="empty"><div class="empty-icon">💬</div><p>No hay respuestas con esos filtros.</p></div>'; return; }
-
   const preg = currentFormulario && Array.isArray(currentFormulario.preguntas) ? currentFormulario.preguntas : [];
-
   el.innerHTML = lista.map(r => {
     const alertClass = (r.estrellas > 0 && r.estrellas <= 2) || (r.emocion > 0 && r.emocion <= 2) ? ' style="border-left:3px solid #ef4444"' : '';
     let items = '';
     if (r.estrellas > 0) items += '<div class="resp-item"><div class="resp-item-q">Estrellas</div><div class="resp-item-a stars-display">' + '⭐'.repeat(r.estrellas) + ' (' + r.estrellas + '/5)</div></div>';
     if (r.emocion > 0) items += '<div class="resp-item"><div class="resp-item-q">Emoción</div><div class="resp-item-a emoji-display">' + emojiFromVal(r.emocion) + ' (' + r.emocion + '/5)</div></div>';
     preg.forEach((p, i) => {
-      if (p.tipo === 'cerrada') {
-        const val = r.cerradas && r.cerradas[i];
-        if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>';
-      } else if (p.tipo === 'abierta') {
-        const val = r.abiertas && r.abiertas[i];
-        if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>';
-      }
+      if (p.tipo === 'cerrada') { const val = r.cerradas && r.cerradas[i]; if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>'; }
+      else if (p.tipo === 'abierta') { const val = r.abiertas && r.abiertas[i]; if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>'; }
     });
     if (r.comentario) items += '<div class="resp-item"><div class="resp-item-q">Comentario</div><div class="resp-item-a">' + r.comentario + '</div></div>';
-    return '<div class="resp-card"' + alertClass + '><div class="resp-card-header"><div><div class="resp-nombre">' + (r.nombre || 'Anónimo') + '</div>' + (r.telefono ? '<div style="font-size:12px;color:var(--text-2)">' + r.telefono + '</div>' : '') + '</div><div class="resp-fecha">' + (r.fecha || r.created_at?.slice(0,10) || '') + '</div></div><div class="resp-items">' + (items || '<em style="color:var(--text-2);font-size:13px">Sin datos adicionales</em>') + '</div></div>';
+    return '<div class="resp-card"' + alertClass + '><div class="resp-card-header"><div><div class="resp-nombre">' + (r.nombre || 'Anónimo') + '</div>' + (r.telefono ? '<div style="font-size:12px;color:var(--text-2)">' + r.telefono + '</div>' : '') + '</div><div class="resp-fecha">' + (r.fecha || '') + '</div></div><div class="resp-items">' + (items || '<em style="color:var(--text-2);font-size:13px">Sin datos adicionales</em>') + '</div></div>';
   }).join('');
 }
 
@@ -879,42 +637,48 @@ function exportCSV() {
   a.download = 'respuestas.csv'; a.click();
 }
 
-// ─── ESTADISTICAS ──────────────────────────────────────────────────────────
 function renderEstadisticas() {
   const el = document.getElementById('estadisticas-content');
   if (allRespuestas.length === 0) { el.innerHTML = '<div class="empty"><div class="empty-icon">📈</div><p>Aún no hay respuestas para mostrar estadísticas.</p></div>'; return; }
-
-  // Distribución estrellas
   const distE = [0,0,0,0,0];
   allRespuestas.forEach(r => { if (r.estrellas > 0) distE[r.estrellas-1]++; });
   const maxE = Math.max(...distE, 1);
   let htmlE = '<div class="card"><h3>⭐ Distribución de Estrellas</h3><div class="chart-bar-wrap">';
-  [5,4,3,2,1].forEach(n => {
-    htmlE += '<div class="chart-row"><div class="chart-label">' + '⭐'.repeat(n) + '</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:' + Math.round(distE[n-1]/maxE*100) + '%"></div></div><div class="chart-count">' + distE[n-1] + '</div></div>';
-  });
+  [5,4,3,2,1].forEach(n => { htmlE += '<div class="chart-row"><div class="chart-label">' + '⭐'.repeat(n) + '</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:' + Math.round(distE[n-1]/maxE*100) + '%"></div></div><div class="chart-count">' + distE[n-1] + '</div></div>'; });
   htmlE += '</div></div>';
-
-  // Distribución emociones
   const distEm = [0,0,0,0,0];
   allRespuestas.forEach(r => { if (r.emocion > 0) distEm[r.emocion-1]++; });
   const maxEm = Math.max(...distEm, 1);
   const emojis = ['😞','😕','😐','😊','🤩'];
   let htmlEm = '<div class="card"><h3>😊 Distribución de Emoticones</h3><div class="chart-bar-wrap">';
-  [5,4,3,2,1].forEach(n => {
-    htmlEm += '<div class="chart-row"><div class="chart-label">' + emojis[n-1] + ' ' + n + '</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:' + Math.round(distEm[n-1]/maxEm*100) + '%;background:linear-gradient(90deg,#f59e0b,#10b981)"></div></div><div class="chart-count">' + distEm[n-1] + '</div></div>';
-  });
+  [5,4,3,2,1].forEach(n => { htmlEm += '<div class="chart-row"><div class="chart-label">' + emojis[n-1] + ' ' + n + '</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:' + Math.round(distEm[n-1]/maxEm*100) + '%;background:linear-gradient(90deg,#f59e0b,#10b981)"></div></div><div class="chart-count">' + distEm[n-1] + '</div></div>'; });
   htmlEm += '</div></div>';
-
-  // Resumen
   const totalR = allRespuestas.length;
   const bajas = allRespuestas.filter(r => (r.estrellas > 0 && r.estrellas <= 2) || (r.emocion > 0 && r.emocion <= 2)).length;
   const pctSat = totalR > 0 ? Math.round((totalR - bajas) / totalR * 100) : 0;
-  let htmlR = '<div class="stats-grid">' + statCard('📋','Total',totalR) + statCard('✅','Satisfechos',pctSat+'%') + statCard('⚠️','Alertas',bajas) + '</div>';
-
-  el.innerHTML = htmlR + htmlE + htmlEm;
+  el.innerHTML = '<div class="stats-grid">' + statCard('📋','Total',totalR) + statCard('✅','Satisfechos',pctSat+'%') + statCard('⚠️','Alertas',bajas) + '</div>' + htmlE + htmlEm;
 }
 
-// ─── COMPRAS ───────────────────────────────────────────────────────────────
+async function cargarTickets() {
+  const code = currentUser.comercio_code;
+  const { data } = await sb
+    .from('sq_ticket_items')
+    .select('*, sq_tickets(cliente_nombre, encuesta_fecha, archivo_url)')
+    .eq('comercio_code', code)
+    .order('created_at', { ascending: false });
+  const tbody = document.getElementById('tickets-tbody');
+  if (!tbody) return;
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay tickets escaneados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(item => {
+    const t = item.sq_tickets || {};
+    const url = t.archivo_url ? '<a href="' + t.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver</a>' : '-';
+    return '<tr><td>' + (t.encuesta_fecha || '-') + '</td><td>' + (t.cliente_nombre || 'Anónimo') + '</td><td>' + (item.producto || '-') + '</td><td>' + (item.cantidad || 1) + '</td><td>$' + (item.precio_unitario || 0) + '</td><td>$' + (item.subtotal || 0) + '</td><td>' + url + '</td></tr>';
+  }).join('');
+}
+
 function renderCompras() {
   const busca = (document.getElementById('comp-buscar').value || '').toLowerCase();
   const metodo = document.getElementById('comp-metodo').value;
@@ -925,7 +689,7 @@ function renderCompras() {
   });
   const tbody = document.getElementById('compras-tbody');
   if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:32px">Sin compras registradas</td></tr>'; return; }
-  tbody.innerHTML = lista.map(c => '<tr><td>' + (c.cliente || '-') + '</td><td>' + (c.producto || '-') + '</td><td>' + (c.proveedor || '-') + '</td><td>$' + (c.monto || 0) + '</td><td><span class="badge badge-blue">' + (c.metodo || '-') + '</span></td><td>' + (c.ticket || '-') + '</td><td>' + (c.fecha || c.created_at?.slice(0,10) || '-') + '</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:12px" onclick="borrarCompra(' + "'" + c.id + "'" + ')">✕</button></td></tr>').join('');
+  tbody.innerHTML = lista.map(c => '<tr><td>' + (c.cliente || '-') + '</td><td>' + (c.producto || '-') + '</td><td>' + (c.proveedor || '-') + '</td><td>$' + (c.monto || 0) + '</td><td><span class="badge badge-blue">' + (c.metodo || '-') + '</span></td><td>' + (c.ticket || '-') + '</td><td>' + (c.fecha || '') + '</td><td><button class="btn btn-danger" style="padding:5px 10px;font-size:12px" onclick="borrarCompra(\'' + c.id + '\')">✕</button></td></tr>').join('');
 }
 
 function abrirModalCompra() {
@@ -934,18 +698,7 @@ function abrirModalCompra() {
 }
 
 async function guardarCompra() {
-  const datos = {
-    comercio_code: currentUser.comercio_code,
-    comercio_nombre: currentComercio ? currentComercio.nombre : currentUser.nombre,
-    cliente: document.getElementById('mc-cliente').value,
-    producto: document.getElementById('mc-producto').value,
-    proveedor: document.getElementById('mc-proveedor').value,
-    monto: parseFloat(document.getElementById('mc-monto').value) || 0,
-    metodo: document.getElementById('mc-metodo').value,
-    ticket: document.getElementById('mc-ticket').value,
-    fecha: document.getElementById('mc-fecha').value,
-    origen: 'manual'
-  };
+  const datos = { comercio_code: currentUser.comercio_code, comercio_nombre: currentComercio ? currentComercio.nombre : currentUser.nombre, cliente: document.getElementById('mc-cliente').value, producto: document.getElementById('mc-producto').value, proveedor: document.getElementById('mc-proveedor').value, monto: parseFloat(document.getElementById('mc-monto').value) || 0, metodo: document.getElementById('mc-metodo').value, ticket: document.getElementById('mc-ticket').value, fecha: document.getElementById('mc-fecha').value, origen: 'manual' };
   const { data, error } = await sb.from('sq_compras').insert(datos).select().single();
   if (error) { showToast('Error: ' + error.message, true); return; }
   allCompras.unshift(data);
@@ -961,19 +714,17 @@ async function borrarCompra(id) {
   showToast('Compra eliminada');
 }
 
-// ─── NAV ───────────────────────────────────────────────────────────────────
 function showPage(p) {
   document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById('page-' + p).classList.add('active');
-  const navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(el => { if (el.getAttribute('onclick').includes("'" + p + "'")) el.classList.add('active'); });
+  document.querySelectorAll('.nav-item').forEach(el => { if ((el.getAttribute('onclick') || '').includes("'" + p + "'")) el.classList.add('active'); });
   if (p === 'respuestas') renderRespuestas();
   if (p === 'estadisticas') renderEstadisticas();
   if (p === 'compras') renderCompras();
+  if (p === 'tickets') cargarTickets();
 }
 
-// ─── UTILS ─────────────────────────────────────────────────────────────────
 function showToast(msg, err) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -984,7 +735,6 @@ function showToast(msg, err) {
 
 function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
 
-// Close modal on overlay click
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
 });
