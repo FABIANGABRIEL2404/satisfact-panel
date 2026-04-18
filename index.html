@@ -242,7 +242,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <!-- TICKETS -->
     <div id="pg-tickets" class="pg">
       <div class="tb"><div class="tb-title">🧾 Tickets escaneados</div>
-        <select id="f-tick-cli" onchange="renderTickets()" style="width:auto;font-size:13px"><option value="">Todos los clientes</option></select>
+        <div class="row" style="gap:8px">
+          <select id="f-tick-cli" onchange="renderTickets()" style="width:auto;font-size:13px"><option value="">Todos los clientes</option></select>
+          <button class="btn" onclick="exportarTicketsCSV()">Exportar CSV</button>
+        </div>
       </div>
       <div class="ct">
         <div class="card"><div class="tbl">
@@ -458,6 +461,32 @@ async function renderTickets(){
     var url=t.archivo_url?'<a href="'+t.archivo_url+'" target="_blank" style="color:var(--ac);font-size:12px">Ver</a>':'-';
     return'<tr><td style="color:var(--tx3)">'+(t.encuesta_fecha||'-')+'</td><td>'+(t.cliente_nombre||'Anonimo')+'</td><td><span class="badge bg">'+(t.comercio_code||'-')+'</span></td><td>'+(item.producto||'-')+'</td><td>'+(item.cantidad||1)+'</td><td>$'+(item.precio_unitario||0)+'</td><td>$'+(item.subtotal||0)+'</td><td>'+url+'</td></tr>';
   }).join('');
+}
+
+function exportarTicketsCSV(){
+  var tb=document.getElementById('tick-tbody');
+  var filas=tb?tb.querySelectorAll('tr'):[];
+  if(!filas.length){toast('No hay tickets para exportar');return;}
+  var csv='Fecha,Cliente,Comercio,Producto,Cantidad,Precio unitario,Subtotal\n';
+  filas.forEach(function(tr){
+    var celdas=tr.querySelectorAll('td');
+    if(celdas.length<7)return;
+    var fila=[
+      celdas[0].textContent.trim(),
+      celdas[1].textContent.trim(),
+      celdas[2].textContent.trim(),
+      celdas[3].textContent.trim(),
+      celdas[4].textContent.trim(),
+      celdas[5].textContent.trim(),
+      celdas[6].textContent.trim()
+    ].map(function(v){return'"'+v.replace(/"/g,'""')+'"';}).join(',');
+    csv+=fila+'\n';
+  });
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='tickets.csv';
+  a.click();
+  toast('CSV descargado');
 }
 
 function renderDash(){
