@@ -314,14 +314,6 @@ tr:hover td { background: #f8fafc; }
           </div>
         </div>
         <div class="form-group">
-          <label>Sección de compras en encuesta</label>
-          <select id="form-modo-compras">
-            <option value="ninguno">Sin sección de compras</option>
-            <option value="manual">Carga manual de productos</option>
-            <option value="ticket_ia">Subir ticket — IA extrae los ítems</option>
-          </select>
-        </div>
-        <div class="form-group">
           <label>Mensaje de bienvenida</label>
           <textarea id="form-bienvenida" rows="2" placeholder="¡Hola! Tu opinión nos importa."></textarea>
         </div>
@@ -368,9 +360,6 @@ tr:hover td { background: #f8fafc; }
     <div class="page-section" id="page-tickets">
       <div class="page-title">Tickets escaneados</div>
       <div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
-      <div style="margin-bottom:16px">
-        <button class="btn btn-outline" onclick="exportarTicketsCSV()">⬇️ Exportar CSV</button>
-      </div>
       <div class="card">
         <div class="tbl-wrap">
           <table>
@@ -402,7 +391,6 @@ tr:hover td { background: #f8fafc; }
       </div>
       <div class="filters-bar">
         <input type="text" id="comp-buscar" placeholder="Buscar cliente..." oninput="renderCompras()" style="max-width:200px">
-        <input type="text" id="comp-telefono" placeholder="Filtrar por teléfono..." oninput="renderCompras()" style="max-width:180px">
         <select id="comp-metodo" onchange="renderCompras()">
           <option value="">Todos los métodos</option>
           <option value="efectivo">Efectivo</option>
@@ -563,9 +551,6 @@ function cargarFormularioEditor() {
   document.getElementById('form-nombre').value = currentFormulario.nombre || '';
   document.getElementById('form-bienvenida').value = currentFormulario.bienvenida || '';
   document.getElementById('form-lang').value = currentFormulario.lang || 'es';
-  if (document.getElementById('form-modo-compras')) {
-    document.getElementById('form-modo-compras').value = currentFormulario.modo_compras || 'ninguno';
-  }
   preguntas = Array.isArray(currentFormulario.preguntas) ? currentFormulario.preguntas : [];
   renderPreguntas();
 }
@@ -600,7 +585,7 @@ function delPregunta(i) { preguntas.splice(i, 1); renderPreguntas(); }
 
 async function guardarFormulario() {
   const code = currentUser.comercio_code;
-  const datos = { comercio_code: code, nombre: document.getElementById('form-nombre').value || 'Encuesta', bienvenida: document.getElementById('form-bienvenida').value, lang: document.getElementById('form-lang').value, modo_compras: document.getElementById('form-modo-compras').value, preguntas, updated_at: new Date().toISOString() };
+  const datos = { comercio_code: code, nombre: document.getElementById('form-nombre').value || 'Encuesta', bienvenida: document.getElementById('form-bienvenida').value, lang: document.getElementById('form-lang').value, preguntas, updated_at: new Date().toISOString() };
   let res;
   if (currentFormulario && currentFormulario.id) {
     res = await sb.from('sq_formularios').update(datos).eq('id', currentFormulario.id);
@@ -694,38 +679,11 @@ async function cargarTickets() {
   }).join('');
 }
 
-function exportarTicketsCSV() {
-  const tbody = document.getElementById('tickets-tbody');
-  const filas = tbody ? tbody.querySelectorAll('tr') : [];
-  if (!filas.length) { showToast('No hay tickets para exportar', true); return; }
-  let csv = 'Fecha,Cliente,Producto,Cantidad,Precio unitario,Subtotal\n';
-  filas.forEach(tr => {
-    const celdas = tr.querySelectorAll('td');
-    if (celdas.length < 6) return;
-    const fila = [
-      celdas[0].textContent.trim(),
-      celdas[1].textContent.trim(),
-      celdas[2].textContent.trim(),
-      celdas[3].textContent.trim(),
-      celdas[4].textContent.trim(),
-      celdas[5].textContent.trim()
-    ].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
-    csv += fila + '\n';
-  });
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
-  a.download = 'tickets.csv';
-  a.click();
-  showToast('CSV descargado');
-}
-
 function renderCompras() {
   const busca = (document.getElementById('comp-buscar').value || '').toLowerCase();
-  const telefono = (document.getElementById('comp-telefono').value || '').trim();
   const metodo = document.getElementById('comp-metodo').value;
   const lista = allCompras.filter(c => {
     if (busca && !(c.cliente || '').toLowerCase().includes(busca)) return false;
-    if (telefono && !(c.telefono || '').includes(telefono)) return false;
     if (metodo && c.metodo !== metodo) return false;
     return true;
   });
