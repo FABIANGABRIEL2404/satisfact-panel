@@ -274,6 +274,7 @@ tr:hover td { background: #f8fafc; }
       <div class="nav-item" onclick="showPage('tickets')"><span class="nav-icon">🧾</span> Tickets</div>
     </nav>
     <div class="sidebar-footer">
+      <button onclick="abrirCambiarPassword()" style="width:100%;padding:9px;background:rgba(37,99,235,0.2);color:#93c5fd;border:1px solid rgba(37,99,235,0.3);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:all .2s">Cambiar contraseña</button>
       <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
     </div>
   </div>
@@ -312,6 +313,14 @@ tr:hover td { background: #f8fafc; }
               <option value="pt">🇧🇷 Português</option>
             </select>
           </div>
+        </div>
+        <div class="form-group">
+          <label>Sección de compras en encuesta</label>
+          <select id="form-modo-compras">
+            <option value="ninguno">Sin sección de compras</option>
+            <option value="manual">Carga manual de productos</option>
+            <option value="ticket_ia">Subir ticket — IA extrae los ítems</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Mensaje de bienvenida</label>
@@ -360,6 +369,9 @@ tr:hover td { background: #f8fafc; }
     <div class="page-section" id="page-tickets">
       <div class="page-title">Tickets escaneados</div>
       <div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
+      <div style="margin-bottom:16px">
+        <button class="btn btn-outline" onclick="exportarTicketsCSV()">⬇️ Exportar CSV</button>
+      </div>
       <div class="card">
         <div class="tbl-wrap">
           <table>
@@ -391,6 +403,7 @@ tr:hover td { background: #f8fafc; }
       </div>
       <div class="filters-bar">
         <input type="text" id="comp-buscar" placeholder="Buscar cliente..." oninput="renderCompras()" style="max-width:200px">
+        <input type="text" id="comp-telefono" placeholder="Filtrar por teléfono..." oninput="renderCompras()" style="max-width:180px">
         <select id="comp-metodo" onchange="renderCompras()">
           <option value="">Todos los métodos</option>
           <option value="efectivo">Efectivo</option>
@@ -444,6 +457,30 @@ tr:hover td { background: #f8fafc; }
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="cerrarModal('modal-compra')">Cancelar</button>
       <button class="btn btn-primary" onclick="guardarCompra()">Guardar compra</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR CONTRASEÑA -->
+<div class="modal-overlay" id="modal-password">
+  <div class="modal-box" style="max-width:380px">
+    <div class="modal-title">Cambiar contraseña</div>
+    <div class="form-group">
+      <label>Contraseña actual</label>
+      <input type="password" id="pass-actual" placeholder="••••••••">
+    </div>
+    <div class="form-group">
+      <label>Nueva contraseña</label>
+      <input type="password" id="pass-nueva" placeholder="••••••••">
+    </div>
+    <div class="form-group">
+      <label>Confirmar nueva contraseña</label>
+      <input type="password" id="pass-confirmar" placeholder="••••••••">
+    </div>
+    <div id="pass-error" style="color:#ef4444;font-size:13px;margin-bottom:10px;display:none"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="cerrarModal('modal-password')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarPassword()">Guardar</button>
     </div>
   </div>
 </div>
@@ -551,6 +588,9 @@ function cargarFormularioEditor() {
   document.getElementById('form-nombre').value = currentFormulario.nombre || '';
   document.getElementById('form-bienvenida').value = currentFormulario.bienvenida || '';
   document.getElementById('form-lang').value = currentFormulario.lang || 'es';
+  if (document.getElementById('form-modo-compras')) {
+    document.getElementById('form-modo-compras').value = currentFormulario.modo_compras || 'ninguno';
+  }
   preguntas = Array.isArray(currentFormulario.preguntas) ? currentFormulario.preguntas : [];
   renderPreguntas();
 }
@@ -585,7 +625,7 @@ function delPregunta(i) { preguntas.splice(i, 1); renderPreguntas(); }
 
 async function guardarFormulario() {
   const code = currentUser.comercio_code;
-  const datos = { comercio_code: code, nombre: document.getElementById('form-nombre').value || 'Encuesta', bienvenida: document.getElementById('form-bienvenida').value, lang: document.getElementById('form-lang').value, preguntas, updated_at: new Date().toISOString() };
+  const datos = { comercio_code: code, nombre: document.getElementById('form-nombre').value || 'Encuesta', bienvenida: document.getElementById('form-bienvenida').value, lang: document.getElementById('form-lang').value, modo_compras: document.getElementById('form-modo-compras').value, preguntas, updated_at: new Date().toISOString() };
   let res;
   if (currentFormulario && currentFormulario.id) {
     res = await sb.from('sq_formularios').update(datos).eq('id', currentFormulario.id);
@@ -679,11 +719,38 @@ async function cargarTickets() {
   }).join('');
 }
 
+function exportarTicketsCSV() {
+  const tbody = document.getElementById('tickets-tbody');
+  const filas = tbody ? tbody.querySelectorAll('tr') : [];
+  if (!filas.length) { showToast('No hay tickets para exportar', true); return; }
+  let csv = 'Fecha,Cliente,Producto,Cantidad,Precio unitario,Subtotal\n';
+  filas.forEach(tr => {
+    const celdas = tr.querySelectorAll('td');
+    if (celdas.length < 6) return;
+    const fila = [
+      celdas[0].textContent.trim(),
+      celdas[1].textContent.trim(),
+      celdas[2].textContent.trim(),
+      celdas[3].textContent.trim(),
+      celdas[4].textContent.trim(),
+      celdas[5].textContent.trim()
+    ].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
+    csv += fila + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'tickets.csv';
+  a.click();
+  showToast('CSV descargado');
+}
+
 function renderCompras() {
   const busca = (document.getElementById('comp-buscar').value || '').toLowerCase();
+  const telefono = (document.getElementById('comp-telefono').value || '').trim();
   const metodo = document.getElementById('comp-metodo').value;
   const lista = allCompras.filter(c => {
     if (busca && !(c.cliente || '').toLowerCase().includes(busca)) return false;
+    if (telefono && !(c.telefono || '').includes(telefono)) return false;
     if (metodo && c.metodo !== metodo) return false;
     return true;
   });
@@ -734,6 +801,34 @@ function showToast(msg, err) {
 }
 
 function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function abrirCambiarPassword() {
+  document.getElementById('pass-actual').value = '';
+  document.getElementById('pass-nueva').value = '';
+  document.getElementById('pass-confirmar').value = '';
+  document.getElementById('pass-error').style.display = 'none';
+  document.getElementById('modal-password').classList.add('open');
+}
+
+async function guardarPassword() {
+  const actual = document.getElementById('pass-actual').value.trim();
+  const nueva = document.getElementById('pass-nueva').value.trim();
+  const confirmar = document.getElementById('pass-confirmar').value.trim();
+  const errEl = document.getElementById('pass-error');
+  errEl.style.display = 'none';
+
+  if (!actual || !nueva || !confirmar) { errEl.textContent = 'Completá todos los campos'; errEl.style.display = 'block'; return; }
+  if (nueva !== confirmar) { errEl.textContent = 'Las contraseñas nuevas no coinciden'; errEl.style.display = 'block'; return; }
+  if (actual !== currentUser.password_hash) { errEl.textContent = 'La contraseña actual es incorrecta'; errEl.style.display = 'block'; return; }
+  if (nueva.length < 6) { errEl.textContent = 'La nueva contraseña debe tener al menos 6 caracteres'; errEl.style.display = 'block'; return; }
+
+  const { error } = await sb.from('sq_usuarios').update({ password_hash: nueva }).eq('id', currentUser.id);
+  if (error) { errEl.textContent = 'Error al guardar: ' + error.message; errEl.style.display = 'block'; return; }
+  currentUser.password_hash = nueva;
+  sessionStorage.setItem ? null : null;
+  cerrarModal('modal-password');
+  showToast('Contraseña actualizada correctamente');
+}
 
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
