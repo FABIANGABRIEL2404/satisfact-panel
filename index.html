@@ -154,6 +154,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
             <div class="fg"><label class="fl">Cliente</label><select id="sel-cli" onchange="cargarForm(this.value)"></select></div>
             <div class="fg"><label class="fl">Idioma</label><select id="sel-lang"><option value="es">Espanol</option><option value="en">English</option><option value="pt">Portugues</option></select></div>
           </div>
+          <div class="fg"><label class="fl">Seccion de compras en encuesta</label>
+            <select id="sel-modo-compras">
+              <option value="ninguno">Sin seccion de compras</option>
+              <option value="manual">Carga manual de productos</option>
+              <option value="ticket_ia">Subir ticket — IA extrae los items</option>
+            </select>
+          </div>
+          <div class="g2" style="margin-bottom:0">
+          </div>
           <div class="fg"><label class="fl">Nombre del formulario</label><input id="f-nombre" type="text" value="Encuesta"></div>
           <div class="fg"><label class="fl">Mensaje de bienvenida</label><textarea id="f-bienvenida" rows="2" style="resize:vertical">Gracias por visitarnos!</textarea></div>
           <div class="divider"></div>
@@ -579,6 +588,7 @@ async function cargarForm(code){
   document.getElementById('f-nombre').value=data?(data.nombre||''):'';
   document.getElementById('f-bienvenida').value=data?(data.bienvenida||''):'';
   if(data&&data.lang)document.getElementById('sel-lang').value=data.lang;
+  if(data&&data.modo_compras)document.getElementById('sel-modo-compras').value=data.modo_compras;
   var ql=document.getElementById('qlist');ql.innerHTML='';
   if(data&&data.preguntas)data.preguntas.forEach(function(q){var m={'Estrellas':'stars','Emoticones':'emoji','Opcion cerrada':'closed','Respuesta abierta':'open'};crearQ(m[q.tipo]||'open',q.texto||'',q.opciones||null);});
 }
@@ -592,7 +602,7 @@ async function guardarForm(){
     if(p.tipo==='Opcion cerrada'){p.opciones=[];b.querySelectorAll('.opt-inp').forEach(function(o){var v=o.value.trim();if(v)p.opciones.push(v);});}
     pregs.push(p);
   });
-  var data={comercio_code:code,nombre:document.getElementById('f-nombre').value.trim()||'Encuesta',bienvenida:document.getElementById('f-bienvenida').value.trim(),lang:document.getElementById('sel-lang').value,preguntas:pregs,updated_at:new Date().toISOString()};
+  var data={comercio_code:code,nombre:document.getElementById('f-nombre').value.trim()||'Encuesta',bienvenida:document.getElementById('f-bienvenida').value.trim(),lang:document.getElementById('sel-lang').value,modo_compras:document.getElementById('sel-modo-compras').value,preguntas:pregs,updated_at:new Date().toISOString()};
   var existing=await sb.from('sq_formularios').select('id').eq('comercio_code',code).single();
   var res=existing.data?await sb.from('sq_formularios').update(data).eq('comercio_code',code):await sb.from('sq_formularios').insert(data);
   if(res.error){toast('Error al guardar');return;}
@@ -746,7 +756,9 @@ async function cargarUsuarios(){
     var td2=document.createElement('td');td2.style.color='var(--tx2)';td2.textContent=u.email;
     var td3=document.createElement('td');var sp=document.createElement('span');sp.className=u.rol==='superadmin'?'badge bb':'badge bg';sp.textContent=u.rol==='superadmin'?'Super Admin':'Comercio';td3.appendChild(sp);
     var td4=document.createElement('td');td4.style.color='var(--tx2)';td4.textContent=u.comercio_code||'-';
-    var td5=document.createElement('td');var btn=document.createElement('button');btn.className='btn btns btnd';btn.textContent='Eliminar';btn.onclick=(function(id){return function(){eliminarUsuario(id);};})(u.id);td5.appendChild(btn);
+    var td5=document.createElement('td');
+    var btnPass=document.createElement('button');btnPass.className='btn btns';btnPass.textContent='Contraseña';btnPass.style.marginRight='4px';btnPass.onclick=(function(id,email){return function(){cambiarPassword(id,email);};})(u.id,u.email);td5.appendChild(btnPass);
+    var btn=document.createElement('button');btn.className='btn btns btnd';btn.textContent='Eliminar';btn.onclick=(function(id){return function(){eliminarUsuario(id);};})(u.id);td5.appendChild(btn);
     tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);tr.appendChild(td5);
     tb.appendChild(tr);
   });
@@ -777,6 +789,14 @@ async function guardarUsuario(){
   cargarUsuarios();
 }
 async function eliminarUsuario(id){if(!confirm('Eliminar este usuario?'))return;await sb.from('sq_usuarios').delete().eq('id',id);cargarUsuarios();toast('Usuario eliminado');}
+
+async function cambiarPassword(id, email){
+  var nueva=prompt('Nueva contraseña para '+email+':');
+  if(!nueva||nueva.trim()===''){return;}
+  var res=await sb.from('sq_usuarios').update({password_hash:nueva.trim()}).eq('id',id);
+  if(res.error){toast('Error al cambiar contraseña');return;}
+  toast('Contraseña actualizada para '+email);
+}
 
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
