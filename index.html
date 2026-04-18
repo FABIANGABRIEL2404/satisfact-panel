@@ -528,7 +528,10 @@ function renderClientes(){
       +'<div style="font-size:11px;color:var(--tx2)">'+(c.tipo||'Comercio')+' - '+(c.ciudad||'')+'</div>'
       +'<span class="ct2">'+c.code+'</span></div>'
       +'<span class="badge bg">'+(c.estado==='activo'?'Activo':'Pausado')+'</span></div>'
-      +'<div style="font-size:11px;color:var(--tx2)">'+rc+' respuestas</div>';
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">'
+      +'<div style="font-size:11px;color:var(--tx2)">'+rc+' respuestas</div>'
+      +'<button class="btn btns btnd" onclick="event.stopPropagation();eliminarCliente(\''+c.code+'\',\''+( c.nombre||'').replace(/'/g,'')+'\')" style="font-size:11px;padding:3px 8px">Eliminar</button>'
+      +'</div>';
     grid.appendChild(card);
   });
   var addCard=document.createElement('div');addCard.className='card';
@@ -539,6 +542,14 @@ function renderClientes(){
 }
 
 function nextCode(){if(!allClientes.length)return'CLI-001';var n=allClientes.map(function(c){return parseInt((c.code||'CLI-000').split('-')[1]||0);});return'CLI-'+String(Math.max.apply(null,n)+1).padStart(3,'0');}
+
+async function eliminarCliente(code, nombre){
+  if(!confirm('¿Eliminar el comercio "'+nombre+'" ('+code+')?\nEsto NO elimina sus respuestas ni compras.'))return;
+  var res=await sb.from('sq_clientes').delete().eq('code',code);
+  if(res.error){toast('Error al eliminar: '+res.error.message);return;}
+  await cargarClientes();poblarSelects();renderFormSelector();
+  toast('Comercio eliminado: '+code);
+}
 
 function abrirModalCliente(code){
   var c=code?allClientes.find(function(x){return x.code===code;}):null;
