@@ -395,40 +395,40 @@ tr:hover td { background: #f8fafc; }
       </div>
     </div>
 
-    <!-- COMPRAS -->
-    <div class="page-section" id="page-compras">
-      <div class="page-title">Base de Compras</div>
-      <div class="page-sub">Historial de compras de tus clientes</div>
-      <div style="margin-bottom:16px">
-        <button class="btn btn-primary" onclick="abrirModalCompra()">+ Nueva compra</button>
+       <!-- VENTAS CIRCUITO B -->
+    <div class="page-section" id="page-ventas">
+      <div class="page-title">Ventas registradas</div>
+      <div class="page-sub">Historial de ventas cargadas con datos del cliente y detalle de compra</div>
+      <div style="margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <a href="/comercio/carga-venta.html" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">+ Nueva carga</a>
+        <button class="btn btn-outline" onclick="exportVentasCSV()">⬇️ Exportar CSV</button>
+        <input type="text" id="vent-buscar" placeholder="Buscar cliente..." oninput="filtrarVentas()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;max-width:200px">
       </div>
-      <div class="filters-bar">
-        <input type="text" id="comp-buscar" placeholder="Buscar cliente..." oninput="renderCompras()" style="max-width:200px">
-        <input type="text" id="comp-telefono" placeholder="Filtrar por teléfono..." oninput="renderCompras()" style="max-width:180px">
-        <select id="comp-metodo" onchange="renderCompras()">
-          <option value="">Todos los métodos</option>
-          <option value="efectivo">Efectivo</option>
-          <option value="debito">Débito</option>
-          <option value="credito">Crédito</option>
-          <option value="transferencia">Transferencia</option>
-        </select>
-      </div>
+      <div id="ventas-stats" class="stats-grid" style="margin-bottom:20px"></div>
       <div class="card">
         <div class="tbl-wrap">
           <table>
             <thead>
               <tr>
-                <th>Cliente</th><th>Producto</th><th>Proveedor</th>
-                <th>Monto</th><th>Método</th><th>Ticket</th><th>Fecha</th><th></th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Teléfono</th>
+                <th>Localidad</th>
+                <th>Total</th>
+                <th>Medio pago</th>
+                <th>Productos</th>
+                <th>Bot WA</th>
+                <th>WA enviado</th>
+                <th>Comprobante</th>
               </tr>
             </thead>
-            <tbody id="compras-tbody"></tbody>
+            <tbody id="ventas-tbody">
+              <tr><td colspan="10" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
 <!-- MODAL COMPRA -->
 <div class="modal-overlay" id="modal-compra">
