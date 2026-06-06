@@ -833,6 +833,111 @@ async function guardarPassword() {
   showToast('Contraseña actualizada correctamente');
 }
 
+// ── CIRCUITO B: VERIFICAR Y CARGAR VENTAS ──
+
+async function verificarCircuitoB() {
+  if (!currentComercio) return;
+  const { data } = await sb.from('sq_config_comercio')
+    .select('circuito_b')
+    .eq('comercio_id', currentComercio.id)
+    .single();
+  if (data && data.circuito_b) {
+    document.getElementById('nav-ventas').style.display = 'flex';
+  }
+}
+
+let allVentas = [];
+
+async function cargarVentas() {
+  if (!currentComercio) return;
+  const { data } = await sb.from('sq_ventas')
+    .select('*')
+    .eq('comercio_id', currentComercio.id)
+    .order('created_at', { ascending: false });
+  allVentas = data || [];
+  renderVentasStats();
+  renderVentas(allVentas);
+}
+
+function renderVentasStats() {
+  const total = allVentas.length;
+  const conTel = allVentas.filter(v => v.telefono).length;
+  const waEnviados = allVentas.filter(v => v.whatsapp_enviado).length;
+  const totalMonto = allVentas.reduce((s, v) => s + (parseFloat(v.total_compra) || 0), 0);
+  document.getElementById('ventas-stats').innerHTML =
+    statCard('🛒', 'Total ventas', total) +
+    statCard('💰', 'Monto total', '$' + totalMonto.toLocaleString('es-AR')) +
+    statCard('📱', 'Con teléfono', conTel) +
+    statCard('✅', 'WA enviados', waEnviados);
+}
+
+function filtrarVentas() {
+  const busca = (document.getElementById('vent-buscar').value || '').toLowerCase();
+  const lista = busca ? allVentas.filter(v =>
+    (v.apellido || '').toLowerCase().includes(busca) ||
+    (v.nombre || '').toLowerCase().includes(busca) ||
+    (v.telefono || '').includes(busca)
+  ) : allVentas;
+  renderVentas(lista);
+}
+
+function renderVentas(lista) {
+  const tbody = document.getElementById('ventas-tbody');
+  if (!lista || lista.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay ventas registradas. <a href="/comercio/carga-venta.html" style="color:var(--primary)">Cargar primera venta →</a></td></tr>';
+    return;
+  }
+  tbody.innerHTML = lista.map(v => {
+    const fecha = v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '-';
+    const cliente = [v.apellido, v.nombre].filter(Boolean).join(', ') || 'Sin nombre';
+    const total = v.total_compra ? '$' + parseFloat(v.total_compra).toLocaleString('es-AR') : '-';
+    const medioPago = v.medio_pago || v.ia_extraccion?.medio_pago || '-';
+    const cuotas = v.cuotas && v.cuotas > 1 ? ' (' + v.cuotas + 'c)' : '';
+    const prods = v.productos_comprados || v.ia_extraccion?.productos_comprados || [];
+    const prodsStr = prods.length > 0
+      ? '<span title="' + prods.map(p => p.descripcion).join(', ') + '" style="cursor:help">' + prods.length + ' ítem(s) 🔍</span>'
+      : '-';
+    const bot = v.whatsapp_bot === 'vendedoria' ? '🛒 Vendedoria'
+      : v.whatsapp_bot === 'asistente_ia' ? '🤖 Asistente' : '-';
+    const waStatus = v.whatsapp_enviado
+      ? '<span class="badge badge-green">Enviado</span>'
+      : (v.telefono ? '<span class="badge badge-yellow">Pendiente</span>'
+        : '<span class="badge" style="background:#f1f5f9;color:#64748b">Sin tel.</span>');
+    const comprobante = v.archivo_url
+      ? '<a href="' + v.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver 📎</a>'
+      : '-';
+    return '<tr>' +
+      '<td>' + fecha + '</td>' +
+      '<td style="font-weight:600">' + cliente + '</td>' +
+      '<td>' + (v.telefono || '-') + '</td>' +
+      '<td>' + (v.localidad || '-') + '</td>' +
+      '<td>' + total + '</td>' +
+      '<td>' + medioPago + cuotas + '</td>' +
+      '<td>' + prodsStr + '</td>' +
+      '<td style="font-size:12px">' + bot + '</td>' +
+      '<td>' + waStatus + '</td>' +
+      '<td>' + comprobante + '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function exportVentasCSV() {
+  if (!allVentas.length) { showToast('No hay ventas para exportar', true); return; }
+  const cols = ['Fecha','Apellido','Nombre','Telefono','Direccion','Localidad','Total','Medio pago','Cuotas','Bot WA','WA enviado'];
+  const rows = [cols.join(','), ...allVentas.map(v => [
+    v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '',
+    v.apellido || '', v.nombre || '', v.telefono || '',
+    v.direccion || '', v.localidad || '',
+    v.total_compra || '', v.medio_pago || '', v.cuotas || '',
+    v.whatsapp_bot || '', v.whatsapp_enviado ? 'Si' : 'No'
+  ].map(c => '"' + String(c).replace(/"/g, '""') + '"').join(','))];
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n'));
+  a.download = 'ventas.csv';
+  a.click();
+  showToast('CSV descargado');
+}
+  
 document.querySelectorAll('.modal-overlay').forEach(el => {
   el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
 });
