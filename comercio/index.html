@@ -271,7 +271,8 @@ tr:hover td { background: #f8fafc; }
       <div class="nav-item" onclick="showPage('respuestas')"><span class="nav-icon">💬</span> Respuestas</div>
       <div class="nav-item" onclick="showPage('estadisticas')"><span class="nav-icon">📈</span> Estadísticas</div>
       <div class="nav-item" onclick="showPage('compras')"><span class="nav-icon">🛍️</span> Compras</div>
-      <div class="nav-item" onclick="showPage('tickets')"><span class="nav-icon">🧾</span> Tickets</div>
+    <div class="nav-item" onclick="showPage('tickets')"><span class="nav-icon">🧾</span> Tickets</div>
+      <div class="nav-item" id="nav-ventas" onclick="showPage('ventas')" style="display:none"><span class="nav-icon">🛒</span> Ventas <span style="font-size:10px;background:#6c63ff;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">NUEVO</span></div>
     </nav>
     <div class="sidebar-footer">
       <button onclick="abrirCambiarPassword()" style="width:100%;padding:9px;background:rgba(37,99,235,0.2);color:#93c5fd;border:1px solid rgba(37,99,235,0.3);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:all .2s">Cambiar contraseña</button>
@@ -522,6 +523,8 @@ function iniciarApp() {
   document.getElementById('com-name').textContent = nombre;
   document.getElementById('com-code').textContent = currentUser.comercio_code || '';
   document.getElementById('com-icon').textContent = currentComercio ? (currentComercio.emoji || '🏪') : '🏪';
+  if (currentComercio) localStorage.setItem('sq_comercio_id', currentComercio.id);
+  verificarCircuitoB();
   cargarTodo();
 }
 
