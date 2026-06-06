@@ -538,6 +538,7 @@ function doLogout() {
 async function cargarTodo() {
   const code = currentUser.comercio_code;
   if (!code) return;
+  cargarVentas();
   const [r1, r2, r3] = await Promise.all([
     sb.from('sq_respuestas').select('*').eq('comercio_code', code).order('created_at', { ascending: false }),
     sb.from('sq_compras').select('*').eq('comercio_code', code).order('created_at', { ascending: false }),
