@@ -587,7 +587,8 @@ async function guardarCliente(){
   var idiomas=[];
   document.querySelectorAll('#modal-cliente .tag[data-lang].on').forEach(function(t){idiomas.push(t.dataset.lang);});
   if(!idiomas.length)idiomas=['Espanol'];
-  var obj={code:editCode||nextCode(),nombre:nombre,tipo:document.getElementById('cli-tipo').value,ciudad:document.getElementById('cli-ciudad').value.trim(),emoji:document.getElementById('cli-emoji').value.trim(),email:document.getElementById('cli-email').value.trim(),idiomas:idiomas,estado:'activo'};
+  var slugBase=nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+var obj={code:editCode||nextCode(),nombre:nombre,tipo:document.getElementById('cli-tipo').value,ciudad:document.getElementById('cli-ciudad').value.trim(),emoji:document.getElementById('cli-emoji').value.trim(),email:document.getElementById('cli-email').value.trim(),idiomas:idiomas,estado:'activo',slug:editCode?undefined:slugBase};
   var res=editCode?await sb.from('sq_clientes').update(obj).eq('code',editCode):await sb.from('sq_clientes').insert(obj);
   if(res.error){toast('Error: '+res.error.message);return;}
   document.getElementById('modal-cliente').classList.remove('open');
