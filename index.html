@@ -449,6 +449,7 @@ function showPage(id){
   if(id==='formularios')renderFormSelector();
   if(id==='usuarios')cargarUsuarios();
   if(id==='tickets'){poblarSelectTickets();renderTickets();}
+  if(id==='circuitos')cargarCircuitos();
 }
 
 function poblarSelects(){
@@ -821,6 +822,99 @@ async function cambiarPassword(id, email){
 }
 
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
+// ── CIRCUITOS ──
+async function cargarCircuitos() {
+  var grid = document.getElementById('circuitos-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="loading">Cargando...</div>';
+
+  // Cargar configuraciones existentes
+  var res = await sb.from('sq_config_comercio').select('*');
+  var configs = res.data || [];
+  var configMap = {};
+  configs.forEach(function(c) { configMap[c.comercio_id] = c; });
+
+  if (!allClientes.length) {
+    grid.innerHTML = '<div style="padding:20px;color:var(--tx3)">No hay clientes creados aun.</div>';
+    return;
+  }
+
+  grid.innerHTML = allClientes.map(function(c) {
+    var cfg = configMap[c.id] || { circuito_a: true, circuito_b: false, bot_whatsapp: 'vendedoria' };
+    var cfgId = configMap[c.id] ? configMap[c.id].id : null;
+    return '<div class="card" style="margin-bottom:12px">'
+      + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'
+      + '<div style="width:40px;height:40px;border-radius:var(--r);background:var(--al);display:flex;align-items:center;justify-content:center;font-size:18px">' + (c.emoji || '🏪') + '</div>'
+      + '<div><div style="font-weight:600;font-size:14px">' + c.nombre + '</div>'
+      + '<div style="font-size:11px;color:var(--tx3)">' + c.code + ' · ' + (c.ciudad || '') + '</div></div></div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'
+      // Circuito A
+      + '<div style="background:var(--bg2);border-radius:var(--r);padding:12px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
+      + '<div style="font-size:12px;font-weight:600">Circuito A</div>'
+      + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer">'
+      + '<input type="checkbox" id="ca-' + c.id + '"' + (cfg.circuito_a ? ' checked' : '') + ' style="width:auto">'
+      + '<span style="font-size:12px">' + (cfg.circuito_a ? 'Activo' : 'Inactivo') + '</span>'
+      + '</label></div>'
+      + '<div style="font-size:11px;color:var(--tx3)">Encuesta de satisfaccion</div></div>'
+      // Circuito B
+      + '<div style="background:var(--bg2);border-radius:var(--r);padding:12px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
+      + '<div style="font-size:12px;font-weight:600">Circuito B</div>'
+      + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer">'
+      + '<input type="checkbox" id="cb-' + c.id + '"' + (cfg.circuito_b ? ' checked' : '') + ' style="width:auto">'
+      + '<span style="font-size:12px">' + (cfg.circuito_b ? 'Activo' : 'Inactivo') + '</span>'
+      + '</label></div>'
+      + '<div style="font-size:11px;color:var(--tx3)">Ventas + WhatsApp bot</div></div>'
+      + '</div>'
+      // Bot selector
+      + '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+      + '<div style="font-size:12px;color:var(--tx2);font-weight:500">Bot WhatsApp:</div>'
+      + '<select id="bot-' + c.id + '" style="width:auto;font-size:12px;padding:4px 8px">'
+      + '<option value="vendedoria"' + (cfg.bot_whatsapp === 'vendedoria' ? ' selected' : '') + '>🛒 Vendedoria</option>'
+      + '<option value="asistente_ia"' + (cfg.bot_whatsapp === 'asistente_ia' ? ' selected' : '') + '>🤖 Asistente IA</option>'
+      + '</select>'
+      + '<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId || '') + '\')">'
+      + 'Guardar</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+
+  // Actualizar labels al cambiar checkboxes
+  allClientes.forEach(function(c) {
+    ['ca', 'cb'].forEach(function(prefix) {
+      var cb = document.getElementById(prefix + '-' + c.id);
+      if (cb) cb.addEventListener('change', function() {
+        this.nextElementSibling.textContent = this.checked ? 'Activo' : 'Inactivo';
+      });
+    });
+  });
+}
+
+async function guardarCircuito(clienteId, configId) {
+  var circuitoA = document.getElementById('ca-' + clienteId).checked;
+  var circuitoB = document.getElementById('cb-' + clienteId).checked;
+  var bot = document.getElementById('bot-' + clienteId).value;
+
+  var datos = {
+    comercio_id: clienteId,
+    circuito_a: circuitoA,
+    circuito_b: circuitoB,
+    bot_whatsapp: bot
+  };
+
+  var res;
+  if (configId) {
+    res = await sb.from('sq_config_comercio').update(datos).eq('id', configId);
+  } else {
+    res = await sb.from('sq_config_comercio').insert(datos);
+  }
+
+  if (res.error) { toast('Error al guardar: ' + res.error.message); return; }
+  toast('Configuracion guardada para el comercio');
+  cargarCircuitos(); // recargar para actualizar IDs
+}
+
 
 var savedUser=sessionStorage.getItem('sq_user');
 if(savedUser){try{currentUser=JSON.parse(savedUser);iniciarApp();}catch(e){sessionStorage.removeItem('sq_user');}}
