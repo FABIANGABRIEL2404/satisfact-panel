@@ -387,7 +387,11 @@ async function doLogin(){
   var email=document.getElementById('login-email').value.trim();
   var pass=document.getElementById('login-pass').value.trim();
   if(!email||!pass){document.getElementById('login-err').style.display='block';return;}
-  var res=await sb.from('sq_usuarios').select('*').eq('email',email).eq('password_hash',pass).eq('activo',true).single();
+  // Autenticar con Supabase Auth
+  var authRes=await sb.auth.signInWithPassword({email:email,password:pass});
+  if(authRes.error){document.getElementById('login-err').style.display='block';return;}
+  // Buscar datos del usuario en sq_usuarios
+  var res=await sb.from('sq_usuarios').select('*').eq('email',email).eq('activo',true).single();
   if(res.error||!res.data){document.getElementById('login-err').style.display='block';return;}
   currentUser=res.data;
   sessionStorage.setItem('sq_user',JSON.stringify(currentUser));
@@ -395,6 +399,7 @@ async function doLogin(){
 }
 
 function doLogout(){
+  sb.auth.signOut();
   currentUser=null;sessionStorage.removeItem('sq_user');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
