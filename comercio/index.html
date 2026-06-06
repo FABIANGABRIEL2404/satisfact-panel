@@ -503,7 +503,11 @@ async function doLogin() {
   const errEl = document.getElementById('login-err');
   errEl.style.display = 'none';
   if (!email || !pass) { errEl.style.display = 'block'; errEl.textContent = 'Completá todos los campos'; return; }
-  const { data, error } = await sb.from('sq_usuarios').select('*').eq('email', email).eq('password_hash', pass).eq('rol', 'comercio').eq('activo', true).single();
+  // Autenticar con Supabase Auth
+  const authRes = await sb.auth.signInWithPassword({ email, password: pass });
+  if (authRes.error) { errEl.style.display = 'block'; return; }
+  // Buscar datos del usuario
+  const { data, error } = await sb.from('sq_usuarios').select('*').eq('email', email).eq('rol', 'comercio').eq('activo', true).single();
   if (error || !data) { errEl.style.display = 'block'; return; }
   currentUser = data;
   await cargarComercio();
@@ -529,6 +533,7 @@ function iniciarApp() {
 }
 
 function doLogout() {
+  sb.auth.signOut();
   currentUser = null; currentComercio = null;
   allRespuestas = []; allCompras = [];
   document.getElementById('app').style.display = 'none';
