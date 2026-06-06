@@ -804,6 +804,13 @@ async function guardarUsuario(){
   var rol=document.getElementById('usr-rol').value;
   var comercio=document.getElementById('usr-comercio').value||null;
   if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
+  // 1. Crear en Supabase Auth
+  var authRes=await sb.auth.admin.createUser({email:email,password:pass,email_confirm:true});
+  if(authRes.error){
+    // Si ya existe en Auth, continuar igual
+    if(!authRes.error.message.includes('already')){toast('Error Auth: '+authRes.error.message);return;}
+  }
+  // 2. Crear en sq_usuarios
   var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true});
   if(res.error){toast('Error: '+res.error.message);return;}
   if(rol==='comercio'){
