@@ -220,6 +220,30 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
             <label>Localidad <span class="ia-tag" id="t-loc">IA</span></label>
             <input type="text" id="f-loc" placeholder="Mar del Plata">
           </div>
+          <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
+          <div class="card-title" style="margin-bottom:10px">Detalle de la compra</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Medio de pago <span class="ia-tag" id="t-mpago">IA</span></label>
+              <input type="text" id="f-mpago" placeholder="Efectivo / Tarjeta...">
+            </div>
+            <div class="field">
+              <label>Cuotas <span class="ia-tag" id="t-cuotas">IA</span></label>
+              <input type="number" id="f-cuotas" placeholder="1" min="1">
+            </div>
+          </div>
+          <div class="field">
+            <label>Total de la compra <span class="ia-tag" id="t-total">IA</span></label>
+            <input type="number" id="f-total" placeholder="0.00" step="0.01">
+          </div>
+          <div class="field">
+            <label>Productos / servicios <span class="ia-tag" id="t-prods">IA</span></label>
+            <div id="prods-lista" style="font-size:12px;color:var(--text2);padding:8px;background:var(--surface2);border-radius:var(--radius-sm);min-height:36px;border:1px solid var(--border)">Sin productos detectados</div>
+          </div>
+          <div class="field">
+            <label>Observaciones <span class="ia-tag" id="t-obs">IA</span></label>
+            <input type="text" id="f-obs" placeholder="Descuentos, promociones, nro. pedido...">
+          </div>
         </div>
       </div>
       <div>
@@ -404,13 +428,23 @@ function poblarCampos(d) {
     if (d[campo]) { inp.value = d[campo]; inp.classList.add('ia-ok'); }
     if (enc.includes(campo)) tag.style.display = 'inline';
   });
+  // Campos de compra
+  if (d.medio_pago) { document.getElementById('f-mpago').value = d.medio_pago; document.getElementById('f-mpago').classList.add('ia-ok'); document.getElementById('t-mpago').style.display = 'inline'; }
+  if (d.cuotas) { document.getElementById('f-cuotas').value = d.cuotas; document.getElementById('f-cuotas').classList.add('ia-ok'); document.getElementById('t-cuotas').style.display = 'inline'; }
+  if (d.total_compra) { document.getElementById('f-total').value = d.total_compra; document.getElementById('f-total').classList.add('ia-ok'); document.getElementById('t-total').style.display = 'inline'; }
+  if (d.observaciones) { document.getElementById('f-obs').value = d.observaciones; document.getElementById('t-obs').style.display = 'inline'; }
+  if (d.productos_comprados && d.productos_comprados.length > 0) {
+    const lista = d.productos_comprados.map(p => `<div style="padding:3px 0;border-bottom:1px solid var(--border)">${p.cantidad || 1}x ${p.descripcion} ${p.subtotal ? '— $'+Number(p.subtotal).toLocaleString('es-AR') : ''}</div>`).join('');
+    document.getElementById('prods-lista').innerHTML = lista;
+    document.getElementById('t-prods').style.display = 'inline';
+  }
   const bar = document.getElementById('ia-bar');
   bar.style.display = 'flex';
   const conf = d.confianza || 0;
   const cel = document.getElementById('ia-conf');
   cel.textContent = Math.round(conf * 100) + '% confianza';
   cel.className = 'ia-conf ' + (conf >= 0.8 ? 'high' : conf >= 0.5 ? 'med' : 'low');
-  document.getElementById('ia-status').textContent = enc.length + ' de 5 campos detectados';
+  document.getElementById('ia-status').textContent = enc.length + ' campos del cliente detectados';
 }
 
 async function guardar() {
@@ -446,7 +480,12 @@ async function guardar() {
       metodo_carga: S.tipo,
       ia_extraccion: S.iaData,
       ia_confianza: S.iaData?.confianza || null,
-      whatsapp_bot: S.bot
+      whatsapp_bot: S.bot,
+      medio_pago: document.getElementById('f-mpago').value.trim() || null,
+      cuotas: parseInt(document.getElementById('f-cuotas').value) || null,
+      total_compra: parseFloat(document.getElementById('f-total').value) || null,
+      productos_comprados: S.iaData?.productos_comprados || null,
+      observaciones: document.getElementById('f-obs').value.trim() || null
     };
     const ins = await fetch(`${SB_URL}/rest/v1/sq_ventas`, {
       method: 'POST',
