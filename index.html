@@ -116,6 +116,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <div class="sb-sec">Compras</div>
     <div class="ni" onclick="showPage('compras')">Base de datos</div>
     <div class="ni" onclick="showPage('tickets')">🧾 Tickets</div>
+    <div class="sb-sec">Configuracion</div>
+    <div class="ni" onclick="showPage('circuitos')">⚙️ Circuitos</div>
     <div class="sb-sec" id="nav-admin-sec" style="display:none">Administracion</div>
     <div class="ni" onclick="showPage('usuarios')" id="nav-usuarios" style="display:none">Usuarios</div>
     <div class="sb-logout"><button onclick="doLogout()">Cerrar sesion</button></div>
@@ -264,6 +266,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
       </div>
     </div>
 
+    <!-- CIRCUITOS -->
+    <div id="pg-circuitos" class="pg">
+      <div class="tb"><div class="tb-title">Configuracion de circuitos</div></div>
+      <div class="ct">
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Activá o desactivá los circuitos A (encuesta) y B (ventas + WhatsApp) para cada comercio.</div>
+        <div id="circuitos-grid"></div>
+      </div>
+    </div>
+    
     <!-- USUARIOS -->
     <div id="pg-usuarios" class="pg">
       <div class="tb"><div class="tb-title">Usuarios</div><button class="btn btnp" onclick="document.getElementById('modal-usuario').classList.add('open');poblarSelects()">+ Nuevo usuario</button></div>
