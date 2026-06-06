@@ -322,8 +322,24 @@ let S = {
   iaData: null, comercioId: null
 };
 
-window.onload = () => {
-  S.comercioId = localStorage.getItem('sq_comercio_id') || null;
+window.onload = async () => {
+  // Leer slug de la URL (/carga/nuevos-rumbos) o comercio_id del localStorage
+  const pathSlug = window.location.pathname.split('/').pop();
+  if (pathSlug && pathSlug !== 'carga-venta.html') {
+    // Buscar comercio por slug
+    const res = await fetch(`${SB_URL}/rest/v1/sq_clientes?slug=eq.${pathSlug}&select=id,nombre,slug`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const data = await res.json();
+    if (data && data.length > 0) {
+      S.comercioId = data[0].id;
+      S.comercioNombre = data[0].nombre;
+      // Mostrar nombre del comercio en el header
+      document.querySelector('.header-sub').textContent = '— ' + data[0].nombre;
+    }
+  } else {
+    S.comercioId = localStorage.getItem('sq_comercio_id') || null;
+  }
   const zone = document.getElementById('drop-zone');
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
