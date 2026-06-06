@@ -116,8 +116,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <div class="sb-sec">Compras</div>
     <div class="ni" onclick="showPage('compras')">Base de datos</div>
     <div class="ni" onclick="showPage('tickets')">🧾 Tickets</div>
-    <div class="sb-sec">Configuracion</div>
-    <div class="ni" onclick="showPage('circuitos')">⚙️ Circuitos</div>
+    <div class="sb-sec" id="nav-circuitos-sec" style="display:none">Configuracion</div>
+<div class="ni" id="nav-circuitos" onclick="showPage('circuitos')" style="display:none">⚙️ Circuitos</div>
     <div class="sb-sec" id="nav-admin-sec" style="display:none">Administracion</div>
     <div class="ni" onclick="showPage('usuarios')" id="nav-usuarios" style="display:none">Usuarios</div>
     <div class="sb-logout"><button onclick="doLogout()">Cerrar sesion</button></div>
@@ -409,6 +409,9 @@ function iniciarApp(){
   if(currentUser.rol==='superadmin'){
     document.getElementById('nav-admin-sec').style.display='block';
     document.getElementById('nav-usuarios').style.display='flex';
+    document.getElementById('nav-circuitos-sec').style.display='block';
+    document.getElementById('nav-circuitos').style.display='flex';
+  }
   }
   if(currentUser.rol!=='superadmin'){
     document.getElementById('btn-nuevo-cli').style.display='none';
