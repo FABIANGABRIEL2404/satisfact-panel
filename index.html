@@ -909,17 +909,6 @@ async function cargarCircuitos() {
   });
 }
 
-+ '<select id="bot-' + c.id + '" style="width:auto;font-size:12px;padding:4px 8px">'
-+ '<option value="vendedoria"' + (cfg.bot_whatsapp === 'vendedoria' ? ' selected' : '') + '>🛒 Vendedoria</option>'
-+ '<option value="asistente_ia"' + (cfg.bot_whatsapp === 'asistente_ia' ? ' selected' : '') + '>🤖 Asistente IA</option>'
-+ '</select>'
-+ '<select id="plan-' + c.id + '" style="width:auto;font-size:12px;padding:4px 8px">'
-+ '<option value="basico"' + (cfg.bot_plan === 'basico' ? ' selected' : '') + '>Básico (10k tokens)</option>'
-+ '<option value="profesional"' + (cfg.bot_plan === 'profesional' ? ' selected' : '') + '>Profesional (100k tokens)</option>'
-+ '<option value="enterprise"' + (cfg.bot_plan === 'enterprise' ? ' selected' : '') + '>Enterprise (300k tokens)</option>'
-+ '</select>'
-
-
 var savedUser=sessionStorage.getItem('sq_user');
 if(savedUser){try{currentUser=JSON.parse(savedUser);iniciarApp();}catch(e){sessionStorage.removeItem('sq_user');}}
 </script>
