@@ -909,6 +909,51 @@ async function cargarCircuitos() {
   });
 }
 
+async function guardarCircuito(clienteId, configId) {
+  var circuitoA = document.getElementById('ca-' + clienteId).checked;
+  var circuitoB = document.getElementById('cb-' + clienteId).checked;
+  var bot = document.getElementById('bot-' + clienteId).value;
+  var plan = document.getElementById('plan-' + clienteId) ? document.getElementById('plan-' + clienteId).value : 'basico';
+
+  var datos = {
+    comercio_id: clienteId,
+    circuito_a: circuitoA,
+    circuito_b: circuitoB,
+    bot_whatsapp: bot,
+    bot_plan: plan
+  };
+
+  var res;
+  if (configId) {
+    res = await sb.from('sq_config_comercio').update(datos).eq('id', configId);
+  } else {
+    res = await sb.from('sq_config_comercio').insert(datos);
+  }
+
+  if (res.error) { toast('Error al guardar: ' + res.error.message); return; }
+
+  // Si activó Circuito B y no tiene bot_cliente_id todavía, crear en AsistenteIA/Vendedoria
+  if (circuitoB) {
+    var cfg = await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id', clienteId).single();
+    if (!cfg.data || !cfg.data.bot_cliente_id) {
+      toast('Creando cliente en el bot...');
+      var fnRes = await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-crear-bot-cliente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SB_KEY },
+        body: JSON.stringify({ comercio_id: clienteId, bot_tipo: bot, bot_plan: plan })
+      });
+      var fnData = await fnRes.json();
+      if (fnData.error) { toast('Error creando bot cliente: ' + fnData.error); return; }
+      toast('Cliente creado en ' + (bot === 'vendedoria' ? 'Vendedoria' : 'AsistenteIA'));
+    } else {
+      toast('Configuracion guardada');
+    }
+  } else {
+    toast('Configuracion guardada');
+  }
+
+  cargarCircuitos();
+}  
 var savedUser=sessionStorage.getItem('sq_user');
 if(savedUser){try{currentUser=JSON.parse(savedUser);iniciarApp();}catch(e){sessionStorage.removeItem('sq_user');}}
 </script>
