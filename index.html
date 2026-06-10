@@ -855,7 +855,8 @@ async function cargarCircuitos() {
   }
 
   grid.innerHTML = allClientes.map(function(c) {
-    var cfg = configMap[c.id] || { circuito_a: true, circuito_b: false, bot_whatsapp: 'vendedoria' };
+    var cfg = configMap[c.id] || { circuito_a: true, circuito_b: false, bot_whatsapp: 'vendedoria', voz_activa: false };
+
     var cfgId = configMap[c.id] ? configMap[c.id].id : null;
     return '<div class="card" style="margin-bottom:12px">'
       + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'
@@ -892,6 +893,15 @@ async function cargarCircuitos() {
 + '<option value="profesional"' + (cfg.bot_plan === 'profesional' ? ' selected' : '') + '>Profesional (100k tokens)</option>'
 + '<option value="enterprise"' + (cfg.bot_plan === 'enterprise' ? ' selected' : '') + '>Enterprise (300k tokens)</option>'
 + '</select>'
++ '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:10px;background:var(--bg2);border-radius:var(--r)">'
++ '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px">'
++ '<input type="checkbox" id="voz-' + c.id + '"' + (cfg.voz_activa ? ' checked' : '') + ' style="width:auto">'
++ '<span>🔊 Voz activa</span>'
++ '</label>'
++ '<span style="font-size:11px;color:var(--tx3);flex:1">'
++ (cfg.bot_plan === 'enterprise' ? '— ElevenLabs (premium)' : '— Voz robótica (básica)')'
++ '</span>'
++ '</div>'      
 + '<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId || '') + '\')">'
 + 'Guardar</button>'
       + '</div>'
@@ -915,13 +925,17 @@ async function guardarCircuito(clienteId, configId) {
   var bot = document.getElementById('bot-' + clienteId).value;
   var plan = document.getElementById('plan-' + clienteId) ? document.getElementById('plan-' + clienteId).value : 'basico';
 
-  var datos = {
-    comercio_id: clienteId,
-    circuito_a: circuitoA,
-    circuito_b: circuitoB,
-    bot_whatsapp: bot,
-    bot_plan: plan
-  };
+  var vozActiva = document.getElementById('voz-' + clienteId) ?
+  document.getElementById('voz-' + clienteId).checked : false;
+
+var datos = {
+  comercio_id: clienteId,
+  circuito_a: circuitoA,
+  circuito_b: circuitoB,
+  bot_whatsapp: bot,
+  bot_plan: plan,
+  voz_activa: vozActiva    // ← nuevo
+};
 
   var res;
   if (configId) {
