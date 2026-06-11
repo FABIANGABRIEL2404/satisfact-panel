@@ -1,7 +1,7 @@
 {
   "rewrites": [
     { "source": "/comercio", "destination": "/comercio/index.html" },
-    { "source": "/carga/:slug", "destination": "/comercio/carga-venta.html" },
+    { "source": "/carga/:slug", "destination": "/comercio/carga-venta.html?slug=:slug" }
    { "source": "/chat/:slug", "destination": "/comercio/chat.html?slug=:slug" }
   ],
   "headers": [
