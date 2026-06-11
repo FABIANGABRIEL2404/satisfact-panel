@@ -347,6 +347,7 @@ tr:hover td { background: #f8fafc; }
       <div class="nav-item" onclick="showPage('tickets')"><span class="nav-icon">🧾</span> Tickets</div>
       <div class="nav-item" id="nav-ventas" onclick="showPage('ventas')" style="display:none"><span class="nav-icon">🛒</span> Ventas <span style="font-size:10px;background:#6c63ff;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">NUEVO</span></div>
       <div class="nav-item" id="nav-qr" onclick="showPage('qr')" style="display:none"><span class="nav-icon">📱</span> QR de carga <span style="font-size:10px;background:#0891b2;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">QR</span></div>
+      <div class="nav-item" id="nav-wa-msg" onclick="showPage('wa-msg')" style="display:none"><span class="nav-icon">💬</span> Mensaje WA</div>
     </nav>
     <div class="sidebar-footer">
       <button onclick="abrirCambiarPassword()" style="width:100%;padding:9px;background:rgba(37,99,235,0.2);color:#93c5fd;border:1px solid rgba(37,99,235,0.3);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:all .2s">Cambiar contraseña</button>
@@ -452,13 +453,7 @@ tr:hover td { background: #f8fafc; }
           <table>
             <thead>
               <tr>
-                <th>Fecha</th>
-                <th>Cliente</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio unit.</th>
-                <th>Subtotal</th>
-                <th>Ticket</th>
+                <th>Fecha</th><th>Cliente</th><th>Producto</th><th>Cantidad</th><th>Precio unit.</th><th>Subtotal</th><th>Ticket</th>
               </tr>
             </thead>
             <tbody id="tickets-tbody">
@@ -484,16 +479,7 @@ tr:hover td { background: #f8fafc; }
           <table>
             <thead>
               <tr>
-                <th>Fecha</th>
-                <th>Cliente</th>
-                <th>Teléfono</th>
-                <th>Localidad</th>
-                <th>Total</th>
-                <th>Medio pago</th>
-                <th>Productos</th>
-                <th>Bot WA</th>
-                <th>WA enviado</th>
-                <th>Comprobante</th>
+                <th>Fecha</th><th>Cliente</th><th>Teléfono</th><th>Localidad</th><th>Total</th><th>Medio pago</th><th>Productos</th><th>Bot WA</th><th>WA enviado</th><th>Comprobante</th>
               </tr>
             </thead>
             <tbody id="ventas-tbody">
@@ -508,7 +494,6 @@ tr:hover td { background: #f8fafc; }
     <div class="page-section" id="page-qr">
       <div class="page-title">QR de carga</div>
       <div class="page-sub">Códigos QR para operarios y clientes presenciales</div>
-
       <div class="qr-info-banner">
         <span class="info-icon">ℹ️</span>
         <div>
@@ -516,31 +501,23 @@ tr:hover td { background: #f8fafc; }
           Imprimí o mostrá cada QR según el caso. El QR de operario está pensado para que el empleado cargue la venta. El QR de cliente presencial arranca el bot directamente, sin necesidad de WhatsApp.
         </div>
       </div>
-
       <div class="qr-grid">
-        <!-- QR OPERARIO -->
         <div class="qr-card operario">
           <div class="qr-type-label">🟣 Para el operario</div>
           <h4>QR de carga de venta</h4>
           <p>El operario escanea este código y se abre directamente el formulario de carga de venta para este comercio.</p>
-          <div class="qr-canvas-wrap operario">
-            <div id="qr-operario"></div>
-          </div>
+          <div class="qr-canvas-wrap operario"><div id="qr-operario"></div></div>
           <div class="qr-url-box" id="qr-url-operario">—</div>
           <div class="qr-actions">
             <button class="btn btn-outline" onclick="copiarUrlQR('operario')">📋 Copiar URL</button>
             <button class="btn btn-primary" style="background:#7c3aed" onclick="descargarQR('operario')">⬇️ Descargar</button>
           </div>
         </div>
-
-        <!-- QR CLIENTE PRESENCIAL -->
         <div class="qr-card cliente">
           <div class="qr-type-label">🔵 Para el cliente presencial</div>
           <h4>QR de encuesta / bot</h4>
           <p>El cliente escanea este código en el local y accede al bot directamente, sin necesidad de WhatsApp.</p>
-          <div class="qr-canvas-wrap cliente">
-            <div id="qr-cliente"></div>
-          </div>
+          <div class="qr-canvas-wrap cliente"><div id="qr-cliente"></div></div>
           <div class="qr-url-box" id="qr-url-cliente">—</div>
           <div class="qr-actions">
             <button class="btn btn-outline" onclick="copiarUrlQR('cliente')">📋 Copiar URL</button>
@@ -548,8 +525,6 @@ tr:hover td { background: #f8fafc; }
           </div>
         </div>
       </div>
-
-      <!-- INSTRUCCIONES DE IMPRESIÓN -->
       <div class="card">
         <h3>🖨️ Instrucciones para imprimir</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;color:var(--text-2)">
@@ -562,6 +537,30 @@ tr:hover td { background: #f8fafc; }
             Colocalo en el mostrador, en la bolsa o en un soporte visible para el cliente. Ideal en tamaño 8×8cm o más grande.
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- MENSAJE WHATSAPP -->
+    <div class="page-section" id="page-wa-msg">
+      <div class="page-title">Mensaje de WhatsApp</div>
+      <div class="page-sub">Personalizá el mensaje que recibe el cliente cuando se registra una venta</div>
+      <div class="card">
+        <h3>✏️ Editor de mensaje</h3>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">
+          Usá las siguientes variables en tu mensaje:<br>
+          <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{nombre}</code> — Nombre del cliente &nbsp;
+          <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{comercio}</code> — Nombre de tu comercio &nbsp;
+          <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{link}</code> — Link al chat del asistente
+        </p>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea id="wa-msg-texto" rows="5" placeholder="¡Hola {nombre}! Gracias por tu compra en {comercio}. Accedé a tu asistente: {link}" oninput="previewWAMsg()"></textarea>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px">
+          <div style="font-size:11px;font-weight:700;color:#166534;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Vista previa</div>
+          <div id="wa-msg-preview" style="font-size:14px;color:#1e293b;line-height:1.6;white-space:pre-wrap"></div>
+        </div>
+        <button class="btn btn-primary" onclick="guardarMensajeWA()">💾 Guardar mensaje</button>
       </div>
     </div>
 
@@ -604,18 +603,9 @@ tr:hover td { background: #f8fafc; }
 <div class="modal-overlay" id="modal-password">
   <div class="modal-box" style="max-width:380px">
     <div class="modal-title">Cambiar contraseña</div>
-    <div class="form-group">
-      <label>Contraseña actual</label>
-      <input type="password" id="pass-actual" placeholder="••••••••">
-    </div>
-    <div class="form-group">
-      <label>Nueva contraseña</label>
-      <input type="password" id="pass-nueva" placeholder="••••••••">
-    </div>
-    <div class="form-group">
-      <label>Confirmar nueva contraseña</label>
-      <input type="password" id="pass-confirmar" placeholder="••••••••">
-    </div>
+    <div class="form-group"><label>Contraseña actual</label><input type="password" id="pass-actual" placeholder="••••••••"></div>
+    <div class="form-group"><label>Nueva contraseña</label><input type="password" id="pass-nueva" placeholder="••••••••"></div>
+    <div class="form-group"><label>Confirmar nueva contraseña</label><input type="password" id="pass-confirmar" placeholder="••••••••"></div>
     <div id="pass-error" style="color:#ef4444;font-size:13px;margin-bottom:10px;display:none"></div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="cerrarModal('modal-password')">Cancelar</button>
@@ -846,17 +836,10 @@ function renderEstadisticas() {
 
 async function cargarTickets() {
   const code = currentUser.comercio_code;
-  const { data } = await sb
-    .from('sq_ticket_items')
-    .select('*, sq_tickets(cliente_nombre, encuesta_fecha, archivo_url)')
-    .eq('comercio_code', code)
-    .order('created_at', { ascending: false });
+  const { data } = await sb.from('sq_ticket_items').select('*, sq_tickets(cliente_nombre, encuesta_fecha, archivo_url)').eq('comercio_code', code).order('created_at', { ascending: false });
   const tbody = document.getElementById('tickets-tbody');
   if (!tbody) return;
-  if (!data || data.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay tickets escaneados</td></tr>';
-    return;
-  }
+  if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay tickets escaneados</td></tr>'; return; }
   tbody.innerHTML = data.map(item => {
     const t = item.sq_tickets || {};
     const url = t.archivo_url ? '<a href="' + t.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver</a>' : '-';
@@ -872,11 +855,7 @@ function exportarTicketsCSV() {
   filas.forEach(tr => {
     const celdas = tr.querySelectorAll('td');
     if (celdas.length < 6) return;
-    const fila = [
-      celdas[0].textContent.trim(), celdas[1].textContent.trim(),
-      celdas[2].textContent.trim(), celdas[3].textContent.trim(),
-      celdas[4].textContent.trim(), celdas[5].textContent.trim()
-    ].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
+    const fila = [celdas[0].textContent.trim(), celdas[1].textContent.trim(), celdas[2].textContent.trim(), celdas[3].textContent.trim(), celdas[4].textContent.trim(), celdas[5].textContent.trim()].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
     csv += fila + '\n';
   });
   const a = document.createElement('a');
@@ -926,6 +905,7 @@ function showPage(p) {
   if (p === 'compras') renderCompras();
   if (p === 'tickets') cargarTickets();
   if (p === 'qr') renderQR();
+  if (p === 'wa-msg') cargarMensajeWA();
 }
 
 function showToast(msg, err) {
@@ -967,13 +947,11 @@ async function guardarPassword() {
 
 async function verificarCircuitoB() {
   if (!currentComercio) return;
-  const { data } = await sb.from('sq_config_comercio')
-    .select('circuito_b')
-    .eq('comercio_id', currentComercio.id)
-    .single();
+  const { data } = await sb.from('sq_config_comercio').select('circuito_b').eq('comercio_id', currentComercio.id).single();
   if (data && data.circuito_b) {
     document.getElementById('nav-ventas').style.display = 'flex';
     document.getElementById('nav-qr').style.display = 'flex';
+    document.getElementById('nav-wa-msg').style.display = 'flex';
   }
 }
 
@@ -981,10 +959,7 @@ let allVentas = [];
 
 async function cargarVentas() {
   if (!currentComercio) return;
-  const { data } = await sb.from('sq_ventas')
-    .select('*')
-    .eq('comercio_id', currentComercio.id)
-    .order('created_at', { ascending: false });
+  const { data } = await sb.from('sq_ventas').select('*').eq('comercio_id', currentComercio.id).order('created_at', { ascending: false });
   allVentas = data || [];
   renderVentasStats();
   renderVentas(allVentas);
@@ -1004,20 +979,13 @@ function renderVentasStats() {
 
 function filtrarVentas() {
   const busca = (document.getElementById('vent-buscar').value || '').toLowerCase();
-  const lista = busca ? allVentas.filter(v =>
-    (v.apellido || '').toLowerCase().includes(busca) ||
-    (v.nombre || '').toLowerCase().includes(busca) ||
-    (v.telefono || '').includes(busca)
-  ) : allVentas;
+  const lista = busca ? allVentas.filter(v => (v.apellido || '').toLowerCase().includes(busca) || (v.nombre || '').toLowerCase().includes(busca) || (v.telefono || '').includes(busca)) : allVentas;
   renderVentas(lista);
 }
 
 function renderVentas(lista) {
   const tbody = document.getElementById('ventas-tbody');
-  if (!lista || lista.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay ventas registradas. <a href="/comercio/carga-venta.html" style="color:var(--primary)">Cargar primera venta →</a></td></tr>';
-    return;
-  }
+  if (!lista || lista.length === 0) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay ventas registradas. <a href="/comercio/carga-venta.html" style="color:var(--primary)">Cargar primera venta →</a></td></tr>'; return; }
   tbody.innerHTML = lista.map(v => {
     const fecha = v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '-';
     const cliente = [v.apellido, v.nombre].filter(Boolean).join(', ') || 'Sin nombre';
@@ -1025,43 +993,18 @@ function renderVentas(lista) {
     const medioPago = v.medio_pago || v.ia_extraccion?.medio_pago || '-';
     const cuotas = v.cuotas && v.cuotas > 1 ? ' (' + v.cuotas + 'c)' : '';
     const prods = v.productos_comprados || v.ia_extraccion?.productos_comprados || [];
-    const prodsStr = prods.length > 0
-      ? '<span title="' + prods.map(p => p.descripcion).join(', ') + '" style="cursor:help">' + prods.length + ' ítem(s) 🔍</span>'
-      : '-';
-    const bot = v.whatsapp_bot === 'vendedoria' ? '🛒 Vendedoria'
-      : v.whatsapp_bot === 'asistente_ia' ? '🤖 Asistente' : '-';
-    const waStatus = v.whatsapp_enviado
-      ? '<span class="badge badge-green">Enviado</span>'
-      : (v.telefono ? '<span class="badge badge-yellow">Pendiente</span>'
-        : '<span class="badge" style="background:#f1f5f9;color:#64748b">Sin tel.</span>');
-    const comprobante = v.archivo_url
-      ? '<a href="' + v.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver 📎</a>'
-      : '-';
-    return '<tr>' +
-      '<td>' + fecha + '</td>' +
-      '<td style="font-weight:600">' + cliente + '</td>' +
-      '<td>' + (v.telefono || '-') + '</td>' +
-      '<td>' + (v.localidad || '-') + '</td>' +
-      '<td>' + total + '</td>' +
-      '<td>' + medioPago + cuotas + '</td>' +
-      '<td>' + prodsStr + '</td>' +
-      '<td style="font-size:12px">' + bot + '</td>' +
-      '<td>' + waStatus + '</td>' +
-      '<td>' + comprobante + '</td>' +
-      '</tr>';
+    const prodsStr = prods.length > 0 ? '<span title="' + prods.map(p => p.descripcion).join(', ') + '" style="cursor:help">' + prods.length + ' ítem(s) 🔍</span>' : '-';
+    const bot = v.whatsapp_bot === 'vendedoria' ? '🛒 Vendedoria' : v.whatsapp_bot === 'asistente_ia' ? '🤖 Asistente' : '-';
+    const waStatus = v.whatsapp_enviado ? '<span class="badge badge-green">Enviado</span>' : (v.telefono ? '<span class="badge badge-yellow">Pendiente</span>' : '<span class="badge" style="background:#f1f5f9;color:#64748b">Sin tel.</span>');
+    const comprobante = v.archivo_url ? '<a href="' + v.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver 📎</a>' : '-';
+    return '<tr><td>' + fecha + '</td><td style="font-weight:600">' + cliente + '</td><td>' + (v.telefono || '-') + '</td><td>' + (v.localidad || '-') + '</td><td>' + total + '</td><td>' + medioPago + cuotas + '</td><td>' + prodsStr + '</td><td style="font-size:12px">' + bot + '</td><td>' + waStatus + '</td><td>' + comprobante + '</td></tr>';
   }).join('');
 }
 
 function exportVentasCSV() {
   if (!allVentas.length) { showToast('No hay ventas para exportar', true); return; }
   const cols = ['Fecha','Apellido','Nombre','Telefono','Direccion','Localidad','Total','Medio pago','Cuotas','Bot WA','WA enviado'];
-  const rows = [cols.join(','), ...allVentas.map(v => [
-    v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '',
-    v.apellido || '', v.nombre || '', v.telefono || '',
-    v.direccion || '', v.localidad || '',
-    v.total_compra || '', v.medio_pago || '', v.cuotas || '',
-    v.whatsapp_bot || '', v.whatsapp_enviado ? 'Si' : 'No'
-  ].map(c => '"' + String(c).replace(/"/g, '""') + '"').join(','))];
+  const rows = [cols.join(','), ...allVentas.map(v => [v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '', v.apellido || '', v.nombre || '', v.telefono || '', v.direccion || '', v.localidad || '', v.total_compra || '', v.medio_pago || '', v.cuotas || '', v.whatsapp_bot || '', v.whatsapp_enviado ? 'Si' : 'No'].map(c => '"' + String(c).replace(/"/g, '""') + '"').join(','))];
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n'));
   a.download = 'ventas.csv'; a.click();
@@ -1069,53 +1012,23 @@ function exportVentasCSV() {
 }
 
 // ── QR DE CARGA ──
-
-let qrOperarioInstance = null;
-let qrClienteInstance = null;
-let urlQROperario = '';
-let urlQRCliente = '';
+let qrOperarioInstance = null, qrClienteInstance = null, urlQROperario = '', urlQRCliente = '';
 
 function renderQR() {
   if (!currentComercio) return;
   const slug = currentComercio.slug || currentUser.comercio_code;
-
-  // URLs
   urlQROperario = 'https://satisfactq.menteactiva.com.ar/carga/' + slug;
-
-  // URL cliente: bot AsistenteIA directamente (si tiene bot_cliente_id, mejor; si no, encuesta)
   const botId = currentComercio.bot_cliente_id || '';
   urlQRCliente = botId
     ? 'https://www.miasistenteia.com.ar/widget?clienteId=' + botId + '&comercio=' + encodeURIComponent(currentComercio.nombre || slug)
     : 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + slug;
-
   document.getElementById('qr-url-operario').textContent = urlQROperario;
   document.getElementById('qr-url-cliente').textContent = urlQRCliente;
-
-  // Limpiar QRs anteriores
   const wrapOp = document.getElementById('qr-operario');
   const wrapCli = document.getElementById('qr-cliente');
-  wrapOp.innerHTML = '';
-  wrapCli.innerHTML = '';
-
-  // Generar QR operario
-  qrOperarioInstance = new QRCode(wrapOp, {
-    text: urlQROperario,
-    width: 180,
-    height: 180,
-    colorDark: '#7c3aed',
-    colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
-
-  // Generar QR cliente
-  qrClienteInstance = new QRCode(wrapCli, {
-    text: urlQRCliente,
-    width: 180,
-    height: 180,
-    colorDark: '#0891b2',
-    colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
+  wrapOp.innerHTML = ''; wrapCli.innerHTML = '';
+  qrOperarioInstance = new QRCode(wrapOp, { text: urlQROperario, width: 180, height: 180, colorDark: '#7c3aed', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  qrClienteInstance = new QRCode(wrapCli, { text: urlQRCliente, width: 180, height: 180, colorDark: '#0891b2', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
 }
 
 function copiarUrlQR(tipo) {
@@ -1129,32 +1042,47 @@ function descargarQR(tipo) {
   const wrapper = document.getElementById(wrapperId);
   const canvas = wrapper.querySelector('canvas');
   const img = wrapper.querySelector('img');
-
   if (canvas) {
-    const a = document.createElement('a');
-    a.download = nombre + '.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
-    showToast('QR descargado');
+    const a = document.createElement('a'); a.download = nombre + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); showToast('QR descargado');
   } else if (img) {
-    // QRCode.js a veces genera img en vez de canvas — convertir
-    const tmpCanvas = document.createElement('canvas');
-    tmpCanvas.width = 180; tmpCanvas.height = 180;
-    const ctx = tmpCanvas.getContext('2d');
-    const image = new Image();
-    image.crossOrigin = 'anonymous';
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0);
-      const a = document.createElement('a');
-      a.download = nombre + '.png';
-      a.href = tmpCanvas.toDataURL('image/png');
-      a.click();
-      showToast('QR descargado');
-    };
+    const tmpCanvas = document.createElement('canvas'); tmpCanvas.width = 180; tmpCanvas.height = 180;
+    const ctx = tmpCanvas.getContext('2d'); const image = new Image(); image.crossOrigin = 'anonymous';
+    image.onload = () => { ctx.drawImage(image, 0, 0); const a = document.createElement('a'); a.download = nombre + '.png'; a.href = tmpCanvas.toDataURL('image/png'); a.click(); showToast('QR descargado'); };
     image.src = img.src;
-  } else {
-    showToast('No se pudo generar el QR', true);
+  } else { showToast('No se pudo generar el QR', true); }
+}
+
+// ── MENSAJE WHATSAPP ──
+let configComercioId = null;
+
+async function cargarMensajeWA() {
+  if (!currentComercio) return;
+  const { data } = await sb.from('sq_config_comercio').select('id, mensaje_whatsapp').eq('comercio_id', currentComercio.id).single();
+  if (data) {
+    configComercioId = data.id;
+    const msg = data.mensaje_whatsapp || '¡Hola {nombre}! 👋 Gracias por tu compra en *{comercio}*. Tenemos un asistente para ayudarte: {link}';
+    document.getElementById('wa-msg-texto').value = msg;
+    previewWAMsg();
   }
+}
+
+function previewWAMsg() {
+  const msg = document.getElementById('wa-msg-texto').value;
+  const nombre = currentComercio ? currentComercio.nombre : 'tu comercio';
+  const preview = msg
+    .replace(/{nombre}/g, 'Juan García')
+    .replace(/{comercio}/g, nombre)
+    .replace(/{link}/g, 'satisfactq.menteactiva.com.ar/chat/...');
+  document.getElementById('wa-msg-preview').textContent = preview;
+}
+
+async function guardarMensajeWA() {
+  if (!currentComercio || !configComercioId) { showToast('No hay configuración disponible', true); return; }
+  const msg = document.getElementById('wa-msg-texto').value.trim();
+  if (!msg) { showToast('El mensaje no puede estar vacío', true); return; }
+  const { error } = await sb.from('sq_config_comercio').update({ mensaje_whatsapp: msg }).eq('id', configComercioId);
+  if (error) { showToast('Error al guardar: ' + error.message, true); return; }
+  showToast('Mensaje guardado correctamente');
 }
 
 document.querySelectorAll('.modal-overlay').forEach(el => {
