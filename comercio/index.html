@@ -348,6 +348,7 @@ tr:hover td { background: #f8fafc; }
       <div class="nav-item" id="nav-ventas" onclick="showPage('ventas')" style="display:none"><span class="nav-icon">🛒</span> Ventas <span style="font-size:10px;background:#6c63ff;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">NUEVO</span></div>
       <div class="nav-item" id="nav-qr" onclick="showPage('qr')" style="display:none"><span class="nav-icon">📱</span> QR de carga <span style="font-size:10px;background:#0891b2;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">QR</span></div>
       <div class="nav-item" id="nav-wa-msg" onclick="showPage('wa-msg')" style="display:none"><span class="nav-icon">💬</span> Mensaje WA</div>
+      <div class="nav-item" id="nav-asistente" onclick="showPage('asistente')" style="display:none"><span class="nav-icon">🤖</span> Mi Asistente</div>
     </nav>
     <div class="sidebar-footer">
       <button onclick="abrirCambiarPassword()" style="width:100%;padding:9px;background:rgba(37,99,235,0.2);color:#93c5fd;border:1px solid rgba(37,99,235,0.3);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:all .2s">Cambiar contraseña</button>
@@ -564,6 +565,13 @@ tr:hover td { background: #f8fafc; }
       </div>
     </div>
 
+    <!-- MI ASISTENTE -->
+    <div class="page-section" id="page-asistente">
+      <div class="page-title">Mi Asistente</div>
+      <div class="page-sub">Configurá el bot que atiende a tus clientes por WhatsApp</div>
+      <div id="asistente-content"><div class="empty"><div class="empty-icon">⏳</div><p>Cargando...</p></div></div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /app -->
 
@@ -610,6 +618,23 @@ tr:hover td { background: #f8fafc; }
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="cerrarModal('modal-password')">Cancelar</button>
       <button class="btn btn-primary" onclick="guardarPassword()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KB ASISTENTE -->
+<div class="modal-overlay" id="modal-kb">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-title" id="modal-kb-titulo">Nuevo artículo</div>
+    <div class="form-row">
+      <div class="form-group"><label>Título *</label><input type="text" id="kb-titulo" placeholder="Ej: Horarios de atención"></div>
+      <div class="form-group"><label>Categoría</label><input type="text" id="kb-categoria" placeholder="Ej: Atención al cliente"></div>
+    </div>
+    <div class="form-group"><label>Contenido *</label><textarea id="kb-contenido" rows="5" placeholder="Escribí la información que el asistente debe conocer..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" id="kb-btn-eliminar" onclick="eliminarArticuloKB()" style="display:none;margin-right:auto">🗑 Eliminar</button>
+      <button class="btn btn-outline" onclick="cerrarModal('modal-kb')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarArticuloKB()">Guardar</button>
     </div>
   </div>
 </div>
@@ -906,6 +931,7 @@ function showPage(p) {
   if (p === 'tickets') cargarTickets();
   if (p === 'qr') renderQR();
   if (p === 'wa-msg') cargarMensajeWA();
+  if (p === 'asistente') cargarMiAsistente();
 }
 
 function showToast(msg, err) {
@@ -952,6 +978,7 @@ async function verificarCircuitoB() {
     document.getElementById('nav-ventas').style.display = 'flex';
     document.getElementById('nav-qr').style.display = 'flex';
     document.getElementById('nav-wa-msg').style.display = 'flex';
+    document.getElementById('nav-asistente').style.display = 'flex';
   }
 }
 
@@ -1083,6 +1110,167 @@ async function guardarMensajeWA() {
   const { error } = await sb.from('sq_config_comercio').update({ mensaje_whatsapp: msg }).eq('id', configComercioId);
   if (error) { showToast('Error al guardar: ' + error.message, true); return; }
   showToast('Mensaje guardado correctamente');
+}
+
+// ── MI ASISTENTE ──
+const ASIS_SB_URL = 'https://ixctqxxtzoesotniisoq.supabase.co';
+const ASIS_SB_KEY = 'sb_publishable_n__2avD0lTMMeSW-6zXsYQ_j973clG7';
+const sbAsis = supabase.createClient(ASIS_SB_URL, ASIS_SB_KEY);
+
+let botCliente = null, botKB = [], botFuentes = [], editKBId = null;
+
+async function cargarMiAsistente() {
+  if (!currentComercio) return;
+  const { data: cfg } = await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id', currentComercio.id).single();
+  if (!cfg?.bot_cliente_id) {
+    document.getElementById('asistente-content').innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>El asistente aún no está configurado. Contactá al administrador.</p></div>';
+    return;
+  }
+  const [r1, r2, r3] = await Promise.all([
+    sbAsis.from('asis_clientes').select('*').eq('id', cfg.bot_cliente_id).single(),
+    sbAsis.from('asis_base_conocimiento').select('*').eq('cliente_id', cfg.bot_cliente_id).eq('activo', true).order('created_at', { ascending: false }),
+    sbAsis.from('asis_fuentes_config').select('*').eq('cliente_id', cfg.bot_cliente_id).order('orden', { ascending: true })
+  ]);
+  botCliente = r1.data; botKB = r2.data || []; botFuentes = r3.data || [];
+  renderMiAsistente();
+}
+
+function renderMiAsistente() {
+  const c = document.getElementById('asistente-content');
+  if (!botCliente) { c.innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>No se pudo cargar el asistente.</p></div>'; return; }
+  c.innerHTML = `
+    <div class="card">
+      <h3>⚙️ Configuración del asistente</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Nombre del asistente</label><input type="text" id="bot-nombre" value="${botCliente.nombre || ''}" placeholder="Ej: Sofía, Alex..."></div>
+        <div class="form-group"><label>Color</label><input type="color" id="bot-color" value="${botCliente.color_acento || '#f59e0b'}" style="height:42px;cursor:pointer;padding:4px"></div>
+      </div>
+      <div class="form-group"><label>Personalidad y tono</label><textarea id="bot-personalidad" rows="3" placeholder="Describí cómo debe hablar el asistente...">${botCliente.descripcion || ''}</textarea></div>
+      <div class="form-group"><label>Web del negocio (para consultas en tiempo real)</label><input type="url" id="bot-web" value="${botCliente.web || ''}" placeholder="https://..."></div>
+      <button class="btn btn-primary" onclick="guardarConfigBot()">💾 Guardar configuración</button>
+    </div>
+    <div class="card">
+      <h3>🔍 Fuentes de información</h3>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Seleccioná qué fuentes usa el asistente y en qué orden las consulta.</p>
+      <div id="bot-fuentes-lista" style="display:flex;flex-direction:column;gap:10px"></div>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="guardarFuentesBot()">💾 Guardar fuentes</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h3 style="margin:0">📚 Base de conocimiento</h3>
+        <button class="btn btn-primary" onclick="abrirModalKB(null)">+ Agregar</button>
+      </div>
+      <div id="bot-kb-lista"></div>
+    </div>`;
+  renderFuentesBot();
+  renderKBBot();
+}
+
+function renderFuentesBot() {
+  const lista = document.getElementById('bot-fuentes-lista');
+  if (!lista) return;
+  const defaults = [
+    { fuente: 'kb', label: '📚 Base de conocimiento propia', desc: 'Artículos cargados en esta sección' },
+    { fuente: 'web', label: '🌐 Web del negocio', desc: 'Consulta tu sitio web en tiempo real' },
+    { fuente: 'internet', label: '🔍 Internet', desc: 'Búsqueda general en la web' }
+  ];
+  lista.innerHTML = defaults.map((d, i) => {
+    const f = botFuentes.find(x => x.fuente === d.fuente);
+    const activa = f ? f.activa : d.fuente === 'kb';
+    const orden = f ? f.orden : i + 1;
+    return `<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid var(--border)">
+      <input type="checkbox" id="bf-activa-${d.fuente}" ${activa ? 'checked' : ''} style="width:auto;cursor:pointer">
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">${d.label}</div><div style="font-size:11px;color:var(--text-2)">${d.desc}</div></div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:var(--text-2)">Orden:</span>
+        <select id="bf-orden-${d.fuente}" style="width:60px;padding:4px 8px;font-size:12px;border:1.5px solid var(--border);border-radius:6px;outline:none">
+          <option ${orden===1?'selected':''}>1</option><option ${orden===2?'selected':''}>2</option><option ${orden===3?'selected':''}>3</option>
+        </select>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderKBBot() {
+  const lista = document.getElementById('bot-kb-lista');
+  if (!lista) return;
+  if (!botKB.length) { lista.innerHTML = '<div class="empty"><div class="empty-icon">📚</div><p>Sin artículos aún. Agregá el primero.</p></div>'; return; }
+  lista.innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Título</th><th>Categoría</th><th>Contenido</th><th></th></tr></thead>
+    <tbody>${botKB.map(a => `<tr>
+      <td style="font-weight:600">${a.titulo || '—'}</td>
+      <td>${a.categoria || '—'}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-2)">${a.contenido || '—'}</td>
+      <td><button class="btn btn-outline" style="padding:5px 10px;font-size:12px" onclick="abrirModalKB('${a.id}')">Editar</button></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+async function guardarConfigBot() {
+  if (!botCliente) return;
+  const updates = { nombre: document.getElementById('bot-nombre').value.trim(), color_acento: document.getElementById('bot-color').value, descripcion: document.getElementById('bot-personalidad').value.trim(), web: document.getElementById('bot-web').value.trim() };
+  const { error } = await sbAsis.from('asis_clientes').update(updates).eq('id', botCliente.id);
+  if (error) { showToast('Error al guardar: ' + error.message, true); return; }
+  Object.assign(botCliente, updates);
+  showToast('Configuración guardada correctamente');
+}
+
+async function guardarFuentesBot() {
+  if (!botCliente) return;
+  const fuentes = ['kb', 'web', 'internet'].map(f => ({ cliente_id: botCliente.id, fuente: f, activa: document.getElementById(`bf-activa-${f}`)?.checked || false, orden: parseInt(document.getElementById(`bf-orden-${f}`)?.value || '1') }));
+  for (const f of fuentes) {
+    const existe = botFuentes.find(x => x.fuente === f.fuente);
+    if (existe) await sbAsis.from('asis_fuentes_config').update({ activa: f.activa, orden: f.orden }).eq('id', existe.id);
+    else await sbAsis.from('asis_fuentes_config').insert(f);
+  }
+  const { data } = await sbAsis.from('asis_fuentes_config').select('*').eq('cliente_id', botCliente.id).order('orden', { ascending: true });
+  botFuentes = data || [];
+  showToast('Fuentes guardadas correctamente');
+}
+
+function abrirModalKB(id) {
+  editKBId = id;
+  const a = id ? botKB.find(x => x.id === id) : null;
+  document.getElementById('modal-kb-titulo').textContent = a ? 'Editar artículo' : 'Nuevo artículo';
+  document.getElementById('kb-titulo').value = a?.titulo || '';
+  document.getElementById('kb-categoria').value = a?.categoria || '';
+  document.getElementById('kb-contenido').value = a?.contenido || '';
+  document.getElementById('kb-btn-eliminar').style.display = a ? 'inline-block' : 'none';
+  document.getElementById('modal-kb').classList.add('open');
+}
+
+async function guardarArticuloKB() {
+  if (!botCliente) return;
+  const titulo = document.getElementById('kb-titulo').value.trim();
+  const contenido = document.getElementById('kb-contenido').value.trim();
+  if (!titulo || !contenido) { showToast('Título y contenido son obligatorios', true); return; }
+  const datos = { cliente_id: botCliente.id, titulo, contenido, categoria: document.getElementById('kb-categoria').value.trim() || null, activo: true };
+  if (editKBId) {
+    const { error } = await sbAsis.from('asis_base_conocimiento').update(datos).eq('id', editKBId);
+    if (error) { showToast('Error al guardar', true); return; }
+    const idx = botKB.findIndex(x => x.id === editKBId);
+    if (idx >= 0) botKB[idx] = { ...botKB[idx], ...datos };
+    showToast('Artículo actualizado');
+  } else {
+    const { data, error } = await sbAsis.from('asis_base_conocimiento').insert(datos).select().single();
+    if (error) { showToast('Error al guardar', true); return; }
+    botKB.unshift(data);
+    showToast('Artículo creado');
+  }
+  cerrarModal('modal-kb');
+  renderKBBot();
+}
+
+async function eliminarArticuloKB() {
+  if (!editKBId) return;
+  const a = botKB.find(x => x.id === editKBId);
+  if (!confirm(`¿Eliminar "${a?.titulo}"?`)) return;
+  const { error } = await sbAsis.from('asis_base_conocimiento').update({ activo: false }).eq('id', editKBId);
+  if (error) { showToast('Error al eliminar', true); return; }
+  botKB = botKB.filter(x => x.id !== editKBId);
+  cerrarModal('modal-kb');
+  renderKBBot();
+  showToast('Artículo eliminado');
 }
 
 document.querySelectorAll('.modal-overlay').forEach(el => {
