@@ -6,7 +6,7 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>SatisfactQ 路 Chat</title>
+  <title>SatisfactQ · Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -93,22 +93,22 @@
 <body>
 <div id="app">
   <div id="loading-screen">
-    <div class="loading-logo">馃</div>
+    <div class="loading-logo">🤖</div>
     <div class="loading-text">Conectando asistente...</div>
     <div class="loading-dots"><span></span><span></span><span></span></div>
   </div>
   <div id="error-screen">
-    <div class="error-icon">馃槙</div>
+    <div class="error-icon">😕</div>
     <div class="error-title">No disponible</div>
     <div class="error-msg" id="error-msg">No se pudo conectar con el asistente.</div>
   </div>
   <div id="chat-header">
-    <div class="header-avatar" id="headerAvatar">馃</div>
+    <div class="header-avatar" id="headerAvatar">🤖</div>
     <div class="header-info">
       <div class="header-name" id="headerName">Asistente</div>
       <div class="header-sub">
         <span class="status-dot"></span>
-        <span id="headerSub">En l铆nea</span>
+        <span id="headerSub">En línea</span>
       </div>
     </div>
     <div id="voz-badge">
@@ -123,13 +123,13 @@
       <option value="Rachel">Rachel (femenina)</option>
       <option value="Adam">Adam (masculino)</option>
       <option value="Bella">Bella (suave)</option>
-      <option value="Antoni">Antoni (c谩lido)</option>
+      <option value="Antoni">Antoni (cálido)</option>
     </select>
   </div>
   <div id="messages"></div>
   <div id="input-area">
-    <button id="btn-mic" aria-label="Hablar">馃帳</button>
-    <textarea id="chat-input" placeholder="Escrib铆 tu consulta..." rows="1" maxlength="500"></textarea>
+    <button id="btn-mic" aria-label="Hablar">🎤</button>
+    <textarea id="chat-input" placeholder="Escribí tu consulta..." rows="1" maxlength="500"></textarea>
     <button id="btn-send" aria-label="Enviar">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
     </button>
@@ -141,11 +141,11 @@
 (function () {
   'use strict';
 
-  // Supabase SatisfactQ 鈥?para leer comercio y config
+  // Supabase SatisfactQ — para leer comercio y config
   const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
   const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
 
-  // Supabase AsistenteIA 鈥?para guardar conversaciones en asis_conversaciones
+  // Supabase AsistenteIA — para guardar conversaciones en asis_conversaciones
   const ASIS_SB_URL = 'https://ixctqxxtzoesotniisoq.supabase.co';
   const ASIS_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4Y3RxeHh0em9lc290bmlpc29xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODIxNjYsImV4cCI6MjA5MDY1ODE2Nn0.SOTz5PSmpA7y13ATfEr73gViBkj3ujq9OBY7tcf3BTI';
 
@@ -161,8 +161,8 @@
   let messages    = [];
   let isLoading   = false;
 
-  // 鈹€鈹€ Conversaci贸n en Supabase 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-  // Genera un ID de sesi贸n 煤nico por visita
+  // ── Conversación en Supabase ─────────────────────────────────────────────────
+  // Genera un ID de sesión único por visita
   let sessionId = null;
   let convId    = null; // ID del registro en asis_conversaciones
 
@@ -170,7 +170,7 @@
     return 'sq_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
   }
 
-  // Crea el registro de conversaci贸n en asis_conversaciones al primer mensaje
+  // Crea el registro de conversación en asis_conversaciones al primer mensaje
   async function crearConversacion(primerMensaje) {
     if (!config?.bot_cliente_id) return;
     try {
@@ -200,7 +200,7 @@
         convId = Array.isArray(data) ? data[0]?.id : data?.id;
       }
     } catch(e) {
-      console.warn('[SatisfactQ] No se pudo crear conversaci贸n:', e);
+      console.warn('[SatisfactQ] No se pudo crear conversación:', e);
     }
   }
 
@@ -222,10 +222,10 @@
         })
       });
     } catch(e) {
-      console.warn('[SatisfactQ] No se pudo actualizar conversaci贸n:', e);
+      console.warn('[SatisfactQ] No se pudo actualizar conversación:', e);
     }
   }
-  // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+  // ────────────────────────────────────────────────────────────────────────────
 
   let vozActiva  = false;
   let vozTipo    = 'robotica';
@@ -270,7 +270,7 @@
     } else if (COMERCIO_ID) {
       url = `${SB_URL}/rest/v1/sq_clientes?id=eq.${COMERCIO_ID}&select=id,nombre,emoji,color&limit=1`;
     } else {
-      showErrorScreen('Enlace inv谩lido. Falta el identificador del comercio.');
+      showErrorScreen('Enlace inválido. Falta el identificador del comercio.');
       return false;
     }
     const r1 = await fetch(url, { headers: hdr });
@@ -289,21 +289,21 @@
 
   async function initAsistente() {
     if (!config?.bot_cliente_id) {
-      showErrorScreen('El asistente de este comercio a煤n no est谩 configurado.');
+      showErrorScreen('El asistente de este comercio aún no está configurado.');
       return false;
     }
     try {
       const res = await fetch(`${ASIS_URL}/api/widget-init?clienteId=${config.bot_cliente_id}`);
       if (!res.ok) {
-        if (res.status === 429) showErrorScreen('El asistente alcanz贸 su l铆mite mensual. Volv茅 m谩s tarde.');
-        else if (res.status === 403) showErrorScreen('El asistente no est谩 disponible en este momento.');
+        if (res.status === 429) showErrorScreen('El asistente alcanzó su límite mensual. Volvé más tarde.');
+        else if (res.status === 403) showErrorScreen('El asistente no está disponible en este momento.');
         else showErrorScreen('No se pudo conectar con el asistente.');
         return false;
       }
       asistConfig = await res.json();
       return true;
     } catch(e) {
-      showErrorScreen('Error de conexi贸n. Verific谩 tu internet.');
+      showErrorScreen('Error de conexión. Verificá tu internet.');
       return false;
     }
   }
@@ -335,12 +335,12 @@
       $input.style.height = Math.min($input.scrollHeight, 100) + 'px';
       sendMessage(texto);
     };
-    recognition.onend = () => { grabando = false; $mic.classList.remove('grabando'); $mic.textContent = '馃帳'; };
-    recognition.onerror = () => { grabando = false; $mic.classList.remove('grabando'); $mic.textContent = '馃帳'; };
+    recognition.onend = () => { grabando = false; $mic.classList.remove('grabando'); $mic.textContent = '🎤'; };
+    recognition.onerror = () => { grabando = false; $mic.classList.remove('grabando'); $mic.textContent = '🎤'; };
     $mic.classList.add('visible');
     $mic.addEventListener('click', () => {
       if (grabando) { recognition.stop(); }
-      else { grabando = true; $mic.classList.add('grabando'); $mic.textContent = '鈴?; recognition.start(); }
+      else { grabando = true; $mic.classList.add('grabando'); $mic.textContent = '⏹'; recognition.start(); }
     });
   }
 
@@ -353,16 +353,16 @@
     const vozES = voces.find(v => v.lang.startsWith('es'));
     if (vozES) utterance.voice = vozES;
     if (btnEl) {
-      btnEl.textContent = '鈴?; btnEl.classList.add('hablando');
-      utterance.onend  = () => { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); };
-      utterance.onerror = () => { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); };
+      btnEl.textContent = '⏹'; btnEl.classList.add('hablando');
+      utterance.onend  = () => { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); };
+      utterance.onerror = () => { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); };
     }
     synth.speak(utterance);
   }
 
   function detenerVozRobotica(btnEl) {
     if (synth) synth.cancel();
-    if (btnEl) { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); }
+    if (btnEl) { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); }
   }
 
   async function leerTextoElevenLabs(text, btnEl) {
@@ -381,14 +381,14 @@
 
   function detenerVoz(btnEl) {
     if (synth) synth.cancel();
-    if (btnEl) { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); }
+    if (btnEl) { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); }
   }
 
   function showWelcome() {
     const nombre    = asistConfig?.cliente?.nombre || comercio?.nombre || 'este comercio';
     const rubro     = asistConfig?.cliente?.rubro  || '';
     const asistente = asistConfig?.cliente?.nombre_asistente || 'tu asistente virtual';
-    const emoji     = comercio?.emoji || '馃';
+    const emoji     = comercio?.emoji || '🤖';
     document.getElementById('headerAvatar').textContent = emoji;
     document.getElementById('headerName').textContent   = nombre;
     document.getElementById('headerSub').textContent    = asistente;
@@ -396,12 +396,12 @@
     $messages.innerHTML = `
       <div class="welcome">
         <div class="welcome-icon">${emoji}</div>
-        <div class="welcome-title">隆Hola! Soy ${asistente}</div>
-        <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` 路 ${rubro}` : ''}.<br>驴En qu茅 puedo ayudarte hoy?</div>
+        <div class="welcome-title">¡Hola! Soy ${asistente}</div>
+        <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` · ${rubro}` : ''}.<br>¿En qué puedo ayudarte hoy?</div>
         <div class="suggestions">
-          <button class="suggestion">驴Cu谩les son sus horarios de atenci贸n?</button>
-          <button class="suggestion">驴Qu茅 servicios ofrecen?</button>
-          <button class="suggestion">驴C贸mo puedo contactarlos?</button>
+          <button class="suggestion">¿Cuáles son sus horarios de atención?</button>
+          <button class="suggestion">¿Qué servicios ofrecen?</button>
+          <button class="suggestion">¿Cómo puedo contactarlos?</button>
         </div>
       </div>
     `;
@@ -419,7 +419,7 @@
     if (role === 'bot' && vozActiva) {
       const btnVoz = document.createElement('button');
       btnVoz.className = 'btn-voz';
-      btnVoz.textContent = '馃攰';
+      btnVoz.textContent = '🔊';
       btnVoz.title = 'Escuchar respuesta';
       btnVoz.addEventListener('click', () => {
         if (btnVoz.classList.contains('hablando')) detenerVoz(btnVoz);
@@ -449,7 +449,7 @@
   }
   function hideTyping() { document.getElementById('typing')?.remove(); }
 
-  // 鈹€鈹€ Enviar mensaje (con guardado en Supabase) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+  // ── Enviar mensaje (con guardado en Supabase) ────────────────────────────────
   async function sendMessage(text) {
     if (!text?.trim() || isLoading || !asistConfig) return;
     text = text.trim();
@@ -463,7 +463,7 @@
     $send.disabled = true;
     showTyping();
 
-    // Si es el primer mensaje, crear la conversaci贸n en Supabase
+    // Si es el primer mensaje, crear la conversación en Supabase
     const esPrimerMensaje = messages.length === 1;
     if (esPrimerMensaje) {
       await crearConversacion(text);
@@ -485,7 +485,7 @@
       hideTyping();
 
       if (!res.ok) {
-        appendError('No se pudo obtener respuesta. Intent谩 de nuevo.');
+        appendError('No se pudo obtener respuesta. Intentá de nuevo.');
         messages.pop();
       } else {
         const data  = await res.json();
@@ -509,7 +509,7 @@
       }
     } catch(e) {
       hideTyping();
-      appendError('Error de conexi贸n.');
+      appendError('Error de conexión.');
       messages.pop();
     } finally {
       isLoading = false;
@@ -519,7 +519,7 @@
   }
 
   async function init() {
-    // Generar session ID 煤nico para esta visita
+    // Generar session ID único para esta visita
     sessionId = generarSessionId();
 
     const ok1 = await cargarComercio();
