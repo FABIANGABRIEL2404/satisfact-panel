@@ -9,157 +9,74 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f0f4f8;
-  --card: #ffffff;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --accent: #10b981;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --text: #1e293b;
-  --text-2: #64748b;
-  --border: #e2e8f0;
-  --sidebar-w: 230px;
-  --radius: 10px;
+  --bg: #f0f4f8; --card: #ffffff; --primary: #2563eb; --primary-dark: #1d4ed8;
+  --accent: #10b981; --danger: #ef4444; --warning: #f59e0b;
+  --text: #1e293b; --text-2: #64748b; --border: #e2e8f0;
+  --sidebar-w: 230px; --radius: 10px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-#login-screen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
-}
-.login-card {
-  background: white;
-  border-radius: 16px;
-  padding: 48px 40px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
+#login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); }
+.login-card { background: white; border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
 .login-logo { text-align: center; margin-bottom: 32px; }
-.login-logo .logo-icon {
-  width: 64px; height: 64px;
-  background: linear-gradient(135deg, #2563eb, #10b981);
-  border-radius: 16px;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 28px; margin-bottom: 12px;
-}
+.login-logo .logo-icon { width: 64px; height: 64px; background: linear-gradient(135deg, #2563eb, #10b981); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 12px; }
 .login-logo h1 { font-size: 22px; font-weight: 700; color: var(--text); }
 .login-logo p { color: var(--text-2); font-size: 14px; margin-top: 4px; }
 .login-card label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-.login-card input {
-  width: 100%; padding: 11px 14px;
-  border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 14px; font-family: inherit; outline: none;
-  transition: border-color .2s; margin-bottom: 16px;
-}
+.login-card input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s; margin-bottom: 16px; }
 .login-card input:focus { border-color: var(--primary); }
-.btn-login {
-  width: 100%; padding: 13px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white; border: none; border-radius: 8px;
-  font-size: 15px; font-weight: 600; cursor: pointer;
-  font-family: inherit; transition: opacity .2s;
-}
+.btn-login { width: 100%; padding: 13px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .2s; }
 .btn-login:hover { opacity: .9; }
 .login-error { color: var(--danger); font-size: 13px; text-align: center; margin-top: 12px; display: none; }
-
 #app { display: none; min-height: 100vh; }
-
-.sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-w); background: #1e293b;
-  color: white; display: flex; flex-direction: column; z-index: 100;
-}
+.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: #1e293b; color: white; display: flex; flex-direction: column; z-index: 100; }
 .sidebar-brand { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.sidebar-brand .brand-icon {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, #2563eb, #10b981);
-  border-radius: 8px; display: inline-flex;
-  align-items: center; justify-content: center;
-  font-size: 16px; margin-bottom: 8px;
-}
+.sidebar-brand .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #2563eb, #10b981); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 8px; }
 .sidebar-brand h2 { font-size: 15px; font-weight: 700; }
 .sidebar-brand p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-.sidebar-comercio {
-  padding: 12px 20px;
-  background: rgba(37,99,235,0.2);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
+.sidebar-comercio { padding: 12px 20px; background: rgba(37,99,235,0.2); border-bottom: 1px solid rgba(255,255,255,0.08); }
 .sidebar-comercio .com-badge { display: flex; align-items: center; gap: 10px; }
-.com-icon {
-  width: 32px; height: 32px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-radius: 8px; display: flex;
-  align-items: center; justify-content: center;
-  font-size: 14px; flex-shrink: 0;
-}
+.com-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
 .com-name { font-size: 13px; font-weight: 600; }
 .com-code { font-size: 11px; color: rgba(255,255,255,0.5); }
 .sidebar-nav { padding: 12px 0; flex: 1; overflow-y: auto; }
-.nav-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 20px; cursor: pointer;
-  font-size: 13px; font-weight: 500;
-  color: rgba(255,255,255,0.65);
-  transition: all .15s; border-left: 3px solid transparent;
-}
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; cursor: pointer; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.65); transition: all .15s; border-left: 3px solid transparent; }
 .nav-item:hover { background: rgba(255,255,255,0.06); color: white; }
 .nav-item.active { background: rgba(37,99,235,0.25); color: white; border-left-color: #2563eb; }
 .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
 .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-.btn-logout {
-  width: 100%; padding: 9px;
-  background: rgba(239,68,68,0.15); color: #fca5a5;
-  border: 1px solid rgba(239,68,68,0.25); border-radius: 7px;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  font-family: inherit; transition: all .2s;
-}
+.btn-logout { width: 100%; padding: 9px; background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
 .btn-logout:hover { background: rgba(239,68,68,0.25); }
-
 .main { margin-left: var(--sidebar-w); padding: 28px 32px; }
 .page-section { display: none; }
 .page-section.active { display: block; }
 .page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
 .page-sub { color: var(--text-2); font-size: 14px; margin-bottom: 24px; }
-
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
 .stat-card { background: var(--card); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); }
 .stat-card .stat-label { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
 .stat-card .stat-val { font-size: 32px; font-weight: 700; }
 .stat-card .stat-icon { font-size: 22px; margin-bottom: 8px; }
-
 .card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; }
 .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
-
 .tbl-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: left; padding: 10px 12px; background: #f8fafc; color: var(--text-2); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); }
 td { padding: 11px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #f8fafc; }
-
 .badge { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; }
 .badge-green { background: #dcfce7; color: #166534; }
 .badge-red { background: #fee2e2; color: #991b1b; }
 .badge-yellow { background: #fef9c3; color: #854d0e; }
 .badge-blue { background: #dbeafe; color: #1e40af; }
-
+.badge-purple { background: #f3e8ff; color: #6b21a8; }
+.badge-gray { background: #f1f5f9; color: #64748b; }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 10px 13px;
-  border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 14px; font-family: inherit; outline: none;
-  transition: border-color .2s; background: white;
-}
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; transition: border-color .2s; background: white; }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
 .btn { padding: 9px 18px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; transition: all .2s; }
 .btn-primary { background: var(--primary); color: white; }
 .btn-primary:hover { background: var(--primary-dark); }
@@ -167,7 +84,7 @@ tr:hover td { background: #f8fafc; }
 .btn-danger { background: var(--danger); color: white; }
 .btn-outline { background: white; color: var(--text); border: 1.5px solid var(--border); }
 .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-
+.btn-sm { padding: 5px 12px; font-size: 12px; }
 .pregunta-bloque { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; position: relative; }
 .pregunta-bloque .preg-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .pregunta-bloque .preg-num { width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
@@ -180,7 +97,6 @@ tr:hover td { background: #f8fafc; }
 .opcion-row .del-op { background: none; border: none; cursor: pointer; color: var(--text-2); font-size: 14px; padding: 4px; }
 .add-opcion { background: none; border: 1.5px dashed var(--border); color: var(--text-2); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; width: 100%; margin-top: 4px; transition: all .2s; }
 .add-opcion:hover { border-color: var(--primary); color: var(--primary); }
-
 .resp-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; }
 .resp-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .resp-nombre { font-weight: 700; font-size: 15px; }
@@ -191,103 +107,73 @@ tr:hover td { background: #f8fafc; }
 .resp-item-a { font-size: 14px; font-weight: 500; }
 .stars-display { color: #f59e0b; font-size: 18px; }
 .emoji-display { font-size: 22px; }
-
 .alert-banner { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: #92400e; display: flex; align-items: center; gap: 8px; }
-
 .filters-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
 .filters-bar select, .filters-bar input { padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 13px; font-family: inherit; outline: none; background: white; }
 .filters-bar select:focus, .filters-bar input:focus { border-color: var(--primary); }
-
 .chart-bar-wrap { margin-top: 8px; }
 .chart-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .chart-label { font-size: 13px; min-width: 90px; text-align: right; }
 .chart-bar-bg { flex: 1; background: #f1f5f9; border-radius: 99px; height: 10px; }
 .chart-bar-fill { height: 10px; border-radius: 99px; background: linear-gradient(90deg, #2563eb, #10b981); transition: width .4s; }
 .chart-count { font-size: 12px; color: var(--text-2); min-width: 30px; }
-
 .empty { text-align: center; padding: 48px 20px; color: var(--text-2); }
 .empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty p { font-size: 14px; }
-
 .toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 9999; opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateY(0); }
-
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
 .modal-box { background: white; border-radius: 14px; padding: 28px; max-width: 500px; width: 95%; max-height: 90vh; overflow-y: auto; }
 .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-
-/* ── QR STYLES ── */
-.qr-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.qr-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  text-align: center;
-}
-.qr-card .qr-type-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
+.qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.qr-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+.qr-card .qr-type-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
 .qr-card.operario .qr-type-label { color: #7c3aed; }
 .qr-card.cliente .qr-type-label { color: #0891b2; }
-.qr-card h4 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.qr-card p {
-  font-size: 12px;
-  color: var(--text-2);
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-.qr-canvas-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  background: white;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  margin-bottom: 16px;
-}
+.qr-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.qr-card p { font-size: 12px; color: var(--text-2); margin-bottom: 20px; line-height: 1.5; }
+.qr-canvas-wrap { display: inline-flex; align-items: center; justify-content: center; padding: 12px; background: white; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 16px; }
 .qr-canvas-wrap.operario { border-color: #7c3aed; }
 .qr-canvas-wrap.cliente { border-color: #0891b2; }
-.qr-url-box {
-  background: #f8fafc;
-  border-radius: 7px;
-  padding: 8px 12px;
-  font-size: 11px;
-  color: var(--text-2);
-  word-break: break-all;
-  margin-bottom: 14px;
-  text-align: left;
-}
+.qr-url-box { background: #f8fafc; border-radius: 7px; padding: 8px 12px; font-size: 11px; color: var(--text-2); word-break: break-all; margin-bottom: 14px; text-align: left; }
 .qr-actions { display: flex; gap: 8px; justify-content: center; }
-.qr-info-banner {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 8px;
-  padding: 14px 18px;
-  font-size: 13px;
-  color: #166534;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
+.qr-info-banner { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #166534; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; }
 .qr-info-banner .info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── CRM STYLES ── */
+.crm-list-table tr { cursor: pointer; }
+.crm-list-table tr:hover td { background: #eff6ff; }
+.etiqueta-select { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: inherit; outline: none; }
+.etiqueta-nuevo { background: #dbeafe; color: #1e40af; }
+.etiqueta-regular { background: #dcfce7; color: #166534; }
+.etiqueta-vip { background: #fef9c3; color: #854d0e; }
+.etiqueta-inactivo { background: #f1f5f9; color: #64748b; }
+.ficha-panel { display: none; position: fixed; top: 0; right: 0; bottom: 0; width: 480px; background: white; box-shadow: -4px 0 24px rgba(0,0,0,0.12); z-index: 200; overflow-y: auto; }
+.ficha-panel.open { display: block; }
+.ficha-header { padding: 20px 24px; background: linear-gradient(135deg, #1e293b, #2563eb); color: white; display: flex; align-items: center; gap: 14px; }
+.ficha-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
+.ficha-nombre { font-size: 17px; font-weight: 700; }
+.ficha-tel { font-size: 13px; opacity: .75; margin-top: 2px; }
+.ficha-close { margin-left: auto; background: none; border: none; color: white; font-size: 22px; cursor: pointer; opacity: .7; line-height: 1; }
+.ficha-close:hover { opacity: 1; }
+.ficha-body { padding: 20px 24px; }
+.ficha-section { margin-bottom: 20px; }
+.ficha-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-2); margin-bottom: 10px; }
+.ficha-datos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ficha-dato { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+.ficha-dato .label { font-size: 11px; color: var(--text-2); margin-bottom: 3px; }
+.ficha-dato .value { font-size: 13px; font-weight: 600; }
+.historial-item { background: #f8fafc; border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; border-left: 3px solid var(--primary); }
+.historial-item .h-fecha { font-size: 11px; color: var(--text-2); margin-bottom: 4px; }
+.historial-item .h-detalle { font-size: 13px; }
+.historial-item .h-extra { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.conv-item { background: #f8fafc; border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; font-size: 13px; color: var(--text-2); }
+.nota-area { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; resize: vertical; min-height: 80px; }
+.nota-area:focus { border-color: var(--primary); }
+.crm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 190; }
+.crm-overlay.open { display: block; }
 
 @media (max-width: 768px) {
   .sidebar { width: 200px; }
@@ -295,6 +181,7 @@ tr:hover td { background: #f8fafc; }
   .form-row { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .qr-grid { grid-template-columns: 1fr; }
+  .ficha-panel { width: 100%; }
 }
 </style>
 </head>
@@ -346,6 +233,7 @@ tr:hover td { background: #f8fafc; }
       <div class="nav-item" onclick="showPage('compras')"><span class="nav-icon">🛍️</span> Compras</div>
       <div class="nav-item" onclick="showPage('tickets')"><span class="nav-icon">🧾</span> Tickets</div>
       <div class="nav-item" id="nav-ventas" onclick="showPage('ventas')" style="display:none"><span class="nav-icon">🛒</span> Ventas <span style="font-size:10px;background:#6c63ff;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">NUEVO</span></div>
+      <div class="nav-item" id="nav-clientes" onclick="showPage('clientes')" style="display:none"><span class="nav-icon">👥</span> Clientes <span style="font-size:10px;background:#10b981;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">CRM</span></div>
       <div class="nav-item" id="nav-qr" onclick="showPage('qr')" style="display:none"><span class="nav-icon">📱</span> QR de carga <span style="font-size:10px;background:#0891b2;color:white;padding:1px 6px;border-radius:10px;margin-left:4px">QR</span></div>
       <div class="nav-item" id="nav-wa-msg" onclick="showPage('wa-msg')" style="display:none"><span class="nav-icon">💬</span> Mensaje WA</div>
       <div class="nav-item" id="nav-asistente" onclick="showPage('asistente')" style="display:none"><span class="nav-icon">🤖</span> Mi Asistente</div>
@@ -362,14 +250,8 @@ tr:hover td { background: #f8fafc; }
       <div class="page-title">Dashboard</div>
       <div class="page-sub" id="dash-sub">Bienvenido a tu panel</div>
       <div class="stats-grid" id="dash-stats"></div>
-      <div class="card">
-        <h3>⚠️ Respuestas que requieren atención</h3>
-        <div id="dash-alertas"></div>
-      </div>
-      <div class="card">
-        <h3>📋 Últimas respuestas</h3>
-        <div id="dash-ultimas"></div>
-      </div>
+      <div class="card"><h3>⚠️ Respuestas que requieren atención</h3><div id="dash-alertas"></div></div>
+      <div class="card"><h3>📋 Últimas respuestas</h3><div id="dash-ultimas"></div></div>
     </div>
 
     <!-- FORMULARIO -->
@@ -378,31 +260,11 @@ tr:hover td { background: #f8fafc; }
       <div class="page-sub">Creá y editá el formulario de encuesta para tus clientes</div>
       <div class="card">
         <div class="form-row" style="margin-bottom:16px">
-          <div class="form-group" style="margin:0">
-            <label>Nombre del formulario</label>
-            <input type="text" id="form-nombre" placeholder="Encuesta de satisfacción">
-          </div>
-          <div class="form-group" style="margin:0">
-            <label>Idioma</label>
-            <select id="form-lang">
-              <option value="es">🇦🇷 Español</option>
-              <option value="en">🇬🇧 English</option>
-              <option value="pt">🇧🇷 Português</option>
-            </select>
-          </div>
+          <div class="form-group" style="margin:0"><label>Nombre del formulario</label><input type="text" id="form-nombre" placeholder="Encuesta de satisfacción"></div>
+          <div class="form-group" style="margin:0"><label>Idioma</label><select id="form-lang"><option value="es">🇦🇷 Español</option><option value="en">🇬🇧 English</option><option value="pt">🇧🇷 Português</option></select></div>
         </div>
-        <div class="form-group">
-          <label>Sección de compras en encuesta</label>
-          <select id="form-modo-compras">
-            <option value="ninguno">Sin sección de compras</option>
-            <option value="manual">Carga manual de productos</option>
-            <option value="ticket_ia">Subir ticket — IA extrae los ítems</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Mensaje de bienvenida</label>
-          <textarea id="form-bienvenida" rows="2" placeholder="¡Hola! Tu opinión nos importa."></textarea>
-        </div>
+        <div class="form-group"><label>Sección de compras en encuesta</label><select id="form-modo-compras"><option value="ninguno">Sin sección de compras</option><option value="manual">Carga manual de productos</option><option value="ticket_ia">Subir ticket — IA extrae los ítems</option></select></div>
+        <div class="form-group"><label>Mensaje de bienvenida</label><textarea id="form-bienvenida" rows="2" placeholder="¡Hola! Tu opinión nos importa."></textarea></div>
         <div id="preguntas-container" style="margin-bottom:16px"></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
           <button class="btn btn-outline" onclick="addPregunta('estrellas')">⭐ Estrellas</button>
@@ -423,12 +285,7 @@ tr:hover td { background: #f8fafc; }
       <div class="page-title">Respuestas</div>
       <div class="page-sub">Todas las respuestas de tu formulario de encuesta</div>
       <div class="filters-bar">
-        <select id="resp-filtro-fecha" onchange="renderRespuestas()">
-          <option value="">Todas las fechas</option>
-          <option value="7">Últimos 7 días</option>
-          <option value="30">Últimos 30 días</option>
-          <option value="90">Últimos 90 días</option>
-        </select>
+        <select id="resp-filtro-fecha" onchange="renderRespuestas()"><option value="">Todas las fechas</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option></select>
         <input type="text" id="resp-buscar" placeholder="Buscar por nombre..." oninput="renderRespuestas()" style="max-width:200px">
         <button class="btn btn-outline" onclick="exportCSV()">⬇️ Exportar CSV</button>
       </div>
@@ -446,21 +303,11 @@ tr:hover td { background: #f8fafc; }
     <div class="page-section" id="page-tickets">
       <div class="page-title">Tickets escaneados</div>
       <div class="page-sub">Ítems extraídos automáticamente de los tickets subidos por tus clientes</div>
-      <div style="margin-bottom:16px">
-        <button class="btn btn-outline" onclick="exportarTicketsCSV()">⬇️ Exportar CSV</button>
-      </div>
+      <div style="margin-bottom:16px"><button class="btn btn-outline" onclick="exportarTicketsCSV()">⬇️ Exportar CSV</button></div>
       <div class="card">
         <div class="tbl-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Fecha</th><th>Cliente</th><th>Producto</th><th>Cantidad</th><th>Precio unit.</th><th>Subtotal</th><th>Ticket</th>
-              </tr>
-            </thead>
-            <tbody id="tickets-tbody">
-              <tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr>
-            </tbody>
-          </table>
+          <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Cantidad</th><th>Precio unit.</th><th>Subtotal</th><th>Ticket</th></tr></thead>
+          <tbody id="tickets-tbody"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr></tbody></table>
         </div>
       </div>
     </div>
@@ -477,15 +324,33 @@ tr:hover td { background: #f8fafc; }
       <div id="ventas-stats" class="stats-grid" style="margin-bottom:20px"></div>
       <div class="card">
         <div class="tbl-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Fecha</th><th>Cliente</th><th>Teléfono</th><th>Localidad</th><th>Total</th><th>Medio pago</th><th>Productos</th><th>Bot WA</th><th>WA enviado</th><th>Comprobante</th>
-              </tr>
-            </thead>
-            <tbody id="ventas-tbody">
-              <tr><td colspan="10" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr>
-            </tbody>
+          <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Teléfono</th><th>Localidad</th><th>Total</th><th>Medio pago</th><th>Productos</th><th>Bot WA</th><th>WA enviado</th><th>Comprobante</th></tr></thead>
+          <tbody id="ventas-tbody"><tr><td colspan="10" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRM CLIENTES -->
+    <div class="page-section" id="page-clientes">
+      <div class="page-title">Clientes</div>
+      <div class="page-sub">Base de datos de tus clientes con historial de compras y conversaciones</div>
+      <div class="stats-grid" id="crm-stats" style="margin-bottom:20px"></div>
+      <div class="filters-bar">
+        <input type="text" id="crm-buscar" placeholder="Buscar por nombre o teléfono..." oninput="filtrarClientes()" style="max-width:260px">
+        <select id="crm-filtro-etiqueta" onchange="filtrarClientes()">
+          <option value="">Todas las etiquetas</option>
+          <option value="nuevo">🆕 Nuevo</option>
+          <option value="regular">✅ Regular</option>
+          <option value="vip">⭐ VIP</option>
+          <option value="inactivo">💤 Inactivo</option>
+        </select>
+        <button class="btn btn-outline" onclick="exportClientesCSV()">⬇️ Exportar CSV</button>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table class="crm-list-table">
+            <thead><tr><th>Cliente</th><th>Teléfono</th><th>Localidad</th><th>Compras</th><th>Ticket prom.</th><th>Medios de pago</th><th>Etiqueta</th><th>Última compra</th></tr></thead>
+            <tbody id="crm-tbody"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:32px">Cargando...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -495,13 +360,7 @@ tr:hover td { background: #f8fafc; }
     <div class="page-section" id="page-qr">
       <div class="page-title">QR de carga</div>
       <div class="page-sub">Códigos QR para operarios y clientes presenciales</div>
-      <div class="qr-info-banner">
-        <span class="info-icon">ℹ️</span>
-        <div>
-          <strong>¿Cómo usar los QR?</strong><br>
-          Imprimí o mostrá cada QR según el caso. El QR de operario está pensado para que el empleado cargue la venta. El QR de cliente presencial arranca el bot directamente, sin necesidad de WhatsApp.
-        </div>
-      </div>
+      <div class="qr-info-banner"><span class="info-icon">ℹ️</span><div><strong>¿Cómo usar los QR?</strong><br>Imprimí o mostrá cada QR según el caso.</div></div>
       <div class="qr-grid">
         <div class="qr-card operario">
           <div class="qr-type-label">🟣 Para el operario</div>
@@ -517,25 +376,12 @@ tr:hover td { background: #f8fafc; }
         <div class="qr-card cliente">
           <div class="qr-type-label">🔵 Para el cliente presencial</div>
           <h4>QR de encuesta / bot</h4>
-          <p>El cliente escanea este código en el local y accede al bot directamente, sin necesidad de WhatsApp.</p>
+          <p>El cliente escanea este código en el local y accede al bot directamente.</p>
           <div class="qr-canvas-wrap cliente"><div id="qr-cliente"></div></div>
           <div class="qr-url-box" id="qr-url-cliente">—</div>
           <div class="qr-actions">
             <button class="btn btn-outline" onclick="copiarUrlQR('cliente')">📋 Copiar URL</button>
             <button class="btn btn-primary" style="background:#0891b2" onclick="descargarQR('cliente')">⬇️ Descargar</button>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>🖨️ Instrucciones para imprimir</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;color:var(--text-2)">
-          <div style="background:#f8fafc;border-radius:8px;padding:14px">
-            <div style="font-weight:700;color:#7c3aed;margin-bottom:6px">QR Operario</div>
-            Colocalo en el punto de caja o en la tablet del operario. Recomendamos tamaño mínimo 5×5cm para una lectura cómoda.
-          </div>
-          <div style="background:#f8fafc;border-radius:8px;padding:14px">
-            <div style="font-weight:700;color:#0891b2;margin-bottom:6px">QR Cliente</div>
-            Colocalo en el mostrador, en la bolsa o en un soporte visible para el cliente. Ideal en tamaño 8×8cm o más grande.
           </div>
         </div>
       </div>
@@ -547,16 +393,8 @@ tr:hover td { background: #f8fafc; }
       <div class="page-sub">Personalizá el mensaje que recibe el cliente cuando se registra una venta</div>
       <div class="card">
         <h3>✏️ Editor de mensaje</h3>
-        <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">
-          Usá las siguientes variables en tu mensaje:<br>
-          <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{nombre}</code> — Nombre del cliente &nbsp;
-          <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{comercio}</code> — Nombre de tu comercio &nbsp;
-          <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{link}</code> — Link al chat del asistente
-        </p>
-        <div class="form-group">
-          <label>Mensaje</label>
-          <textarea id="wa-msg-texto" rows="5" placeholder="¡Hola {nombre}! Gracias por tu compra en {comercio}. Accedé a tu asistente: {link}" oninput="previewWAMsg()"></textarea>
-        </div>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">Variables disponibles: <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{nombre}</code> <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{comercio}</code> <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">{link}</code></p>
+        <div class="form-group"><label>Mensaje</label><textarea id="wa-msg-texto" rows="5" oninput="previewWAMsg()"></textarea></div>
         <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px">
           <div style="font-size:11px;font-weight:700;color:#166534;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Vista previa</div>
           <div id="wa-msg-preview" style="font-size:14px;color:#1e293b;line-height:1.6;white-space:pre-wrap"></div>
@@ -575,7 +413,21 @@ tr:hover td { background: #f8fafc; }
   </div><!-- /main -->
 </div><!-- /app -->
 
-<!-- MODAL COMPRA -->
+<!-- FICHA CLIENTE (panel lateral) -->
+<div class="crm-overlay" id="crm-overlay" onclick="cerrarFicha()"></div>
+<div class="ficha-panel" id="ficha-panel">
+  <div class="ficha-header">
+    <div class="ficha-avatar" id="ficha-avatar">—</div>
+    <div>
+      <div class="ficha-nombre" id="ficha-nombre">—</div>
+      <div class="ficha-tel" id="ficha-tel">—</div>
+    </div>
+    <button class="ficha-close" onclick="cerrarFicha()">✕</button>
+  </div>
+  <div class="ficha-body" id="ficha-body"></div>
+</div>
+
+<!-- MODALES EXISTENTES -->
 <div class="modal-overlay" id="modal-compra">
   <div class="modal-box">
     <div class="modal-title">Nueva compra</div>
@@ -586,15 +438,7 @@ tr:hover td { background: #f8fafc; }
     </div>
     <div class="form-row">
       <div class="form-group"><label>Monto ($)</label><input type="number" id="mc-monto" placeholder="0.00"></div>
-      <div class="form-group"><label>Método de pago</label>
-        <select id="mc-metodo">
-          <option value="efectivo">Efectivo</option>
-          <option value="debito">Débito</option>
-          <option value="credito">Crédito</option>
-          <option value="transferencia">Transferencia</option>
-          <option value="otro">Otro</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Método de pago</label><select id="mc-metodo"><option value="efectivo">Efectivo</option><option value="debito">Débito</option><option value="credito">Crédito</option><option value="transferencia">Transferencia</option><option value="otro">Otro</option></select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Nº Ticket / Factura</label><input type="text" id="mc-ticket" placeholder="Nº de comprobante"></div>
@@ -607,7 +451,6 @@ tr:hover td { background: #f8fafc; }
   </div>
 </div>
 
-<!-- MODAL CAMBIAR CONTRASEÑA -->
 <div class="modal-overlay" id="modal-password">
   <div class="modal-box" style="max-width:380px">
     <div class="modal-title">Cambiar contraseña</div>
@@ -622,7 +465,6 @@ tr:hover td { background: #f8fafc; }
   </div>
 </div>
 
-<!-- MODAL KB ASISTENTE -->
 <div class="modal-overlay" id="modal-kb">
   <div class="modal-box" style="max-width:560px">
     <div class="modal-title" id="modal-kb-titulo">Nuevo artículo</div>
@@ -715,32 +557,17 @@ function renderDashboard() {
   const avgStars = estrellas.length ? (estrellas.reduce((a, r) => a + r.estrellas, 0) / estrellas.length).toFixed(1) : '-';
   const bajas = allRespuestas.filter(r => (r.estrellas > 0 && r.estrellas <= 2) || (r.emocion > 0 && r.emocion <= 2));
   document.getElementById('dash-stats').innerHTML =
-    statCard('📋', 'Total Respuestas', total) +
-    statCard('⭐', 'Prom. Estrellas', avgStars) +
-    statCard('⚠️', 'Alertas', bajas.length, bajas.length > 0 ? '#fee2e2' : '') +
-    statCard('🛍️', 'Compras', allCompras.length);
+    statCard('📋', 'Total Respuestas', total) + statCard('⭐', 'Prom. Estrellas', avgStars) +
+    statCard('⚠️', 'Alertas', bajas.length, bajas.length > 0 ? '#fee2e2' : '') + statCard('🛍️', 'Compras', allCompras.length);
   const alertEl = document.getElementById('dash-alertas');
-  if (bajas.length === 0) {
-    alertEl.innerHTML = '<div class="empty"><div class="empty-icon">✅</div><p>Sin alertas. Todo bien por ahora.</p></div>';
-  } else {
-    alertEl.innerHTML = bajas.slice(0, 5).map(r => {
-      const puntos = r.estrellas <= 2 && r.estrellas > 0 ? r.estrellas + ' ⭐' : emojiFromVal(r.emocion);
-      return '<div class="alert-banner">⚠️ <strong>' + (r.nombre || 'Anónimo') + '</strong> — Puntuación: ' + puntos + ' — ' + (r.fecha || '') + '</div>';
-    }).join('');
-  }
+  if (bajas.length === 0) { alertEl.innerHTML = '<div class="empty"><div class="empty-icon">✅</div><p>Sin alertas.</p></div>'; }
+  else { alertEl.innerHTML = bajas.slice(0, 5).map(r => { const puntos = r.estrellas <= 2 && r.estrellas > 0 ? r.estrellas + ' ⭐' : emojiFromVal(r.emocion); return '<div class="alert-banner">⚠️ <strong>' + (r.nombre || 'Anónimo') + '</strong> — Puntuación: ' + puntos + ' — ' + (r.fecha || '') + '</div>'; }).join(''); }
   const ulEl = document.getElementById('dash-ultimas');
-  if (allRespuestas.length === 0) {
-    ulEl.innerHTML = '<div class="empty"><div class="empty-icon">💬</div><p>Aún no hay respuestas.</p></div>';
-  } else {
-    ulEl.innerHTML = '<div class="tbl-wrap"><table><thead><tr><th>Cliente</th><th>Estrellas</th><th>Emoción</th><th>Comentario</th><th>Fecha</th></tr></thead><tbody>' +
-      allRespuestas.slice(0, 8).map(r => '<tr><td>' + (r.nombre || 'Anónimo') + '</td><td>' + (r.estrellas > 0 ? '⭐'.repeat(r.estrellas) : '-') + '</td><td>' + (r.emocion > 0 ? emojiFromVal(r.emocion) : '-') + '</td><td>' + (r.comentario ? r.comentario.slice(0, 60) + (r.comentario.length > 60 ? '…' : '') : '-') + '</td><td>' + (r.fecha || '') + '</td></tr>').join('') +
-      '</tbody></table></div>';
-  }
+  if (allRespuestas.length === 0) { ulEl.innerHTML = '<div class="empty"><div class="empty-icon">💬</div><p>Aún no hay respuestas.</p></div>'; }
+  else { ulEl.innerHTML = '<div class="tbl-wrap"><table><thead><tr><th>Cliente</th><th>Estrellas</th><th>Emoción</th><th>Comentario</th><th>Fecha</th></tr></thead><tbody>' + allRespuestas.slice(0, 8).map(r => '<tr><td>' + (r.nombre || 'Anónimo') + '</td><td>' + (r.estrellas > 0 ? '⭐'.repeat(r.estrellas) : '-') + '</td><td>' + (r.emocion > 0 ? emojiFromVal(r.emocion) : '-') + '</td><td>' + (r.comentario ? r.comentario.slice(0, 60) + (r.comentario.length > 60 ? '…' : '') : '-') + '</td><td>' + (r.fecha || '') + '</td></tr>').join('') + '</tbody></table></div>'; }
 }
 
-function statCard(icon, label, val, bg) {
-  return '<div class="stat-card"' + (bg ? ' style="background:' + bg + '"' : '') + '><div class="stat-icon">' + icon + '</div><div class="stat-label">' + label + '</div><div class="stat-val">' + val + '</div></div>';
-}
+function statCard(icon, label, val, bg) { return '<div class="stat-card"' + (bg ? ' style="background:' + bg + '"' : '') + '><div class="stat-icon">' + icon + '</div><div class="stat-label">' + label + '</div><div class="stat-val">' + val + '</div></div>'; }
 function emojiFromVal(v) { return ['', '😞', '😕', '😐', '😊', '🤩'][v] || ''; }
 
 function cargarFormularioEditor() {
@@ -748,9 +575,7 @@ function cargarFormularioEditor() {
   document.getElementById('form-nombre').value = currentFormulario.nombre || '';
   document.getElementById('form-bienvenida').value = currentFormulario.bienvenida || '';
   document.getElementById('form-lang').value = currentFormulario.lang || 'es';
-  if (document.getElementById('form-modo-compras')) {
-    document.getElementById('form-modo-compras').value = currentFormulario.modo_compras || 'ninguno';
-  }
+  if (document.getElementById('form-modo-compras')) document.getElementById('form-modo-compras').value = currentFormulario.modo_compras || 'ninguno';
   preguntas = Array.isArray(currentFormulario.preguntas) ? currentFormulario.preguntas : [];
   renderPreguntas();
 }
@@ -771,12 +596,7 @@ function buildPreguntaBloque(p, i) {
   return '<div class="pregunta-bloque"><div class="preg-header"><div class="preg-num">' + (i+1) + '</div><span style="font-size:12px;color:var(--text-2)">' + (tipos[p.tipo] || p.tipo) + '</span></div><div class="form-group" style="margin:0"><label>Texto de la pregunta</label><input type="text" value="' + (p.texto || '').replace(/"/g, '&quot;') + '" oninput="updatePregunta(' + i + ',this.value)" placeholder="Escribí tu pregunta..."></div>' + extra + '<button class="preg-del" onclick="delPregunta(' + i + ')">✕</button></div>';
 }
 
-function addPregunta(tipo) {
-  const defaults = { estrellas: 'Calificá tu experiencia', emociones: '¿Cómo te sentiste?', cerrada: 'Seleccioná una opción', abierta: '¿Algún comentario adicional?' };
-  preguntas.push({ tipo, texto: defaults[tipo] || '', opciones: tipo === 'cerrada' ? ['Opción 1', 'Opción 2', 'Opción 3'] : undefined });
-  renderPreguntas();
-}
-
+function addPregunta(tipo) { const defaults = { estrellas: 'Calificá tu experiencia', emociones: '¿Cómo te sentiste?', cerrada: 'Seleccioná una opción', abierta: '¿Algún comentario adicional?' }; preguntas.push({ tipo, texto: defaults[tipo] || '', opciones: tipo === 'cerrada' ? ['Opción 1', 'Opción 2', 'Opción 3'] : undefined }); renderPreguntas(); }
 function updatePregunta(i, v) { preguntas[i].texto = v; }
 function updateOpcion(pi, oi, v) { preguntas[pi].opciones[oi] = v; }
 function delOpcion(pi, oi) { preguntas[pi].opciones.splice(oi, 1); renderPreguntas(); }
@@ -787,12 +607,8 @@ async function guardarFormulario() {
   const code = currentUser.comercio_code;
   const datos = { comercio_code: code, nombre: document.getElementById('form-nombre').value || 'Encuesta', bienvenida: document.getElementById('form-bienvenida').value, lang: document.getElementById('form-lang').value, modo_compras: document.getElementById('form-modo-compras').value, preguntas, updated_at: new Date().toISOString() };
   let res;
-  if (currentFormulario && currentFormulario.id) {
-    res = await sb.from('sq_formularios').update(datos).eq('id', currentFormulario.id);
-  } else {
-    res = await sb.from('sq_formularios').insert(datos).select().single();
-    if (res.data) currentFormulario = res.data;
-  }
+  if (currentFormulario && currentFormulario.id) { res = await sb.from('sq_formularios').update(datos).eq('id', currentFormulario.id); }
+  else { res = await sb.from('sq_formularios').insert(datos).select().single(); if (res.data) currentFormulario = res.data; }
   if (res.error) { showToast('Error al guardar: ' + res.error.message, true); return; }
   showToast('Formulario guardado correctamente');
 }
@@ -800,19 +616,14 @@ async function guardarFormulario() {
 function copiarLink() {
   const url = 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + currentUser.comercio_code;
   navigator.clipboard.writeText(url).then(() => showToast('Link copiado al portapapeles'));
-  const box = document.getElementById('link-box');
-  box.style.display = 'block'; box.textContent = url;
+  const box = document.getElementById('link-box'); box.style.display = 'block'; box.textContent = url;
 }
 
 function renderRespuestas() {
   const dias = parseInt(document.getElementById('resp-filtro-fecha').value) || 0;
   const busca = (document.getElementById('resp-buscar').value || '').toLowerCase();
   const el = document.getElementById('respuestas-lista');
-  let lista = allRespuestas.filter(r => {
-    if (busca && !(r.nombre || '').toLowerCase().includes(busca)) return false;
-    if (dias > 0) { const fecha = new Date(r.created_at); const limite = new Date(); limite.setDate(limite.getDate() - dias); if (fecha < limite) return false; }
-    return true;
-  });
+  let lista = allRespuestas.filter(r => { if (busca && !(r.nombre || '').toLowerCase().includes(busca)) return false; if (dias > 0) { const fecha = new Date(r.created_at); const limite = new Date(); limite.setDate(limite.getDate() - dias); if (fecha < limite) return false; } return true; });
   if (lista.length === 0) { el.innerHTML = '<div class="empty"><div class="empty-icon">💬</div><p>No hay respuestas con esos filtros.</p></div>'; return; }
   const preg = currentFormulario && Array.isArray(currentFormulario.preguntas) ? currentFormulario.preguntas : [];
   el.innerHTML = lista.map(r => {
@@ -820,10 +631,7 @@ function renderRespuestas() {
     let items = '';
     if (r.estrellas > 0) items += '<div class="resp-item"><div class="resp-item-q">Estrellas</div><div class="resp-item-a stars-display">' + '⭐'.repeat(r.estrellas) + ' (' + r.estrellas + '/5)</div></div>';
     if (r.emocion > 0) items += '<div class="resp-item"><div class="resp-item-q">Emoción</div><div class="resp-item-a emoji-display">' + emojiFromVal(r.emocion) + ' (' + r.emocion + '/5)</div></div>';
-    preg.forEach((p, i) => {
-      if (p.tipo === 'cerrada') { const val = r.cerradas && r.cerradas[i]; if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>'; }
-      else if (p.tipo === 'abierta') { const val = r.abiertas && r.abiertas[i]; if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>'; }
-    });
+    preg.forEach((p, i) => { if (p.tipo === 'cerrada') { const val = r.cerradas && r.cerradas[i]; if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>'; } else if (p.tipo === 'abierta') { const val = r.abiertas && r.abiertas[i]; if (val) items += '<div class="resp-item"><div class="resp-item-q">' + p.texto + '</div><div class="resp-item-a">' + val + '</div></div>'; } });
     if (r.comentario) items += '<div class="resp-item"><div class="resp-item-q">Comentario</div><div class="resp-item-a">' + r.comentario + '</div></div>';
     return '<div class="resp-card"' + alertClass + '><div class="resp-card-header"><div><div class="resp-nombre">' + (r.nombre || 'Anónimo') + '</div>' + (r.telefono ? '<div style="font-size:12px;color:var(--text-2)">' + r.telefono + '</div>' : '') + '</div><div class="resp-fecha">' + (r.fecha || '') + '</div></div><div class="resp-items">' + (items || '<em style="color:var(--text-2);font-size:13px">Sin datos adicionales</em>') + '</div></div>';
   }).join('');
@@ -833,8 +641,7 @@ function exportCSV() {
   const cols = ['nombre', 'telefono', 'estrellas', 'emocion', 'comentario', 'fecha'];
   const rows = [cols.join(','), ...allRespuestas.map(r => cols.map(c => '"' + (r[c] || '') + '"').join(','))];
   const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'respuestas.csv'; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'respuestas.csv'; a.click();
 }
 
 function renderEstadisticas() {
@@ -865,11 +672,7 @@ async function cargarTickets() {
   const tbody = document.getElementById('tickets-tbody');
   if (!tbody) return;
   if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:32px">Aún no hay tickets escaneados</td></tr>'; return; }
-  tbody.innerHTML = data.map(item => {
-    const t = item.sq_tickets || {};
-    const url = t.archivo_url ? '<a href="' + t.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver</a>' : '-';
-    return '<tr><td>' + (t.encuesta_fecha || '-') + '</td><td>' + (t.cliente_nombre || 'Anónimo') + '</td><td>' + (item.producto || '-') + '</td><td>' + (item.cantidad || 1) + '</td><td>$' + (item.precio_unitario || 0) + '</td><td>$' + (item.subtotal || 0) + '</td><td>' + url + '</td></tr>';
-  }).join('');
+  tbody.innerHTML = data.map(item => { const t = item.sq_tickets || {}; const url = t.archivo_url ? '<a href="' + t.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver</a>' : '-'; return '<tr><td>' + (t.encuesta_fecha || '-') + '</td><td>' + (t.cliente_nombre || 'Anónimo') + '</td><td>' + (item.producto || '-') + '</td><td>' + (item.cantidad || 1) + '</td><td>$' + (item.precio_unitario || 0) + '</td><td>$' + (item.subtotal || 0) + '</td><td>' + url + '</td></tr>'; }).join('');
 }
 
 function exportarTicketsCSV() {
@@ -877,16 +680,8 @@ function exportarTicketsCSV() {
   const filas = tbody ? tbody.querySelectorAll('tr') : [];
   if (!filas.length) { showToast('No hay tickets para exportar', true); return; }
   let csv = 'Fecha,Cliente,Producto,Cantidad,Precio unitario,Subtotal\n';
-  filas.forEach(tr => {
-    const celdas = tr.querySelectorAll('td');
-    if (celdas.length < 6) return;
-    const fila = [celdas[0].textContent.trim(), celdas[1].textContent.trim(), celdas[2].textContent.trim(), celdas[3].textContent.trim(), celdas[4].textContent.trim(), celdas[5].textContent.trim()].map(v => '"' + v.replace(/"/g, '""') + '"').join(',');
-    csv += fila + '\n';
-  });
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
-  a.download = 'tickets.csv'; a.click();
-  showToast('CSV descargado');
+  filas.forEach(tr => { const celdas = tr.querySelectorAll('td'); if (celdas.length < 6) return; csv += [celdas[0].textContent.trim(),celdas[1].textContent.trim(),celdas[2].textContent.trim(),celdas[3].textContent.trim(),celdas[4].textContent.trim(),celdas[5].textContent.trim()].map(v => '"' + v.replace(/"/g, '""') + '"').join(',') + '\n'; });
+  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv); a.download = 'tickets.csv'; a.click(); showToast('CSV descargado');
 }
 
 function renderCompras() {
@@ -919,12 +714,7 @@ function showPage(p) {
   document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById('page-' + p).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(el => {
-    if ((el.getAttribute('onclick') || '').includes("'" + p + "'")) {
-      el.classList.add('active');
-      el.style.display = 'flex';
-    }
-  });
+  document.querySelectorAll('.nav-item').forEach(el => { if ((el.getAttribute('onclick') || '').includes("'" + p + "'")) { el.classList.add('active'); el.style.display = 'flex'; } });
   if (p === 'respuestas') renderRespuestas();
   if (p === 'estadisticas') renderEstadisticas();
   if (p === 'compras') renderCompras();
@@ -932,22 +722,19 @@ function showPage(p) {
   if (p === 'qr') renderQR();
   if (p === 'wa-msg') cargarMensajeWA();
   if (p === 'asistente') cargarMiAsistente();
+  if (p === 'clientes') cargarClientes();
 }
 
 function showToast(msg, err) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
+  const t = document.getElementById('toast'); t.textContent = msg;
   t.style.background = err ? '#ef4444' : '#1e293b';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
 
 function abrirCambiarPassword() {
-  document.getElementById('pass-actual').value = '';
-  document.getElementById('pass-nueva').value = '';
-  document.getElementById('pass-confirmar').value = '';
+  document.getElementById('pass-actual').value = ''; document.getElementById('pass-nueva').value = ''; document.getElementById('pass-confirmar').value = '';
   document.getElementById('pass-error').style.display = 'none';
   document.getElementById('modal-password').classList.add('open');
 }
@@ -956,26 +743,23 @@ async function guardarPassword() {
   const actual = document.getElementById('pass-actual').value.trim();
   const nueva = document.getElementById('pass-nueva').value.trim();
   const confirmar = document.getElementById('pass-confirmar').value.trim();
-  const errEl = document.getElementById('pass-error');
-  errEl.style.display = 'none';
+  const errEl = document.getElementById('pass-error'); errEl.style.display = 'none';
   if (!actual || !nueva || !confirmar) { errEl.textContent = 'Completá todos los campos'; errEl.style.display = 'block'; return; }
   if (nueva !== confirmar) { errEl.textContent = 'Las contraseñas nuevas no coinciden'; errEl.style.display = 'block'; return; }
   if (actual !== currentUser.password_hash) { errEl.textContent = 'La contraseña actual es incorrecta'; errEl.style.display = 'block'; return; }
   if (nueva.length < 6) { errEl.textContent = 'La nueva contraseña debe tener al menos 6 caracteres'; errEl.style.display = 'block'; return; }
   const { error } = await sb.from('sq_usuarios').update({ password_hash: nueva }).eq('id', currentUser.id);
   if (error) { errEl.textContent = 'Error al guardar: ' + error.message; errEl.style.display = 'block'; return; }
-  currentUser.password_hash = nueva;
-  cerrarModal('modal-password');
-  showToast('Contraseña actualizada correctamente');
+  currentUser.password_hash = nueva; cerrarModal('modal-password'); showToast('Contraseña actualizada correctamente');
 }
 
 // ── CIRCUITO B ──
-
 async function verificarCircuitoB() {
   if (!currentComercio) return;
   const { data } = await sb.from('sq_config_comercio').select('circuito_b').eq('comercio_id', currentComercio.id).single();
   if (data && data.circuito_b) {
     document.getElementById('nav-ventas').style.display = 'flex';
+    document.getElementById('nav-clientes').style.display = 'flex';
     document.getElementById('nav-qr').style.display = 'flex';
     document.getElementById('nav-wa-msg').style.display = 'flex';
     document.getElementById('nav-asistente').style.display = 'flex';
@@ -998,10 +782,8 @@ function renderVentasStats() {
   const waEnviados = allVentas.filter(v => v.whatsapp_enviado).length;
   const totalMonto = allVentas.reduce((s, v) => s + (parseFloat(v.total_compra) || 0), 0);
   document.getElementById('ventas-stats').innerHTML =
-    statCard('🛒', 'Total ventas', total) +
-    statCard('💰', 'Monto total', '$' + totalMonto.toLocaleString('es-AR')) +
-    statCard('📱', 'Con teléfono', conTel) +
-    statCard('✅', 'WA enviados', waEnviados);
+    statCard('🛒', 'Total ventas', total) + statCard('💰', 'Monto total', '$' + totalMonto.toLocaleString('es-AR')) +
+    statCard('📱', 'Con teléfono', conTel) + statCard('✅', 'WA enviados', waEnviados);
 }
 
 function filtrarVentas() {
@@ -1022,7 +804,7 @@ function renderVentas(lista) {
     const prods = v.productos_comprados || v.ia_extraccion?.productos_comprados || [];
     const prodsStr = prods.length > 0 ? '<span title="' + prods.map(p => p.descripcion).join(', ') + '" style="cursor:help">' + prods.length + ' ítem(s) 🔍</span>' : '-';
     const bot = v.whatsapp_bot === 'vendedoria' ? '🛒 Vendedoria' : v.whatsapp_bot === 'asistente_ia' ? '🤖 Asistente' : '-';
-    const waStatus = v.whatsapp_enviado ? '<span class="badge badge-green">Enviado</span>' : (v.telefono ? '<span class="badge badge-yellow">Pendiente</span>' : '<span class="badge" style="background:#f1f5f9;color:#64748b">Sin tel.</span>');
+    const waStatus = v.whatsapp_enviado ? '<span class="badge badge-green">Enviado</span>' : (v.telefono ? '<span class="badge badge-yellow">Pendiente</span>' : '<span class="badge badge-gray">Sin tel.</span>');
     const comprobante = v.archivo_url ? '<a href="' + v.archivo_url + '" target="_blank" style="color:var(--primary);font-size:12px">Ver 📎</a>' : '-';
     return '<tr><td>' + fecha + '</td><td style="font-weight:600">' + cliente + '</td><td>' + (v.telefono || '-') + '</td><td>' + (v.localidad || '-') + '</td><td>' + total + '</td><td>' + medioPago + cuotas + '</td><td>' + prodsStr + '</td><td style="font-size:12px">' + bot + '</td><td>' + waStatus + '</td><td>' + comprobante + '</td></tr>';
   }).join('');
@@ -1032,11 +814,184 @@ function exportVentasCSV() {
   if (!allVentas.length) { showToast('No hay ventas para exportar', true); return; }
   const cols = ['Fecha','Apellido','Nombre','Telefono','Direccion','Localidad','Total','Medio pago','Cuotas','Bot WA','WA enviado'];
   const rows = [cols.join(','), ...allVentas.map(v => [v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '', v.apellido || '', v.nombre || '', v.telefono || '', v.direccion || '', v.localidad || '', v.total_compra || '', v.medio_pago || '', v.cuotas || '', v.whatsapp_bot || '', v.whatsapp_enviado ? 'Si' : 'No'].map(c => '"' + String(c).replace(/"/g, '""') + '"').join(','))];
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n'));
-  a.download = 'ventas.csv'; a.click();
-  showToast('CSV descargado');
+  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n')); a.download = 'ventas.csv'; a.click(); showToast('CSV descargado');
 }
+
+// ── CRM CLIENTES ──────────────────────────────────────────────────────────────
+let allClientes = [], clienteFichaActual = null;
+
+async function cargarClientes() {
+  if (!currentComercio) return;
+  const { data } = await sb.from('sq_clientes_perfil')
+    .select('*')
+    .eq('comercio_id', currentComercio.id)
+    .order('ultima_interaccion', { ascending: false });
+  allClientes = data || [];
+  renderCRMStats();
+  renderCRMTabla(allClientes);
+}
+
+function renderCRMStats() {
+  const total = allClientes.length;
+  const vip = allClientes.filter(c => c.etiqueta === 'vip').length;
+  const nuevos = allClientes.filter(c => c.etiqueta === 'nuevo' || !c.etiqueta).length;
+  const ticketProm = allClientes.filter(c => c.ticket_promedio).reduce((s, c) => s + parseFloat(c.ticket_promedio || 0), 0);
+  const ticketAvg = allClientes.filter(c => c.ticket_promedio).length > 0 ? (ticketProm / allClientes.filter(c => c.ticket_promedio).length).toFixed(0) : 0;
+  document.getElementById('crm-stats').innerHTML =
+    statCard('👥', 'Total clientes', total) +
+    statCard('🆕', 'Nuevos', nuevos) +
+    statCard('⭐', 'VIP', vip) +
+    statCard('💰', 'Ticket prom.', '$' + Number(ticketAvg).toLocaleString('es-AR'));
+}
+
+function filtrarClientes() {
+  const busca = (document.getElementById('crm-buscar').value || '').toLowerCase();
+  const etiqueta = document.getElementById('crm-filtro-etiqueta').value;
+  const lista = allClientes.filter(c => {
+    const nombre = ((c.apellido || '') + ' ' + (c.nombre || '')).toLowerCase();
+    const tel = (c.telefono || '').toLowerCase();
+    if (busca && !nombre.includes(busca) && !tel.includes(busca)) return false;
+    if (etiqueta && (c.etiqueta || 'nuevo') !== etiqueta) return false;
+    return true;
+  });
+  renderCRMTabla(lista);
+}
+
+function renderCRMTabla(lista) {
+  const tbody = document.getElementById('crm-tbody');
+  if (!lista || lista.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:32px">No hay clientes registrados aún.</td></tr>';
+    return;
+  }
+  const etiquetaLabels = { nuevo: '<span class="badge badge-blue">🆕 Nuevo</span>', regular: '<span class="badge badge-green">✅ Regular</span>', vip: '<span class="badge badge-yellow">⭐ VIP</span>', inactivo: '<span class="badge badge-gray">💤 Inactivo</span>' };
+  tbody.innerHTML = lista.map(c => {
+    const nombre = [c.apellido, c.nombre].filter(Boolean).join(', ') || 'Sin nombre';
+    const iniciales = ((c.nombre || c.apellido || '?')[0]).toUpperCase();
+    const compras = Array.isArray(c.historial_compras) ? c.historial_compras.length : 0;
+    const ticket = c.ticket_promedio ? '$' + parseFloat(c.ticket_promedio).toLocaleString('es-AR') : '-';
+    const medios = Array.isArray(c.medios_pago_usados) ? c.medios_pago_usados.join(', ') : '-';
+    const etiq = etiquetaLabels[c.etiqueta] || etiquetaLabels['nuevo'];
+    const ultima = c.ultima_interaccion ? new Date(c.ultima_interaccion).toLocaleDateString('es-AR') : '-';
+    return '<tr onclick="abrirFicha(\'' + c.id + '\')">' +
+      '<td><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#10b981);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">' + iniciales + '</div><span style="font-weight:600">' + nombre + '</span></div></td>' +
+      '<td>' + (c.telefono || '-') + '</td>' +
+      '<td>' + (c.localidad || '-') + '</td>' +
+      '<td style="font-weight:600">' + compras + '</td>' +
+      '<td>' + ticket + '</td>' +
+      '<td style="font-size:12px;color:var(--text-2)">' + medios + '</td>' +
+      '<td>' + etiq + '</td>' +
+      '<td>' + ultima + '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function abrirFicha(id) {
+  clienteFichaActual = allClientes.find(c => c.id === id);
+  if (!clienteFichaActual) return;
+  const c = clienteFichaActual;
+  const nombre = [c.apellido, c.nombre].filter(Boolean).join(', ') || 'Sin nombre';
+  const iniciales = ((c.nombre || c.apellido || '?')[0]).toUpperCase();
+  document.getElementById('ficha-avatar').textContent = iniciales;
+  document.getElementById('ficha-nombre').textContent = nombre;
+  document.getElementById('ficha-tel').textContent = c.telefono || 'Sin teléfono';
+
+  // Datos personales
+  let html = '<div class="ficha-section">';
+  html += '<div class="ficha-section-title">Datos personales</div>';
+  html += '<div class="ficha-datos-grid">';
+  html += '<div class="ficha-dato"><div class="label">Teléfono</div><div class="value">' + (c.telefono || '-') + '</div></div>';
+  html += '<div class="ficha-dato"><div class="label">Localidad</div><div class="value">' + (c.localidad || '-') + '</div></div>';
+  html += '<div class="ficha-dato"><div class="label">Dirección</div><div class="value">' + (c.direccion || '-') + '</div></div>';
+  html += '<div class="ficha-dato"><div class="label">Cliente desde</div><div class="value">' + (c.created_at ? new Date(c.created_at).toLocaleDateString('es-AR') : '-') + '</div></div>';
+  html += '</div></div>';
+
+  // Perfil de compra
+  html += '<div class="ficha-section">';
+  html += '<div class="ficha-section-title">Perfil de compra</div>';
+  html += '<div class="ficha-datos-grid">';
+  html += '<div class="ficha-dato"><div class="label">Total compras</div><div class="value">' + (Array.isArray(c.historial_compras) ? c.historial_compras.length : 0) + '</div></div>';
+  html += '<div class="ficha-dato"><div class="label">Ticket promedio</div><div class="value">' + (c.ticket_promedio ? '$' + parseFloat(c.ticket_promedio).toLocaleString('es-AR') : '-') + '</div></div>';
+  html += '<div class="ficha-dato" style="grid-column:1/-1"><div class="label">Medios de pago usados</div><div class="value">' + (Array.isArray(c.medios_pago_usados) && c.medios_pago_usados.length ? c.medios_pago_usados.join(', ') : '-') + '</div></div>';
+  html += '<div class="ficha-dato" style="grid-column:1/-1"><div class="label">Productos frecuentes</div><div class="value" style="font-size:12px;font-weight:500">' + (Array.isArray(c.productos_frecuentes) && c.productos_frecuentes.length ? c.productos_frecuentes.slice(0,5).join(' · ') : '-') + '</div></div>';
+  html += '</div></div>';
+
+  // Historial de compras
+  const hist = Array.isArray(c.historial_compras) ? c.historial_compras : [];
+  html += '<div class="ficha-section">';
+  html += '<div class="ficha-section-title">Historial de compras (' + hist.length + ')</div>';
+  if (hist.length === 0) {
+    html += '<div style="font-size:13px;color:var(--text-2)">Sin compras registradas</div>';
+  } else {
+    html += hist.slice().reverse().map(h => {
+      const fecha = h.fecha ? new Date(h.fecha).toLocaleDateString('es-AR') : '-';
+      const total = h.total ? '$' + parseFloat(h.total).toLocaleString('es-AR') : '';
+      const medio = h.medio_pago || '';
+      const cuotas = h.cuotas && h.cuotas > 1 ? h.cuotas + ' cuotas' : '';
+      const prods = Array.isArray(h.productos) && h.productos.length ? h.productos.map(p => p.descripcion || p).join(', ') : '';
+      return '<div class="historial-item">' +
+        '<div class="h-fecha">' + fecha + (h.tipo === 'con_facturacion' ? ' · Con factura' : ' · Sin factura') + '</div>' +
+        '<div class="h-detalle">' + [total, medio, cuotas].filter(Boolean).join(' · ') + '</div>' +
+        (prods ? '<div class="h-extra">' + prods + '</div>' : '') +
+        (h.observaciones ? '<div class="h-extra" style="font-style:italic">' + h.observaciones + '</div>' : '') +
+        '</div>';
+    }).join('');
+  }
+  html += '</div>';
+
+  // Etiqueta y nota
+  const etiquetaActual = c.etiqueta || 'nuevo';
+  html += '<div class="ficha-section">';
+  html += '<div class="ficha-section-title">Gestión</div>';
+  html += '<div class="form-group" style="margin-bottom:12px"><label style="font-size:12px">Etiqueta</label>';
+  html += '<select class="etiqueta-select etiqueta-' + etiquetaActual + '" id="ficha-etiqueta" onchange="this.className=\'etiqueta-select etiqueta-\'+this.value">';
+  ['nuevo','regular','vip','inactivo'].forEach(e => { html += '<option value="' + e + '"' + (etiquetaActual === e ? ' selected' : '') + '>' + {nuevo:'🆕 Nuevo',regular:'✅ Regular',vip:'⭐ VIP',inactivo:'💤 Inactivo'}[e] + '</option>'; });
+  html += '</select></div>';
+  html += '<div class="form-group"><label style="font-size:12px">Nota interna</label>';
+  html += '<textarea class="nota-area" id="ficha-nota" placeholder="Anotaciones del comerciante...">' + (c.nota_interna || '') + '</textarea></div>';
+  html += '<button class="btn btn-primary" style="width:100%" onclick="guardarFicha()">💾 Guardar cambios</button>';
+  html += '</div>';
+
+  document.getElementById('ficha-body').innerHTML = html;
+  document.getElementById('ficha-panel').classList.add('open');
+  document.getElementById('crm-overlay').classList.add('open');
+}
+
+async function guardarFicha() {
+  if (!clienteFichaActual) return;
+  const etiqueta = document.getElementById('ficha-etiqueta').value;
+  const nota = document.getElementById('ficha-nota').value.trim();
+  const { error } = await sb.from('sq_clientes_perfil')
+    .update({ etiqueta, nota_interna: nota, updated_at: new Date().toISOString() })
+    .eq('id', clienteFichaActual.id);
+  if (error) { showToast('Error al guardar', true); return; }
+  clienteFichaActual.etiqueta = etiqueta;
+  clienteFichaActual.nota_interna = nota;
+  const idx = allClientes.findIndex(c => c.id === clienteFichaActual.id);
+  if (idx >= 0) allClientes[idx] = { ...allClientes[idx], etiqueta, nota_interna: nota };
+  filtrarClientes();
+  showToast('Cliente actualizado');
+}
+
+function cerrarFicha() {
+  document.getElementById('ficha-panel').classList.remove('open');
+  document.getElementById('crm-overlay').classList.remove('open');
+  clienteFichaActual = null;
+}
+
+function exportClientesCSV() {
+  if (!allClientes.length) { showToast('No hay clientes para exportar', true); return; }
+  const cols = ['Apellido','Nombre','Telefono','Localidad','Direccion','Compras','Ticket promedio','Medios de pago','Etiqueta','Ultima interaccion'];
+  const rows = [cols.join(','), ...allClientes.map(c => [
+    c.apellido || '', c.nombre || '', c.telefono || '', c.localidad || '', c.direccion || '',
+    Array.isArray(c.historial_compras) ? c.historial_compras.length : 0,
+    c.ticket_promedio || '',
+    Array.isArray(c.medios_pago_usados) ? c.medios_pago_usados.join(' | ') : '',
+    c.etiqueta || 'nuevo',
+    c.ultima_interaccion ? new Date(c.ultima_interaccion).toLocaleDateString('es-AR') : ''
+  ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))];
+  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(rows.join('\n')); a.download = 'clientes.csv'; a.click(); showToast('CSV descargado');
+}
+// ── FIN CRM ───────────────────────────────────────────────────────────────────
 
 // ── QR DE CARGA ──
 let qrOperarioInstance = null, qrClienteInstance = null, urlQROperario = '', urlQRCliente = '';
@@ -1046,9 +1001,7 @@ function renderQR() {
   const slug = currentComercio.slug || currentUser.comercio_code;
   urlQROperario = 'https://satisfactq.menteactiva.com.ar/carga/' + slug;
   const botId = currentComercio.bot_cliente_id || '';
-  urlQRCliente = botId
-    ? 'https://www.miasistenteia.com.ar/widget?clienteId=' + botId + '&comercio=' + encodeURIComponent(currentComercio.nombre || slug)
-    : 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + slug;
+  urlQRCliente = botId ? 'https://www.miasistenteia.com.ar/widget?clienteId=' + botId + '&comercio=' + encodeURIComponent(currentComercio.nombre || slug) : 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + slug;
   document.getElementById('qr-url-operario').textContent = urlQROperario;
   document.getElementById('qr-url-cliente').textContent = urlQRCliente;
   const wrapOp = document.getElementById('qr-operario');
@@ -1058,10 +1011,7 @@ function renderQR() {
   qrClienteInstance = new QRCode(wrapCli, { text: urlQRCliente, width: 180, height: 180, colorDark: '#0891b2', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
 }
 
-function copiarUrlQR(tipo) {
-  const url = tipo === 'operario' ? urlQROperario : urlQRCliente;
-  navigator.clipboard.writeText(url).then(() => showToast('URL copiada al portapapeles'));
-}
+function copiarUrlQR(tipo) { const url = tipo === 'operario' ? urlQROperario : urlQRCliente; navigator.clipboard.writeText(url).then(() => showToast('URL copiada al portapapeles')); }
 
 function descargarQR(tipo) {
   const wrapperId = tipo === 'operario' ? 'qr-operario' : 'qr-cliente';
@@ -1069,14 +1019,9 @@ function descargarQR(tipo) {
   const wrapper = document.getElementById(wrapperId);
   const canvas = wrapper.querySelector('canvas');
   const img = wrapper.querySelector('img');
-  if (canvas) {
-    const a = document.createElement('a'); a.download = nombre + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); showToast('QR descargado');
-  } else if (img) {
-    const tmpCanvas = document.createElement('canvas'); tmpCanvas.width = 180; tmpCanvas.height = 180;
-    const ctx = tmpCanvas.getContext('2d'); const image = new Image(); image.crossOrigin = 'anonymous';
-    image.onload = () => { ctx.drawImage(image, 0, 0); const a = document.createElement('a'); a.download = nombre + '.png'; a.href = tmpCanvas.toDataURL('image/png'); a.click(); showToast('QR descargado'); };
-    image.src = img.src;
-  } else { showToast('No se pudo generar el QR', true); }
+  if (canvas) { const a = document.createElement('a'); a.download = nombre + '.png'; a.href = canvas.toDataURL('image/png'); a.click(); showToast('QR descargado'); }
+  else if (img) { const tmpCanvas = document.createElement('canvas'); tmpCanvas.width = 180; tmpCanvas.height = 180; const ctx = tmpCanvas.getContext('2d'); const image = new Image(); image.crossOrigin = 'anonymous'; image.onload = () => { ctx.drawImage(image, 0, 0); const a = document.createElement('a'); a.download = nombre + '.png'; a.href = tmpCanvas.toDataURL('image/png'); a.click(); showToast('QR descargado'); }; image.src = img.src; }
+  else { showToast('No se pudo generar el QR', true); }
 }
 
 // ── MENSAJE WHATSAPP ──
@@ -1085,22 +1030,13 @@ let configComercioId = null;
 async function cargarMensajeWA() {
   if (!currentComercio) return;
   const { data } = await sb.from('sq_config_comercio').select('id, mensaje_whatsapp').eq('comercio_id', currentComercio.id).single();
-  if (data) {
-    configComercioId = data.id;
-    const msg = data.mensaje_whatsapp || '¡Hola {nombre}! 👋 Gracias por tu compra en *{comercio}*. Tenemos un asistente para ayudarte: {link}';
-    document.getElementById('wa-msg-texto').value = msg;
-    previewWAMsg();
-  }
+  if (data) { configComercioId = data.id; const msg = data.mensaje_whatsapp || '¡Hola {nombre}! 👋 Gracias por tu compra en *{comercio}*. Tenemos un asistente para ayudarte: {link}'; document.getElementById('wa-msg-texto').value = msg; previewWAMsg(); }
 }
 
 function previewWAMsg() {
   const msg = document.getElementById('wa-msg-texto').value;
   const nombre = currentComercio ? currentComercio.nombre : 'tu comercio';
-  const preview = msg
-    .replace(/{nombre}/g, 'Juan García')
-    .replace(/{comercio}/g, nombre)
-    .replace(/{link}/g, 'satisfactq.menteactiva.com.ar/chat/...');
-  document.getElementById('wa-msg-preview').textContent = preview;
+  document.getElementById('wa-msg-preview').textContent = msg.replace(/{nombre}/g, 'Juan García').replace(/{comercio}/g, nombre).replace(/{link}/g, 'satisfactq.menteactiva.com.ar/chat/...');
 }
 
 async function guardarMensajeWA() {
@@ -1116,16 +1052,12 @@ async function guardarMensajeWA() {
 const ASIS_SB_URL = 'https://ixctqxxtzoesotniisoq.supabase.co';
 const ASIS_SB_KEY = 'sb_publishable_n__2avD0lTMMeSW-6zXsYQ_j973clG7';
 const sbAsis = supabase.createClient(ASIS_SB_URL, ASIS_SB_KEY);
-
 let botCliente = null, botKB = [], botFuentes = [], editKBId = null;
 
 async function cargarMiAsistente() {
   if (!currentComercio) return;
   const { data: cfg } = await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id', currentComercio.id).single();
-  if (!cfg?.bot_cliente_id) {
-    document.getElementById('asistente-content').innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>El asistente aún no está configurado. Contactá al administrador.</p></div>';
-    return;
-  }
+  if (!cfg?.bot_cliente_id) { document.getElementById('asistente-content').innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>El asistente aún no está configurado. Contactá al administrador.</p></div>'; return; }
   const [r1, r2, r3] = await Promise.all([
     sbAsis.from('asis_clientes').select('*').eq('id', cfg.bot_cliente_id).single(),
     sbAsis.from('asis_base_conocimiento').select('*').eq('cliente_id', cfg.bot_cliente_id).eq('activo', true).order('created_at', { ascending: false }),
@@ -1139,18 +1071,16 @@ function renderMiAsistente() {
   const c = document.getElementById('asistente-content');
   if (!botCliente) { c.innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>No se pudo cargar el asistente.</p></div>'; return; }
   c.innerHTML = `
-    <div class="card">
-      <h3>⚙️ Configuración del asistente</h3>
+    <div class="card"><h3>⚙️ Configuración del asistente</h3>
       <div class="form-row">
         <div class="form-group"><label>Nombre del asistente</label><input type="text" id="bot-nombre" value="${botCliente.nombre || ''}" placeholder="Ej: Sofía, Alex..."></div>
         <div class="form-group"><label>Color</label><input type="color" id="bot-color" value="${botCliente.color_acento || '#f59e0b'}" style="height:42px;cursor:pointer;padding:4px"></div>
       </div>
       <div class="form-group"><label>Personalidad y tono</label><textarea id="bot-personalidad" rows="3" placeholder="Describí cómo debe hablar el asistente...">${botCliente.descripcion || ''}</textarea></div>
-      <div class="form-group"><label>Web del negocio (para consultas en tiempo real)</label><input type="url" id="bot-web" value="${botCliente.web || ''}" placeholder="https://..."></div>
+      <div class="form-group"><label>Web del negocio</label><input type="url" id="bot-web" value="${botCliente.web || ''}" placeholder="https://..."></div>
       <button class="btn btn-primary" onclick="guardarConfigBot()">💾 Guardar configuración</button>
     </div>
-    <div class="card">
-      <h3>🔍 Fuentes de información</h3>
+    <div class="card"><h3>🔍 Fuentes de información</h3>
       <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Seleccioná qué fuentes usa el asistente y en qué orden las consulta.</p>
       <div id="bot-fuentes-lista" style="display:flex;flex-direction:column;gap:10px"></div>
       <button class="btn btn-primary" style="margin-top:16px" onclick="guardarFuentesBot()">💾 Guardar fuentes</button>
@@ -1169,41 +1099,15 @@ function renderMiAsistente() {
 function renderFuentesBot() {
   const lista = document.getElementById('bot-fuentes-lista');
   if (!lista) return;
-  const defaults = [
-    { fuente: 'kb', label: '📚 Base de conocimiento propia', desc: 'Artículos cargados en esta sección' },
-    { fuente: 'web', label: '🌐 Web del negocio', desc: 'Consulta tu sitio web en tiempo real' },
-    { fuente: 'internet', label: '🔍 Internet', desc: 'Búsqueda general en la web' }
-  ];
-  lista.innerHTML = defaults.map((d, i) => {
-    const f = botFuentes.find(x => x.fuente === d.fuente);
-    const activa = f ? f.activa : d.fuente === 'kb';
-    const orden = f ? f.orden : i + 1;
-    return `<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid var(--border)">
-      <input type="checkbox" id="bf-activa-${d.fuente}" ${activa ? 'checked' : ''} style="width:auto;cursor:pointer">
-      <div style="flex:1"><div style="font-size:13px;font-weight:600">${d.label}</div><div style="font-size:11px;color:var(--text-2)">${d.desc}</div></div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <span style="font-size:11px;color:var(--text-2)">Orden:</span>
-        <select id="bf-orden-${d.fuente}" style="width:60px;padding:4px 8px;font-size:12px;border:1.5px solid var(--border);border-radius:6px;outline:none">
-          <option ${orden===1?'selected':''}>1</option><option ${orden===2?'selected':''}>2</option><option ${orden===3?'selected':''}>3</option>
-        </select>
-      </div>
-    </div>`;
-  }).join('');
+  const defaults = [{ fuente: 'kb', label: '📚 Base de conocimiento propia', desc: 'Artículos cargados en esta sección' }, { fuente: 'web', label: '🌐 Web del negocio', desc: 'Consulta tu sitio web en tiempo real' }, { fuente: 'internet', label: '🔍 Internet', desc: 'Búsqueda general en la web' }];
+  lista.innerHTML = defaults.map((d, i) => { const f = botFuentes.find(x => x.fuente === d.fuente); const activa = f ? f.activa : d.fuente === 'kb'; const orden = f ? f.orden : i + 1; return `<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid var(--border)"><input type="checkbox" id="bf-activa-${d.fuente}" ${activa ? 'checked' : ''} style="width:auto;cursor:pointer"><div style="flex:1"><div style="font-size:13px;font-weight:600">${d.label}</div><div style="font-size:11px;color:var(--text-2)">${d.desc}</div></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--text-2)">Orden:</span><select id="bf-orden-${d.fuente}" style="width:60px;padding:4px 8px;font-size:12px;border:1.5px solid var(--border);border-radius:6px;outline:none"><option ${orden===1?'selected':''}>1</option><option ${orden===2?'selected':''}>2</option><option ${orden===3?'selected':''}>3</option></select></div></div>`; }).join('');
 }
 
 function renderKBBot() {
   const lista = document.getElementById('bot-kb-lista');
   if (!lista) return;
   if (!botKB.length) { lista.innerHTML = '<div class="empty"><div class="empty-icon">📚</div><p>Sin artículos aún. Agregá el primero.</p></div>'; return; }
-  lista.innerHTML = `<div class="tbl-wrap"><table>
-    <thead><tr><th>Título</th><th>Categoría</th><th>Contenido</th><th></th></tr></thead>
-    <tbody>${botKB.map(a => `<tr>
-      <td style="font-weight:600">${a.titulo || '—'}</td>
-      <td>${a.categoria || '—'}</td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-2)">${a.contenido || '—'}</td>
-      <td><button class="btn btn-outline" style="padding:5px 10px;font-size:12px" onclick="abrirModalKB('${a.id}')">Editar</button></td>
-    </tr>`).join('')}</tbody>
-  </table></div>`;
+  lista.innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>Título</th><th>Categoría</th><th>Contenido</th><th></th></tr></thead><tbody>${botKB.map(a => `<tr><td style="font-weight:600">${a.titulo || '—'}</td><td>${a.categoria || '—'}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-2)">${a.contenido || '—'}</td><td><button class="btn btn-outline" style="padding:5px 10px;font-size:12px" onclick="abrirModalKB('${a.id}')">Editar</button></td></tr>`).join('')}</tbody></table></div>`;
 }
 
 async function guardarConfigBot() {
@@ -1211,21 +1115,15 @@ async function guardarConfigBot() {
   const updates = { nombre: document.getElementById('bot-nombre').value.trim(), color_acento: document.getElementById('bot-color').value, descripcion: document.getElementById('bot-personalidad').value.trim(), web: document.getElementById('bot-web').value.trim() };
   const { error } = await sbAsis.from('asis_clientes').update(updates).eq('id', botCliente.id);
   if (error) { showToast('Error al guardar: ' + error.message, true); return; }
-  Object.assign(botCliente, updates);
-  showToast('Configuración guardada correctamente');
+  Object.assign(botCliente, updates); showToast('Configuración guardada correctamente');
 }
 
 async function guardarFuentesBot() {
   if (!botCliente) return;
   const fuentes = ['kb', 'web', 'internet'].map(f => ({ cliente_id: botCliente.id, fuente: f, activa: document.getElementById(`bf-activa-${f}`)?.checked || false, orden: parseInt(document.getElementById(`bf-orden-${f}`)?.value || '1') }));
-  for (const f of fuentes) {
-    const existe = botFuentes.find(x => x.fuente === f.fuente);
-    if (existe) await sbAsis.from('asis_fuentes_config').update({ activa: f.activa, orden: f.orden }).eq('id', existe.id);
-    else await sbAsis.from('asis_fuentes_config').insert(f);
-  }
+  for (const f of fuentes) { const existe = botFuentes.find(x => x.fuente === f.fuente); if (existe) await sbAsis.from('asis_fuentes_config').update({ activa: f.activa, orden: f.orden }).eq('id', existe.id); else await sbAsis.from('asis_fuentes_config').insert(f); }
   const { data } = await sbAsis.from('asis_fuentes_config').select('*').eq('cliente_id', botCliente.id).order('orden', { ascending: true });
-  botFuentes = data || [];
-  showToast('Fuentes guardadas correctamente');
+  botFuentes = data || []; showToast('Fuentes guardadas correctamente');
 }
 
 function abrirModalKB(id) {
@@ -1245,37 +1143,22 @@ async function guardarArticuloKB() {
   const contenido = document.getElementById('kb-contenido').value.trim();
   if (!titulo || !contenido) { showToast('Título y contenido son obligatorios', true); return; }
   const datos = { cliente_id: botCliente.id, titulo, contenido, categoria: document.getElementById('kb-categoria').value.trim() || null, activo: true };
-  if (editKBId) {
-    const { error } = await sbAsis.from('asis_base_conocimiento').update(datos).eq('id', editKBId);
-    if (error) { showToast('Error al guardar', true); return; }
-    const idx = botKB.findIndex(x => x.id === editKBId);
-    if (idx >= 0) botKB[idx] = { ...botKB[idx], ...datos };
-    showToast('Artículo actualizado');
-  } else {
-    const { data, error } = await sbAsis.from('asis_base_conocimiento').insert(datos).select().single();
-    if (error) { showToast('Error al guardar', true); return; }
-    botKB.unshift(data);
-    showToast('Artículo creado');
-  }
-  cerrarModal('modal-kb');
-  renderKBBot();
+  if (editKBId) { const { error } = await sbAsis.from('asis_base_conocimiento').update(datos).eq('id', editKBId); if (error) { showToast('Error al guardar', true); return; } const idx = botKB.findIndex(x => x.id === editKBId); if (idx >= 0) botKB[idx] = { ...botKB[idx], ...datos }; showToast('Artículo actualizado'); }
+  else { const { data, error } = await sbAsis.from('asis_base_conocimiento').insert(datos).select().single(); if (error) { showToast('Error al guardar', true); return; } botKB.unshift(data); showToast('Artículo creado'); }
+  cerrarModal('modal-kb'); renderKBBot();
 }
 
 async function eliminarArticuloKB() {
   if (!editKBId) return;
   const a = botKB.find(x => x.id === editKBId);
-  if (!confirm(`¿Eliminar "${a?.titulo}"?`)) return;
+  if (!confirm('¿Eliminar "' + (a?.titulo) + '"?')) return;
   const { error } = await sbAsis.from('asis_base_conocimiento').update({ activo: false }).eq('id', editKBId);
   if (error) { showToast('Error al eliminar', true); return; }
   botKB = botKB.filter(x => x.id !== editKBId);
-  cerrarModal('modal-kb');
-  renderKBBot();
-  showToast('Artículo eliminado');
+  cerrarModal('modal-kb'); renderKBBot(); showToast('Artículo eliminado');
 }
 
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
-});
+document.querySelectorAll('.modal-overlay').forEach(el => { el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); }); });
 </script>
 </body>
 </html>
