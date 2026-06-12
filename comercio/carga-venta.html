@@ -6,44 +6,30 @@
 <title>Carga de venta — SatisfactQ</title>
 <style>
 :root {
-  --bg: #f8f9fa;
-  --surface: #ffffff;
-  --surface2: #f1f3f5;
-  --accent: #6c63ff;
-  --accent-light: #ede9fe;
-  --success: #22c55e;
-  --success-light: #dcfce7;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --text: #1e1e2e;
-  --text2: #6b7280;
-  --text3: #9ca3af;
-  --border: #e5e7eb;
-  --radius: 12px;
-  --radius-sm: 8px;
+  --bg: #f8f9fa; --surface: #ffffff; --surface2: #f1f3f5;
+  --accent: #6c63ff; --accent-light: #ede9fe;
+  --success: #22c55e; --success-light: #dcfce7;
+  --warning: #f59e0b; --danger: #ef4444;
+  --text: #1e1e2e; --text2: #6b7280; --text3: #9ca3af;
+  --border: #e5e7eb; --radius: 12px; --radius-sm: 8px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
 .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
 .header-logo { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; flex-shrink: 0; }
 .header h1 { font-size: 15px; font-weight: 600; }
 .header-sub { font-size: 13px; color: var(--text2); margin-left: 2px; }
 .btn-back { margin-left: auto; font-size: 13px; color: var(--text2); text-decoration: none; display: flex; align-items: center; gap: 4px; padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: transparent; cursor: pointer; }
 .btn-back:hover { background: var(--surface2); }
-
 .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
-
 .steps { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; }
 .step { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--text3); white-space: nowrap; }
 .step.active { color: var(--accent); }
 .step.done { color: var(--success); }
 .step-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
 .step-sep { flex: 1; height: 1px; background: var(--border); min-width: 16px; max-width: 40px; }
-
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
 .card-title { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
-
 .tipo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tipo-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all 0.15s; text-align: center; }
 .tipo-card:hover { border-color: var(--accent); background: var(--accent-light); }
@@ -51,7 +37,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .tipo-icon { font-size: 28px; margin-bottom: 8px; }
 .tipo-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 .tipo-desc { font-size: 11px; color: var(--text2); line-height: 1.4; }
-
 .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--surface2); position: relative; }
 .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
 .upload-zone.has-file { border-color: var(--success); background: var(--success-light); border-style: solid; }
@@ -60,21 +45,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .upload-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
 .upload-filename { font-size: 13px; font-weight: 600; color: #16a34a; margin-top: 4px; }
 #file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-
 #preview-container { margin-top: 12px; display: none; text-align: center; }
 #preview-img { max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; }
-
 .ia-bar { background: #f5f3ff; border: 1px solid #c4beff; border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
 .ia-badge { background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.04em; white-space: nowrap; }
 .ia-status { font-size: 12px; color: var(--text2); flex: 1; }
 .ia-conf { font-size: 11px; font-weight: 600; white-space: nowrap; }
-.ia-conf.high { color: var(--success); }
-.ia-conf.med { color: var(--warning); }
-.ia-conf.low { color: var(--danger); }
-
+.ia-conf.high { color: var(--success); } .ia-conf.med { color: var(--warning); } .ia-conf.low { color: var(--danger); }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } .tipo-grid { grid-template-columns: 1fr; } }
-
 .field { margin-bottom: 12px; }
 .field label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 4px; }
 .field input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--surface); transition: border-color 0.15s; font-family: inherit; }
@@ -82,7 +61,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .field input.ia-ok { background: #f0fdf4; border-color: #86efac; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .ia-tag { font-size: 10px; font-weight: 600; color: var(--success); background: var(--success-light); padding: 1px 6px; border-radius: 20px; margin-left: 4px; display: none; }
-
 .bot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .bot-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px; cursor: pointer; transition: all 0.15s; }
 .bot-card:hover { border-color: var(--accent); }
@@ -90,7 +68,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .bot-icon { font-size: 20px; margin-bottom: 6px; }
 .bot-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
 .bot-desc { font-size: 11px; color: var(--text2); line-height: 1.4; }
-
 .btn { padding: 10px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; width: 100%; margin-top: 6px; }
 .btn-primary { background: var(--accent); color: white; }
 .btn-primary:hover { background: #5b52e0; }
@@ -100,16 +77,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn-ia { background: var(--accent-light); color: var(--accent); border: 1px solid #c4beff; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .btn-ia:hover { background: #ddd9fe; }
 .btn-ia:disabled { opacity: 0.5; cursor: not-allowed; }
-
 .spinner { width: 15px; height: 15px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--surface2); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; }
 .review-item .label { font-size: 11px; color: var(--text3); margin-bottom: 2px; }
 .review-item .value { font-size: 14px; font-weight: 500; }
-
 .wa-note { font-size: 12px; color: var(--text2); display: flex; align-items: flex-start; gap: 6px; padding: 12px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 14px; line-height: 1.5; }
-
 .result-card { background: var(--success-light); border: 1px solid #86efac; border-radius: var(--radius); padding: 24px; text-align: center; display: none; }
 .result-icon { font-size: 44px; margin-bottom: 8px; }
 .result-title { font-size: 17px; font-weight: 600; color: #15803d; margin-bottom: 6px; }
@@ -117,12 +90,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .result-actions { display: flex; gap: 8px; margin-top: 18px; }
 .btn-outline { background: transparent; border: 1.5px solid #16a34a; color: #15803d; flex: 1; }
 .btn-outline:hover { background: white; }
-
 .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; color: white; z-index: 1000; transform: translateY(80px); opacity: 0; transition: all 0.3s; max-width: 320px; pointer-events: none; }
 .toast.show { transform: translateY(0); opacity: 1; }
-.toast.success { background: #16a34a; }
-.toast.error { background: var(--danger); }
-.toast.info { background: var(--accent); }
+.toast.success { background: #16a34a; } .toast.error { background: var(--danger); } .toast.info { background: var(--accent); }
 </style>
 </head>
 <body>
@@ -135,7 +105,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 </div>
 
 <div class="container">
-
   <div class="steps" id="steps-bar">
     <div class="step active" id="s1"><div class="step-num">1</div><span>Tipo</span></div>
     <div class="step-sep"></div>
@@ -210,7 +179,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
           <div class="field">
             <label>Teléfono / WhatsApp <span class="ia-tag" id="t-tel">IA</span></label>
-            <input type="tel" id="f-tel" placeholder="223 456-7890">
+            <input type="tel" id="f-tel" placeholder="2234567890">
           </div>
           <div class="field">
             <label>Dirección <span class="ia-tag" id="t-dir">IA</span></label>
@@ -304,16 +273,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </div>
 
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
-// IMPORTANTE: reemplazar con la anon key real del proyecto satisfactq
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
-
-// Para la extracción IA, usar el endpoint seguro (Edge Function o Vercel)
-// Ver comentario al final del archivo
 const IA_ENDPOINT = 'https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/extraer-comprobante';
 
 let S = {
@@ -322,11 +286,15 @@ let S = {
   iaData: null, comercioId: null
 };
 
+// ── Normalizar teléfono: solo dígitos, sin espacios ni guiones ──────────────
+function normalizarTelefono(tel) {
+  if (!tel) return '';
+  return tel.replace(/[^\d]/g, '');
+}
+
 window.onload = async () => {
-  // Leer slug de la URL (/carga/nuevos-rumbos) o comercio_id del localStorage
   const pathSlug = window.location.pathname.split('/').pop();
   if (pathSlug && pathSlug !== 'carga-venta.html') {
-    // Buscar comercio por slug
     const res = await fetch(`${SB_URL}/rest/v1/sq_clientes?slug=eq.${pathSlug}&select=id,nombre,slug`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
     });
@@ -334,7 +302,6 @@ window.onload = async () => {
     if (data && data.length > 0) {
       S.comercioId = data[0].id;
       S.comercioNombre = data[0].nombre;
-      // Mostrar nombre del comercio en el header
       document.querySelector('.header-sub').textContent = '— ' + data[0].nombre;
     }
   } else {
@@ -391,8 +358,7 @@ function procFile(file) {
   const r = new FileReader();
   r.onload = e => {
     const [, b64] = e.target.result.split(',');
-    S.b64 = b64;
-    S.mime = file.type || 'image/jpeg';
+    S.b64 = b64; S.mime = file.type || 'image/jpeg';
     const zone = document.getElementById('drop-zone');
     zone.classList.add('has-file');
     document.getElementById('up-icon').textContent = file.type.includes('pdf') ? '📑' : '🖼️';
@@ -413,8 +379,6 @@ async function extraer() {
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Analizando...';
   try {
-    // Llamada al endpoint seguro (Edge Function / Vercel API)
-    // El endpoint recibe { b64, mime } y devuelve los datos extraídos
     const res = await fetch(IA_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -444,7 +408,6 @@ function poblarCampos(d) {
     if (d[campo]) { inp.value = d[campo]; inp.classList.add('ia-ok'); }
     if (enc.includes(campo)) tag.style.display = 'inline';
   });
-  // Campos de compra
   if (d.medio_pago) { document.getElementById('f-mpago').value = d.medio_pago; document.getElementById('f-mpago').classList.add('ia-ok'); document.getElementById('t-mpago').style.display = 'inline'; }
   if (d.cuotas) { document.getElementById('f-cuotas').value = d.cuotas; document.getElementById('f-cuotas').classList.add('ia-ok'); document.getElementById('t-cuotas').style.display = 'inline'; }
   if (d.total_compra) { document.getElementById('f-total').value = d.total_compra; document.getElementById('f-total').classList.add('ia-ok'); document.getElementById('t-total').style.display = 'inline'; }
@@ -468,11 +431,16 @@ async function guardar() {
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner" style="border-color:white;border-top-color:transparent;display:inline-block;margin-right:6px"></div> Guardando...';
   try {
-    const ap = document.getElementById('f-ap').value.trim();
-    const nom = document.getElementById('f-nom').value.trim();
-    const tel = document.getElementById('f-tel').value.trim();
-    const dir = document.getElementById('f-dir').value.trim();
-    const loc = document.getElementById('f-loc').value.trim();
+    const ap   = document.getElementById('f-ap').value.trim();
+    const nom  = document.getElementById('f-nom').value.trim();
+    const tel  = normalizarTelefono(document.getElementById('f-tel').value.trim());
+    const dir  = document.getElementById('f-dir').value.trim();
+    const loc  = document.getElementById('f-loc').value.trim();
+    const mpago  = document.getElementById('f-mpago').value.trim() || null;
+    const cuotas = parseInt(document.getElementById('f-cuotas').value) || null;
+    const total  = parseFloat(document.getElementById('f-total').value) || null;
+    const obs    = document.getElementById('f-obs').value.trim() || null;
+    const prods  = S.iaData?.productos_comprados || null;
 
     // 1. Subir archivo a Storage
     let archivoUrl = null;
@@ -487,9 +455,16 @@ async function guardar() {
       if (up.ok) archivoUrl = `${SB_URL}/storage/v1/object/public/sq-comprobantes/${path}`;
     }
 
-    // 2. Insertar en sq_ventas
+    // 2. Upsert perfil cliente y obtener su ID
+    let clientePerfilId = null;
+    if (tel) {
+      clientePerfilId = await upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs });
+    }
+
+    // 3. Insertar en sq_ventas (con cliente_id vinculado)
     const venta = {
       comercio_id: S.comercioId,
+      cliente_id: clientePerfilId,
       apellido: ap, nombre: nom, telefono: tel,
       direccion: dir, localidad: loc,
       archivo_url: archivoUrl,
@@ -497,11 +472,11 @@ async function guardar() {
       ia_extraccion: S.iaData,
       ia_confianza: S.iaData?.confianza || null,
       whatsapp_bot: S.bot,
-      medio_pago: document.getElementById('f-mpago').value.trim() || null,
-      cuotas: parseInt(document.getElementById('f-cuotas').value) || null,
-      total_compra: parseFloat(document.getElementById('f-total').value) || null,
-      productos_comprados: S.iaData?.productos_comprados || null,
-      observaciones: document.getElementById('f-obs').value.trim() || null
+      medio_pago: mpago,
+      cuotas: cuotas,
+      total_compra: total,
+      productos_comprados: prods,
+      observaciones: obs
     };
     const ins = await fetch(`${SB_URL}/rest/v1/sq_ventas`, {
       method: 'POST',
@@ -509,9 +484,6 @@ async function guardar() {
       body: JSON.stringify(venta)
     });
     if (!ins.ok) { const e = await ins.json(); throw new Error(JSON.stringify(e)); }
-
-    // 3. Actualizar perfil cliente
-    if (tel) await upsertPerfil({ ap, nom, tel, dir, loc });
 
     // 4. Mostrar resultado
     document.getElementById('confirm-card').style.display = 'none';
@@ -530,32 +502,113 @@ async function guardar() {
   }
 }
 
-async function upsertPerfil({ ap, nom, tel, dir, loc }) {
-  if (!S.comercioId || !tel) return;
+// ── Upsert perfil cliente — guarda todos los datos de la compra ──────────────
+// Devuelve el ID del perfil para vincularlo en sq_ventas
+async function upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs }) {
+  if (!S.comercioId || !tel) return null;
   const hdr = { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': 'application/json' };
-  const buscar = await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${S.comercioId}`, { headers: hdr });
-  const ex = await buscar.json();
   const ahora = new Date().toISOString();
+
+  // Buscar por teléfono normalizado
+  const buscar = await fetch(
+    `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${S.comercioId}&select=id,historial_compras,medios_pago_usados,productos_frecuentes,ticket_promedio`,
+    { headers: hdr }
+  );
+  const ex = await buscar.json();
+
+  // Armar entrada del historial de esta compra
+  const entradaCompra = {
+    fecha: ahora,
+    tipo: S.tipo,
+    total: total || 0,
+    medio_pago: mpago || null,
+    cuotas: cuotas || null,
+    productos: prods || [],
+    observaciones: obs || null
+  };
+
   if (ex?.length) {
-    const hist = [...(ex[0].historial_compras || []), { fecha: ahora, tipo: S.tipo }];
-    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${ex[0].id}`, {
-      method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ apellido: ap || ex[0].apellido, nombre: nom || ex[0].nombre, historial_compras: hist, ultima_interaccion: ahora })
+    // Cliente existente — actualizar
+    const perfil = ex[0];
+    const hist = [...(perfil.historial_compras || []), entradaCompra];
+
+    // Acumular medios de pago únicos
+    const mediosActuales = perfil.medios_pago_usados || [];
+    if (mpago && !mediosActuales.includes(mpago)) mediosActuales.push(mpago);
+
+    // Acumular productos frecuentes
+    const prodsActuales = perfil.productos_frecuentes || [];
+    if (prods && prods.length > 0) {
+      prods.forEach(p => {
+        if (p.descripcion && !prodsActuales.includes(p.descripcion)) {
+          prodsActuales.push(p.descripcion);
+        }
+      });
+    }
+
+    // Recalcular ticket promedio
+    const totales = hist.map(h => h.total || 0).filter(t => t > 0);
+    const ticketPromedio = totales.length > 0 ? (totales.reduce((a,b) => a+b, 0) / totales.length).toFixed(2) : null;
+
+    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${perfil.id}`, {
+      method: 'PATCH',
+      headers: { ...hdr, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        apellido: ap || undefined,
+        nombre: nom || undefined,
+        direccion: dir || undefined,
+        localidad: loc || undefined,
+        historial_compras: hist,
+        medios_pago_usados: mediosActuales,
+        productos_frecuentes: prodsActuales,
+        ticket_promedio: ticketPromedio,
+        ultima_interaccion: ahora,
+        updated_at: ahora
+      })
     });
+    return perfil.id;
+
   } else {
-    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
-      method: 'POST', headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ telefono: tel, comercio_id: S.comercioId, apellido: ap, nombre: nom, historial_compras: [{ fecha: ahora, tipo: S.tipo }], ultima_interaccion: ahora })
+    // Cliente nuevo — crear
+    const nuevo = {
+      telefono: tel,
+      comercio_id: S.comercioId,
+      apellido: ap, nombre: nom,
+      direccion: dir || null,
+      localidad: loc || null,
+      etiqueta: 'nuevo',
+      historial_compras: [entradaCompra],
+      medios_pago_usados: mpago ? [mpago] : [],
+      productos_frecuentes: prods ? prods.map(p => p.descripcion).filter(Boolean) : [],
+      ticket_promedio: total ? total.toFixed(2) : null,
+      conversaciones: [],
+      preferencias: {},
+      ultima_interaccion: ahora
+    };
+    const res = await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
+      method: 'POST',
+      headers: { ...hdr, 'Prefer': 'return=representation' },
+      body: JSON.stringify(nuevo)
     });
+    if (res.ok) {
+      const data = await res.json();
+      return Array.isArray(data) ? data[0]?.id : data?.id;
+    }
+    return null;
   }
 }
 
 function reset() {
   const cid = S.comercioId;
   S = { tipo: null, bot: 'vendedoria', paso: 1, archivo: null, b64: null, mime: null, iaData: null, comercioId: cid };
-  ['f-ap','f-nom','f-tel','f-dir','f-loc'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.classList.remove('ia-ok'); });
-  ['t-ap','t-nom','t-tel','t-dir','t-loc'].forEach(id => { document.getElementById(id).style.display = 'none'; });
+  ['f-ap','f-nom','f-tel','f-dir','f-loc','f-mpago','f-cuotas','f-total','f-obs'].forEach(id => {
+    const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('ia-ok'); }
+  });
+  ['t-ap','t-nom','t-tel','t-dir','t-loc','t-mpago','t-cuotas','t-total','t-prods','t-obs'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
   document.getElementById('ia-bar').style.display = 'none';
+  document.getElementById('prods-lista').textContent = 'Sin productos detectados';
   document.getElementById('drop-zone').classList.remove('has-file');
   document.getElementById('up-icon').textContent = '📄';
   document.getElementById('up-text').textContent = 'Arrastrá el archivo o hacé clic para seleccionar';
@@ -579,36 +632,5 @@ function toast(msg, type) {
   setTimeout(() => el.className = 'toast', 3500);
 }
 </script>
-
-<!--
-══ ENDPOINT SEGURO PARA EXTRACCIÓN IA ══
-Creá esta Edge Function en Supabase (o endpoint en Vercel del panel):
-
-  POST /api/extraer-comprobante
-  Body: { b64: string, mime: string }
-
-  import Anthropic from 'npm:@anthropic-ai/sdk';
-  Deno.serve(async (req) => {
-    const { b64, mime } = await req.json();
-    const client = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY') });
-    const isPdf = mime === 'application/pdf';
-    const source = { type: 'base64', media_type: mime, data: b64 };
-    const msg = await client.messages.create({
-      model: 'claude-sonnet-4-20250514', max_tokens: 500,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: isPdf ? 'document' : 'image', source },
-          { type: 'text', text: 'Extraé los datos del cliente de este comprobante. Devolvé SOLO JSON: { "apellido":"","nombre":"","telefono":"","direccion":"","localidad":"","confianza":0.0,"campos_encontrados":[] }' }
-        ]
-      }]
-    });
-    const text = msg.content.find(b => b.type === 'text')?.text || '{}';
-    const json = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '{}');
-    return new Response(JSON.stringify(json), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
-  });
-
-También necesitás crear el bucket 'sq-comprobantes' en Supabase Storage (público).
--->
 </body>
 </html>
