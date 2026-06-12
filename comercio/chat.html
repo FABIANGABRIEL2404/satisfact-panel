@@ -141,8 +141,14 @@
 (function () {
   'use strict';
 
+  // Supabase SatisfactQ 鈥?para leer comercio y config
   const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
   const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
+
+  // Supabase AsistenteIA 鈥?para guardar conversaciones en asis_conversaciones
+  const ASIS_SB_URL = 'https://ixctqxxtzoesotniisoq.supabase.co';
+  const ASIS_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4Y3RxeHh0em9lc290bmlpc29xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODIxNjYsImV4cCI6MjA5MDY1ODE2Nn0.SOTz5PSmpA7y13ATfEr73gViBkj3ujq9OBY7tcf3BTI';
+
   const ASIS_URL = 'https://www.miasistenteia.com.ar';
 
   const params      = new URLSearchParams(window.location.search);
@@ -169,8 +175,8 @@
     if (!config?.bot_cliente_id) return;
     try {
       const hdr = {
-        'apikey': SB_KEY,
-        'Authorization': `Bearer ${SB_KEY}`,
+        'apikey': ASIS_SB_KEY,
+        'Authorization': `Bearer ${ASIS_SB_KEY}`,
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       };
@@ -184,7 +190,7 @@
         created_at:  new Date().toISOString(),
         updated_at:  new Date().toISOString()
       };
-      const res = await fetch(`${SB_URL}/rest/v1/asis_conversaciones`, {
+      const res = await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
         method: 'POST',
         headers: hdr,
         body: JSON.stringify(body)
@@ -203,11 +209,11 @@
     if (!convId || !config?.bot_cliente_id) return;
     try {
       const hdr = {
-        'apikey': SB_KEY,
-        'Authorization': `Bearer ${SB_KEY}`,
+        'apikey': ASIS_SB_KEY,
+        'Authorization': `Bearer ${ASIS_SB_KEY}`,
         'Content-Type': 'application/json'
       };
-      await fetch(`${SB_URL}/rest/v1/asis_conversaciones?id=eq.${convId}`, {
+      await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones?id=eq.${convId}`, {
         method: 'PATCH',
         headers: hdr,
         body: JSON.stringify({
