@@ -218,20 +218,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <div>
         <div class="card">
           <div class="card-title">Bot de seguimiento</div>
-          <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Elegí qué bot contacta al cliente por WhatsApp para consultar su experiencia de compra.</p>
-          <div class="bot-grid">
-            <div class="bot-card selected" id="b-vend" onclick="setBot('vendedoria')">
-              <div class="bot-icon">🛒</div>
-              <div class="bot-name">Vendedoria</div>
-              <div class="bot-desc">Perfil de venta, seguimiento y recomendaciones</div>
-            </div>
-            <div class="bot-card" id="b-asis" onclick="setBot('asistente_ia')">
-              <div class="bot-icon">🤖</div>
-              <div class="bot-name">Asistente IA</div>
-              <div class="bot-desc">Orientativo, consultas y soporte</div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:var(--radius-sm);margin-bottom:12px">
+            <div style="font-size:24px">🤖</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#166534">Asistente IA</div>
+              <div style="font-size:12px;color:#16a34a;margin-top:2px">El asistente de tu comercio contactará al cliente automáticamente</div>
             </div>
           </div>
-          <div style="margin-top:14px;padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">
+          <div style="padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">
             <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500">¿Cuándo se envía?</div>
             <div style="font-size:12px;color:var(--text3);line-height:1.5">Al guardar la venta, si el cliente tiene teléfono registrado y el circuito B está activo.</div>
           </div>
@@ -281,7 +275,7 @@ const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const IA_ENDPOINT = 'https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/extraer-comprobante';
 
 let S = {
-  tipo: null, bot: 'vendedoria', paso: 1,
+  tipo: null, bot: 'asistente_ia', paso: 1,
   archivo: null, b64: null, mime: null,
   iaData: null, comercioId: null
 };
@@ -336,7 +330,7 @@ function ir(n) {
     document.getElementById('r-dir').textContent = document.getElementById('f-dir').value || '—';
     document.getElementById('r-loc').textContent = document.getElementById('f-loc').value || '—';
     document.getElementById('r-tipo').textContent = S.tipo === 'con_facturacion' ? 'Con facturación' : 'Sin facturación';
-    document.getElementById('r-bot').textContent = S.bot === 'vendedoria' ? 'Vendedoria 🛒' : 'Asistente IA 🤖';
+    document.getElementById('r-bot').textContent = 'Asistente IA 🤖';
   }
   S.paso = n;
   [1,2,3,4].forEach(i => {
@@ -489,7 +483,7 @@ async function guardar() {
     document.getElementById('confirm-card').style.display = 'none';
     document.getElementById('res-title').textContent = '¡Venta registrada!';
     document.getElementById('res-sub').textContent = tel
-      ? `Datos guardados. El WhatsApp se enviará en breve a ${tel} con ${S.bot === 'vendedoria' ? 'Vendedoria' : 'Asistente IA'}.`
+      ? `Datos guardados. El WhatsApp se enviará en breve a ${tel} con Asistente IA.`
       : 'Datos guardados. No se enviará WhatsApp (sin teléfono registrado).';
     document.getElementById('result-card').style.display = 'block';
     toast('Venta guardada', 'success');
@@ -600,7 +594,7 @@ async function upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prod
 
 function reset() {
   const cid = S.comercioId;
-  S = { tipo: null, bot: 'vendedoria', paso: 1, archivo: null, b64: null, mime: null, iaData: null, comercioId: cid };
+  S = { tipo: null, bot: 'asistente_ia', paso: 1, archivo: null, b64: null, mime: null, iaData: null, comercioId: cid };
   ['f-ap','f-nom','f-tel','f-dir','f-loc','f-mpago','f-cuotas','f-total','f-obs'].forEach(id => {
     const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('ia-ok'); }
   });
@@ -621,7 +615,7 @@ function reset() {
   document.getElementById('tc-sin').classList.remove('selected');
   document.getElementById('result-card').style.display = 'none';
   document.getElementById('confirm-card').style.display = 'block';
-  setBot('vendedoria');
+  S.bot = 'asistente_ia';
   ir(1);
 }
 
