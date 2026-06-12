@@ -6,333 +6,109 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>SatisfactQ · Chat</title>
+  <title>SatisfactQ 路 Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --accent: #6c63ff;
-      --accent-dark: #5b52e0;
-      --accent-rgb: 108,99,255;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --ink: #0f172a;
-      --ink2: #475569;
-      --ink3: #94a3b8;
-      --border: #e2e8f0;
-      --bot-bg: #f1f5f9;
-      --radius: 18px;
-      --header-h: 68px;
+      --accent: #6c63ff; --accent-dark: #5b52e0; --accent-rgb: 108,99,255;
+      --bg: #f8fafc; --surface: #ffffff; --ink: #0f172a; --ink2: #475569;
+      --ink3: #94a3b8; --border: #e2e8f0; --bot-bg: #f1f5f9;
+      --radius: 18px; --header-h: 68px;
     }
-
-    html, body {
-      height: 100%; height: 100dvh;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      overflow: hidden;
-    }
-
-    #app {
-      display: flex; flex-direction: column;
-      height: 100%; height: 100dvh;
-      max-width: 480px; margin: 0 auto;
-      background: var(--surface);
-      box-shadow: 0 0 40px rgba(0,0,0,.08);
-      position: relative;
-    }
-
-    /* ── Header ── */
-    #chat-header {
-      flex-shrink: 0; height: var(--header-h);
-      background: var(--accent);
-      display: flex; align-items: center; gap: 12px;
-      padding: 0 16px; position: relative; overflow: hidden;
-    }
-    #chat-header::after {
-      content: ''; position: absolute; top: -20px; right: -20px;
-      width: 100px; height: 100px; border-radius: 50%;
-      background: rgba(255,255,255,.1); pointer-events: none;
-    }
-    .header-avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: rgba(255,255,255,.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-    }
+    html, body { height: 100%; height: 100dvh; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); overflow: hidden; }
+    #app { display: flex; flex-direction: column; height: 100%; height: 100dvh; max-width: 480px; margin: 0 auto; background: var(--surface); box-shadow: 0 0 40px rgba(0,0,0,.08); position: relative; }
+    #chat-header { flex-shrink: 0; height: var(--header-h); background: var(--accent); display: flex; align-items: center; gap: 12px; padding: 0 16px; position: relative; overflow: hidden; }
+    #chat-header::after { content: ''; position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,.1); pointer-events: none; }
+    .header-avatar { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
     .header-info { flex: 1; min-width: 0; }
-    .header-name {
-      color: #fff; font-size: 16px; font-weight: 600;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .header-sub {
-      color: rgba(255,255,255,.75); font-size: 12px;
-      display: flex; align-items: center; gap: 5px; margin-top: 2px;
-    }
-    .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #4ade80; display: inline-block;
-      box-shadow: 0 0 0 2px rgba(74,222,128,.3);
-      animation: pulse-dot 2s infinite;
-    }
-    @keyframes pulse-dot {
-      0%,100% { box-shadow: 0 0 0 2px rgba(74,222,128,.3); }
-      50%      { box-shadow: 0 0 0 4px rgba(74,222,128,.15); }
-    }
-
-    /* Indicador de voz en el header */
-    #voz-badge {
-      display: none; align-items: center; gap: 4px;
-      background: rgba(255,255,255,.2); border-radius: 20px;
-      padding: 3px 10px; font-size: 11px; color: #fff;
-      flex-shrink: 0;
-    }
+    .header-name { color: #fff; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .header-sub { color: rgba(255,255,255,.75); font-size: 12px; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; display: inline-block; box-shadow: 0 0 0 2px rgba(74,222,128,.3); animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100% { box-shadow: 0 0 0 2px rgba(74,222,128,.3); } 50% { box-shadow: 0 0 0 4px rgba(74,222,128,.15); } }
+    #voz-badge { display: none; align-items: center; gap: 4px; background: rgba(255,255,255,.2); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: #fff; flex-shrink: 0; }
     #voz-badge.visible { display: flex; }
-    #voz-badge .voz-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #4ade80;
-    }
-
-    /* ── Loading / Error ── */
-    #loading-screen {
-      position: absolute; inset: 0; background: var(--surface);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 16px; z-index: 10; transition: opacity .3s;
-    }
+    #voz-badge .voz-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+    #loading-screen { position: absolute; inset: 0; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 10; transition: opacity .3s; }
     #loading-screen.hidden { opacity: 0; pointer-events: none; }
-    .loading-logo {
-      width: 56px; height: 56px; border-radius: 16px;
-      background: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
-      animation: logo-bounce .8s ease-in-out infinite alternate;
-    }
-    @keyframes logo-bounce {
-      from { transform: translateY(0); } to { transform: translateY(-6px); }
-    }
+    .loading-logo { width: 56px; height: 56px; border-radius: 16px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 26px; animation: logo-bounce .8s ease-in-out infinite alternate; }
+    @keyframes logo-bounce { from { transform: translateY(0); } to { transform: translateY(-6px); } }
     .loading-text { color: var(--ink2); font-size: 14px; }
-    .loading-dots span {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 50%; background: var(--accent);
-      margin: 0 2px; animation: dot-bounce .9s infinite;
-    }
+    .loading-dots span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin: 0 2px; animation: dot-bounce .9s infinite; }
     .loading-dots span:nth-child(2) { animation-delay: .15s; }
     .loading-dots span:nth-child(3) { animation-delay: .3s; }
-    @keyframes dot-bounce {
-      0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); }
-    }
-
-    #error-screen {
-      position: absolute; inset: 0; background: var(--surface);
-      display: none; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 12px; padding: 32px; text-align: center; z-index: 10;
-    }
+    @keyframes dot-bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    #error-screen { position: absolute; inset: 0; background: var(--surface); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 32px; text-align: center; z-index: 10; }
     .error-icon { font-size: 48px; }
     .error-title { font-size: 18px; font-weight: 600; }
     .error-msg { font-size: 14px; color: var(--ink2); line-height: 1.5; }
-
-    /* ── Mensajes ── */
-    #messages {
-      flex: 1; overflow-y: auto;
-      padding: 16px 12px;
-      display: flex; flex-direction: column; gap: 10px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-    }
+    #messages { flex: 1; overflow-y: auto; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
     #messages::-webkit-scrollbar { width: 3px; }
     #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    .msg {
-      max-width: 82%; padding: 11px 14px;
-      border-radius: var(--radius); font-size: 15px;
-      line-height: 1.5; animation: slide-in .2s ease;
-    }
-    @keyframes slide-in {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .msg.user {
-      align-self: flex-end;
-      background: var(--accent); color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-    .msg.bot {
-      align-self: flex-start;
-      background: var(--bot-bg); color: var(--ink);
-      border-bottom-left-radius: 4px;
-    }
-
-    /* Botón escuchar en mensajes bot */
-    .btn-voz {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 26px; height: 26px; border-radius: 50%;
-      border: none; background: rgba(0,0,0,.06);
-      color: var(--ink3); cursor: pointer; font-size: 13px;
-      margin-top: 6px; transition: background .15s, color .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
+    .msg { max-width: 82%; padding: 11px 14px; border-radius: var(--radius); font-size: 15px; line-height: 1.5; animation: slide-in .2s ease; }
+    @keyframes slide-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .msg.user { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+    .msg.bot { align-self: flex-start; background: var(--bot-bg); color: var(--ink); border-bottom-left-radius: 4px; }
+    .btn-voz { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(0,0,0,.06); color: var(--ink3); cursor: pointer; font-size: 13px; margin-top: 6px; transition: background .15s, color .15s; -webkit-tap-highlight-color: transparent; }
     .btn-voz:hover { background: rgba(0,0,0,.1); color: var(--ink2); }
-    .btn-voz.hablando {
-      background: rgba(var(--accent-rgb),.15);
-      color: var(--accent);
-      animation: pulse-voz 1s infinite;
-    }
-    @keyframes pulse-voz {
-      0%,100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),.4); }
-      50%      { box-shadow: 0 0 0 5px rgba(var(--accent-rgb),0); }
-    }
-
-    /* Bienvenida */
-    .welcome {
-      text-align: center; padding: 24px 16px 12px;
-      animation: slide-in .35s ease;
-    }
+    .btn-voz.hablando { background: rgba(var(--accent-rgb),.15); color: var(--accent); animation: pulse-voz 1s infinite; }
+    @keyframes pulse-voz { 0%,100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),.4); } 50% { box-shadow: 0 0 0 5px rgba(var(--accent-rgb),0); } }
+    .welcome { text-align: center; padding: 24px 16px 12px; animation: slide-in .35s ease; }
     .welcome-icon { font-size: 44px; margin-bottom: 10px; }
     .welcome-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
     .welcome-sub { font-size: 14px; color: var(--ink2); line-height: 1.6; margin-bottom: 18px; }
     .suggestions { display: flex; flex-direction: column; gap: 8px; }
-    .suggestion {
-      background: var(--bg); border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 10px 14px;
-      font-size: 14px; color: var(--ink2);
-      cursor: pointer; text-align: left; font-family: inherit;
-      transition: border-color .15s, background .15s;
-    }
+    .suggestion { background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--ink2); cursor: pointer; text-align: left; font-family: inherit; transition: border-color .15s, background .15s; }
     .suggestion:hover { border-color: var(--accent); background: rgba(var(--accent-rgb),.05); color: var(--ink); }
-
-    /* Typing */
-    .typing {
-      align-self: flex-start; background: var(--bot-bg);
-      border-radius: var(--radius); border-bottom-left-radius: 4px;
-      padding: 13px 16px; display: flex; gap: 5px; align-items: center;
-    }
-    .typing span {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--ink3); animation: bounce .9s infinite;
-    }
+    .typing { align-self: flex-start; background: var(--bot-bg); border-radius: var(--radius); border-bottom-left-radius: 4px; padding: 13px 16px; display: flex; gap: 5px; align-items: center; }
+    .typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--ink3); animation: bounce .9s infinite; }
     .typing span:nth-child(2) { animation-delay: .15s; }
     .typing span:nth-child(3) { animation-delay: .3s; }
-    @keyframes bounce {
-      0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); }
-    }
-
-    .msg-error {
-      align-self: center; background: #fef2f2;
-      color: #ef4444; border-radius: 10px;
-      padding: 8px 14px; font-size: 13px;
-    }
-
-    /* ── Input ── */
-    #input-area {
-      flex-shrink: 0; padding: 10px 12px;
-      padding-bottom: max(10px, env(safe-area-inset-bottom));
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      display: flex; gap: 8px; align-items: flex-end;
-    }
-
-    #chat-input {
-      flex: 1; border: 1.5px solid var(--border);
-      border-radius: 14px; padding: 11px 14px;
-      font-size: 15px; font-family: inherit; color: var(--ink);
-      resize: none; outline: none; max-height: 100px;
-      line-height: 1.4; background: var(--bg);
-      transition: border-color .2s; -webkit-appearance: none;
-    }
+    @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+    .msg-error { align-self: center; background: #fef2f2; color: #ef4444; border-radius: 10px; padding: 8px 14px; font-size: 13px; }
+    #input-area { flex-shrink: 0; padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--surface); display: flex; gap: 8px; align-items: flex-end; }
+    #chat-input { flex: 1; border: 1.5px solid var(--border); border-radius: 14px; padding: 11px 14px; font-size: 15px; font-family: inherit; color: var(--ink); resize: none; outline: none; max-height: 100px; line-height: 1.4; background: var(--bg); transition: border-color .2s; -webkit-appearance: none; }
     #chat-input:focus { border-color: var(--accent); background: var(--surface); }
     #chat-input::placeholder { color: var(--ink3); }
-
-    /* Botón micrófono */
-    #btn-mic {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--bg); border: 1.5px solid var(--border);
-      cursor: pointer; display: none; align-items: center;
-      justify-content: center; flex-shrink: 0;
-      font-size: 18px; transition: background .2s, border-color .2s;
-      -webkit-tap-highlight-color: transparent;
-    }
+    #btn-mic { width: 44px; height: 44px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--border); cursor: pointer; display: none; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; transition: background .2s, border-color .2s; -webkit-tap-highlight-color: transparent; }
     #btn-mic.visible { display: flex; }
     #btn-mic:hover { background: rgba(var(--accent-rgb),.08); border-color: var(--accent); }
-    #btn-mic.grabando {
-      background: rgba(239,68,68,.1); border-color: #ef4444;
-      animation: pulse-mic 1s infinite;
-    }
-    @keyframes pulse-mic {
-      0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.4); }
-      50%      { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
-    }
-
-    /* Botón enviar */
-    #btn-send {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--accent); border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: background .2s, transform .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
+    #btn-mic.grabando { background: rgba(239,68,68,.1); border-color: #ef4444; animation: pulse-mic 1s infinite; }
+    @keyframes pulse-mic { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.4); } 50% { box-shadow: 0 0 0 6px rgba(239,68,68,0); } }
+    #btn-send { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .2s, transform .15s; -webkit-tap-highlight-color: transparent; }
     #btn-send:hover { background: var(--accent-dark); transform: scale(1.05); }
     #btn-send:active { transform: scale(.95); }
     #btn-send:disabled { opacity: .45; cursor: not-allowed; transform: none; }
     #btn-send svg { width: 20px; height: 20px; fill: #fff; }
-
-    /* Banner ElevenLabs (premium) */
-    #el-banner {
-      display: none; align-items: center; gap: 10px;
-      padding: 8px 14px; background: linear-gradient(90deg, rgba(108,99,255,.08), rgba(16,185,129,.08));
-      border-bottom: 1px solid rgba(108,99,255,.15);
-      font-size: 12px; color: var(--ink2); flex-shrink: 0;
-    }
+    #el-banner { display: none; align-items: center; gap: 10px; padding: 8px 14px; background: linear-gradient(90deg, rgba(108,99,255,.08), rgba(16,185,129,.08)); border-bottom: 1px solid rgba(108,99,255,.15); font-size: 12px; color: var(--ink2); flex-shrink: 0; }
     #el-banner.visible { display: flex; }
-    #el-banner .el-badge {
-      background: linear-gradient(90deg, #6c63ff, #10b981);
-      color: #fff; font-size: 10px; font-weight: 700;
-      padding: 2px 8px; border-radius: 20px; flex-shrink: 0;
-    }
-    #el-select {
-      flex: 1; border: 1px solid rgba(108,99,255,.25);
-      border-radius: 8px; padding: 4px 8px;
-      font-size: 12px; font-family: inherit;
-      background: #fff; outline: none; color: var(--ink);
-    }
-
-    .chat-footer {
-      text-align: center; padding: 4px 0 2px;
-      font-size: 10px; color: var(--ink3); flex-shrink: 0;
-    }
+    #el-banner .el-badge { background: linear-gradient(90deg, #6c63ff, #10b981); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; flex-shrink: 0; }
+    #el-select { flex: 1; border: 1px solid rgba(108,99,255,.25); border-radius: 8px; padding: 4px 8px; font-size: 12px; font-family: inherit; background: #fff; outline: none; color: var(--ink); }
+    .chat-footer { text-align: center; padding: 4px 0 2px; font-size: 10px; color: var(--ink3); flex-shrink: 0; }
     .chat-footer a { color: var(--ink3); text-decoration: none; }
-
-    @media (min-width: 520px) {
-      body { background: #e2e8f0; display: flex; align-items: center; justify-content: center; }
-      #app { height: 90vh; border-radius: 24px; overflow: hidden; }
-    }
+    @media (min-width: 520px) { body { background: #e2e8f0; display: flex; align-items: center; justify-content: center; } #app { height: 90vh; border-radius: 24px; overflow: hidden; } }
   </style>
 </head>
 <body>
 <div id="app">
-
   <div id="loading-screen">
-    <div class="loading-logo">🤖</div>
+    <div class="loading-logo">馃</div>
     <div class="loading-text">Conectando asistente...</div>
     <div class="loading-dots"><span></span><span></span><span></span></div>
   </div>
-
   <div id="error-screen">
-    <div class="error-icon">😕</div>
+    <div class="error-icon">馃槙</div>
     <div class="error-title">No disponible</div>
     <div class="error-msg" id="error-msg">No se pudo conectar con el asistente.</div>
   </div>
-
   <div id="chat-header">
-    <div class="header-avatar" id="headerAvatar">🤖</div>
+    <div class="header-avatar" id="headerAvatar">馃</div>
     <div class="header-info">
       <div class="header-name" id="headerName">Asistente</div>
       <div class="header-sub">
         <span class="status-dot"></span>
-        <span id="headerSub">En línea</span>
+        <span id="headerSub">En l铆nea</span>
       </div>
     </div>
     <div id="voz-badge">
@@ -340,8 +116,6 @@
       <span id="voz-label">Voz activa</span>
     </div>
   </div>
-
-  <!-- Banner ElevenLabs — solo visible en plan enterprise -->
   <div id="el-banner">
     <span class="el-badge">PREMIUM</span>
     <span>Voz:</span>
@@ -349,58 +123,111 @@
       <option value="Rachel">Rachel (femenina)</option>
       <option value="Adam">Adam (masculino)</option>
       <option value="Bella">Bella (suave)</option>
-      <option value="Antoni">Antoni (cálido)</option>
+      <option value="Antoni">Antoni (c谩lido)</option>
     </select>
   </div>
-
   <div id="messages"></div>
-
   <div id="input-area">
-    <button id="btn-mic" aria-label="Hablar">🎤</button>
-    <textarea id="chat-input" placeholder="Escribí tu consulta..." rows="1" maxlength="500"></textarea>
+    <button id="btn-mic" aria-label="Hablar">馃帳</button>
+    <textarea id="chat-input" placeholder="Escrib铆 tu consulta..." rows="1" maxlength="500"></textarea>
     <button id="btn-send" aria-label="Enviar">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
     </button>
   </div>
-
   <div class="chat-footer">Powered by <a href="https://satisfactq.menteactiva.com.ar" target="_blank">SatisfactQ</a></div>
-
 </div>
 
 <script>
 (function () {
   'use strict';
 
-  // ── Config ──────────────────────────────────────────────────────────────────
   const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
   const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
-
-  // URL base de AsistenteIA — el chat llama a su API
   const ASIS_URL = 'https://www.miasistenteia.com.ar';
 
-  // ── Parámetros de la URL ────────────────────────────────────────────────────
-  // Soporta: /comercio/chat.html?slug=nuevos-rumbos
-  //      o:  /comercio/chat.html?id=UUID-comercio
-  const params    = new URLSearchParams(window.location.search);
-  const SLUG      = params.get('slug');
+  const params      = new URLSearchParams(window.location.search);
+  const SLUG        = params.get('slug');
   const COMERCIO_ID = params.get('id');
 
-  // ── Estado ──────────────────────────────────────────────────────────────────
-  let comercio  = null;  // datos de sq_clientes
-  let config    = null;  // datos de sq_config_comercio (bot_cliente_id, voz_activa, bot_plan, etc.)
-  let asistConfig = null; // respuesta de widget-init de AsistenteIA
-  let messages  = [];
-  let isLoading = false;
+  let comercio    = null;
+  let config      = null;
+  let asistConfig = null;
+  let messages    = [];
+  let isLoading   = false;
 
-  // ── Voz ─────────────────────────────────────────────────────────────────────
-  let vozActiva   = false;
-  let vozTipo     = 'robotica'; // 'robotica' | 'elevenlabs'
-  let vozELVoice  = 'Rachel';   // voz ElevenLabs seleccionada
-  let synth       = window.speechSynthesis;
+  // 鈹€鈹€ Conversaci贸n en Supabase 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+  // Genera un ID de sesi贸n 煤nico por visita
+  let sessionId = null;
+  let convId    = null; // ID del registro en asis_conversaciones
+
+  function generarSessionId() {
+    return 'sq_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+  }
+
+  // Crea el registro de conversaci贸n en asis_conversaciones al primer mensaje
+  async function crearConversacion(primerMensaje) {
+    if (!config?.bot_cliente_id) return;
+    try {
+      const hdr = {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      };
+      const body = {
+        cliente_id:  config.bot_cliente_id,
+        session_id:  sessionId,
+        origen:      'satisfactq_chat',
+        comercio_id: comercio?.id || null,
+        mensajes:    JSON.stringify(messages), // array completo hasta ahora
+        resumen:     primerMensaje.slice(0, 120),
+        created_at:  new Date().toISOString(),
+        updated_at:  new Date().toISOString()
+      };
+      const res = await fetch(`${SB_URL}/rest/v1/asis_conversaciones`, {
+        method: 'POST',
+        headers: hdr,
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        convId = Array.isArray(data) ? data[0]?.id : data?.id;
+      }
+    } catch(e) {
+      console.warn('[SatisfactQ] No se pudo crear conversaci贸n:', e);
+    }
+  }
+
+  // Actualiza el registro existente con el historial completo
+  async function actualizarConversacion() {
+    if (!convId || !config?.bot_cliente_id) return;
+    try {
+      const hdr = {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json'
+      };
+      await fetch(`${SB_URL}/rest/v1/asis_conversaciones?id=eq.${convId}`, {
+        method: 'PATCH',
+        headers: hdr,
+        body: JSON.stringify({
+          mensajes:   JSON.stringify(messages),
+          updated_at: new Date().toISOString()
+        })
+      });
+    } catch(e) {
+      console.warn('[SatisfactQ] No se pudo actualizar conversaci贸n:', e);
+    }
+  }
+  // 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+
+  let vozActiva  = false;
+  let vozTipo    = 'robotica';
+  let vozELVoice = 'Rachel';
+  let synth      = window.speechSynthesis;
   let recognition = null;
-  let grabando    = false;
+  let grabando   = false;
 
-  // ── DOM ──────────────────────────────────────────────────────────────────────
   const $loading  = document.getElementById('loading-screen');
   const $error    = document.getElementById('error-screen');
   const $errorMsg = document.getElementById('error-msg');
@@ -409,7 +236,6 @@
   const $send     = document.getElementById('btn-send');
   const $mic      = document.getElementById('btn-mic');
 
-  // ── Helpers de color ─────────────────────────────────────────────────────────
   function applyColor(hex) {
     if (!hex) return;
     const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -430,99 +256,72 @@
     $errorMsg.textContent = msg;
   }
 
-  // ── Cargar datos del comercio desde Supabase ─────────────────────────────────
   async function cargarComercio() {
     const hdr = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` };
-
-    // 1. Buscar comercio por slug o id
     let url;
     if (SLUG) {
       url = `${SB_URL}/rest/v1/sq_clientes?slug=eq.${SLUG}&select=id,nombre,emoji,color&limit=1`;
     } else if (COMERCIO_ID) {
       url = `${SB_URL}/rest/v1/sq_clientes?id=eq.${COMERCIO_ID}&select=id,nombre,emoji,color&limit=1`;
     } else {
-      showErrorScreen('Enlace inválido. Falta el identificador del comercio.');
+      showErrorScreen('Enlace inv谩lido. Falta el identificador del comercio.');
       return false;
     }
-
     const r1 = await fetch(url, { headers: hdr });
     const d1 = await r1.json();
     if (!d1 || !d1.length) { showErrorScreen('Comercio no encontrado.'); return false; }
     comercio = d1[0];
 
-    // 2. Leer configuración (bot_cliente_id, voz_activa, bot_plan)
     const r2 = await fetch(
       `${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${comercio.id}&select=bot_cliente_id,voz_activa,bot_plan,bot_whatsapp&limit=1`,
       { headers: hdr }
     );
     const d2 = await r2.json();
     config = (d2 && d2.length) ? d2[0] : null;
-
     return true;
   }
 
-  // ── Init AsistenteIA ─────────────────────────────────────────────────────────
   async function initAsistente() {
     if (!config?.bot_cliente_id) {
-      showErrorScreen('El asistente de este comercio aún no está configurado.');
+      showErrorScreen('El asistente de este comercio a煤n no est谩 configurado.');
       return false;
     }
     try {
       const res = await fetch(`${ASIS_URL}/api/widget-init?clienteId=${config.bot_cliente_id}`);
       if (!res.ok) {
-        if (res.status === 429) showErrorScreen('El asistente alcanzó su límite mensual. Volvé más tarde.');
-        else if (res.status === 403) showErrorScreen('El asistente no está disponible en este momento.');
+        if (res.status === 429) showErrorScreen('El asistente alcanz贸 su l铆mite mensual. Volv茅 m谩s tarde.');
+        else if (res.status === 403) showErrorScreen('El asistente no est谩 disponible en este momento.');
         else showErrorScreen('No se pudo conectar con el asistente.');
         return false;
       }
       asistConfig = await res.json();
       return true;
     } catch(e) {
-      showErrorScreen('Error de conexión. Verificá tu internet.');
+      showErrorScreen('Error de conexi贸n. Verific谩 tu internet.');
       return false;
     }
   }
 
-  // ── Configurar voz ───────────────────────────────────────────────────────────
   function setupVoz() {
     vozActiva = config?.voz_activa || false;
     const plan = config?.bot_plan || 'basico';
-
-    // Plan enterprise → ElevenLabs, resto → robótica
     vozTipo = (plan === 'enterprise') ? 'elevenlabs' : 'robotica';
-
     if (!vozActiva) return;
-
-    // Mostrar badge en header
     const badge = document.getElementById('voz-badge');
     badge.classList.add('visible');
-    document.getElementById('voz-label').textContent =
-      vozTipo === 'elevenlabs' ? 'Voz premium' : 'Voz activa';
-
-    // Mostrar banner ElevenLabs si es premium
-    if (vozTipo === 'elevenlabs') {
-      document.getElementById('el-banner').classList.add('visible');
-    }
-
-    // Inicializar micrófono (Web Speech Recognition)
+    document.getElementById('voz-label').textContent = vozTipo === 'elevenlabs' ? 'Voz premium' : 'Voz activa';
+    if (vozTipo === 'elevenlabs') document.getElementById('el-banner').classList.add('visible');
     initMic();
-
-    // Precargar voces de síntesis
-    if (synth && synth.getVoices().length === 0) {
-      synth.addEventListener('voiceschanged', () => {}, { once: true });
-    }
+    if (synth && synth.getVoices().length === 0) synth.addEventListener('voiceschanged', () => {}, { once: true });
   }
 
-  // ── Micrófono ────────────────────────────────────────────────────────────────
   function initMic() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return; // navegador no soporta
-
+    if (!SpeechRecognition) return;
     recognition = new SpeechRecognition();
     recognition.lang = 'es-AR';
     recognition.continuous = false;
     recognition.interimResults = false;
-
     recognition.onresult = e => {
       const texto = e.results[0][0].transcript;
       $input.value = texto;
@@ -530,120 +329,73 @@
       $input.style.height = Math.min($input.scrollHeight, 100) + 'px';
       sendMessage(texto);
     };
-    recognition.onend = () => {
-      grabando = false;
-      $mic.classList.remove('grabando');
-      $mic.textContent = '🎤';
-    };
-    recognition.onerror = () => {
-      grabando = false;
-      $mic.classList.remove('grabando');
-      $mic.textContent = '🎤';
-    };
-
+    recognition.onend = () => { grabando = false; $mic.classList.remove('grabando'); $mic.textContent = '馃帳'; };
+    recognition.onerror = () => { grabando = false; $mic.classList.remove('grabando'); $mic.textContent = '馃帳'; };
     $mic.classList.add('visible');
     $mic.addEventListener('click', () => {
-      if (grabando) {
-        recognition.stop();
-      } else {
-        grabando = true;
-        $mic.classList.add('grabando');
-        $mic.textContent = '⏹';
-        recognition.start();
-      }
+      if (grabando) { recognition.stop(); }
+      else { grabando = true; $mic.classList.add('grabando'); $mic.textContent = '鈴?; recognition.start(); }
     });
   }
 
-  // ── Voz robótica (Web Speech Synthesis) ─────────────────────────────────────
   function leerTextoRobotico(text, btnEl) {
     if (!synth) return;
     synth.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-AR';
-    utterance.rate = 0.95;
+    utterance.lang = 'es-AR'; utterance.rate = 0.95;
     const voces = synth.getVoices();
     const vozES = voces.find(v => v.lang.startsWith('es'));
     if (vozES) utterance.voice = vozES;
     if (btnEl) {
-      btnEl.textContent = '⏹';
-      btnEl.classList.add('hablando');
-      utterance.onend = () => { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); };
-      utterance.onerror = () => { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); };
+      btnEl.textContent = '鈴?; btnEl.classList.add('hablando');
+      utterance.onend  = () => { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); };
+      utterance.onerror = () => { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); };
     }
     synth.speak(utterance);
   }
 
   function detenerVozRobotica(btnEl) {
     if (synth) synth.cancel();
-    if (btnEl) { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); }
+    if (btnEl) { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); }
   }
 
-  // ── Voz ElevenLabs (premium) ─────────────────────────────────────────────────
-  // PENDIENTE: requiere API key de ElevenLabs configurada como secret en Supabase
-  // Cuando esté lista, crear Edge Function 'sq-elevenlabs-tts' que reciba { text, voice }
-  // y devuelva audio/mpeg en base64 o URL temporal.
   async function leerTextoElevenLabs(text, btnEl) {
-    // ── ESTRUCTURA LISTA — activar cuando haya API key ──
-    // const EL_ENDPOINT = `${SB_URL}/functions/v1/sq-elevenlabs-tts`;
-    // try {
-    //   if (btnEl) { btnEl.textContent = '⏳'; btnEl.classList.add('hablando'); }
-    //   const res = await fetch(EL_ENDPOINT, {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SB_KEY}` },
-    //     body: JSON.stringify({ text, voice: vozELVoice })
-    //   });
-    //   const { audioUrl } = await res.json();
-    //   const audio = new Audio(audioUrl);
-    //   audio.onended = () => { if (btnEl) { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); } };
-    //   audio.play();
-    // } catch(e) {
-    //   console.warn('[SatisfactQ] ElevenLabs no disponible, usando voz robótica');
-    //   leerTextoRobotico(text, btnEl);
-    // }
-
-    // Por ahora, fallback a robótica
+    // PENDIENTE: activar cuando haya API key de ElevenLabs
     leerTextoRobotico(text, btnEl);
   }
 
   function cambiarVozEL(voice) { vozELVoice = voice; }
   window.cambiarVozEL = cambiarVozEL;
 
-  // ── Leer texto (despachador según plan) ───────────────────────────────────────
   function leerTexto(text, btnEl) {
     if (!vozActiva) return;
-    if (vozTipo === 'elevenlabs') {
-      leerTextoElevenLabs(text, btnEl);
-    } else {
-      leerTextoRobotico(text, btnEl);
-    }
+    if (vozTipo === 'elevenlabs') leerTextoElevenLabs(text, btnEl);
+    else leerTextoRobotico(text, btnEl);
   }
 
   function detenerVoz(btnEl) {
     if (synth) synth.cancel();
-    if (btnEl) { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); }
+    if (btnEl) { btnEl.textContent = '馃攰'; btnEl.classList.remove('hablando'); }
   }
 
-  // ── Bienvenida ───────────────────────────────────────────────────────────────
   function showWelcome() {
     const nombre    = asistConfig?.cliente?.nombre || comercio?.nombre || 'este comercio';
     const rubro     = asistConfig?.cliente?.rubro  || '';
     const asistente = asistConfig?.cliente?.nombre_asistente || 'tu asistente virtual';
-    const emoji     = comercio?.emoji || '🤖';
-
+    const emoji     = comercio?.emoji || '馃';
     document.getElementById('headerAvatar').textContent = emoji;
     document.getElementById('headerName').textContent   = nombre;
     document.getElementById('headerSub').textContent    = asistente;
     document.title = nombre;
-
     $messages.innerHTML = `
       <div class="welcome">
         <div class="welcome-icon">${emoji}</div>
-        <div class="welcome-title">¡Hola! Soy ${asistente}</div>
-        <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` · ${rubro}` : ''}.<br>¿En qué puedo ayudarte hoy?</div>
+        <div class="welcome-title">隆Hola! Soy ${asistente}</div>
+        <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` 路 ${rubro}` : ''}.<br>驴En qu茅 puedo ayudarte hoy?</div>
         <div class="suggestions">
-          <button class="suggestion">¿Cuáles son sus horarios de atención?</button>
-          <button class="suggestion">¿Qué servicios ofrecen?</button>
-          <button class="suggestion">¿Cómo puedo contactarlos?</button>
+          <button class="suggestion">驴Cu谩les son sus horarios de atenci贸n?</button>
+          <button class="suggestion">驴Qu茅 servicios ofrecen?</button>
+          <button class="suggestion">驴C贸mo puedo contactarlos?</button>
         </div>
       </div>
     `;
@@ -652,31 +404,24 @@
     });
   }
 
-  // ── Mensajes ─────────────────────────────────────────────────────────────────
   function appendMsg(role, text) {
     const welcome = $messages.querySelector('.welcome');
     if (welcome) welcome.remove();
-
     const div = document.createElement('div');
     div.className = `msg ${role}`;
     div.textContent = text;
-
     if (role === 'bot' && vozActiva) {
       const btnVoz = document.createElement('button');
       btnVoz.className = 'btn-voz';
-      btnVoz.textContent = '🔊';
+      btnVoz.textContent = '馃攰';
       btnVoz.title = 'Escuchar respuesta';
       btnVoz.addEventListener('click', () => {
-        if (btnVoz.classList.contains('hablando')) {
-          detenerVoz(btnVoz);
-        } else {
-          leerTexto(text, btnVoz);
-        }
+        if (btnVoz.classList.contains('hablando')) detenerVoz(btnVoz);
+        else leerTexto(text, btnVoz);
       });
       div.appendChild(document.createElement('br'));
       div.appendChild(btnVoz);
     }
-
     $messages.appendChild(div);
     $messages.scrollTop = $messages.scrollHeight;
   }
@@ -698,7 +443,7 @@
   }
   function hideTyping() { document.getElementById('typing')?.remove(); }
 
-  // ── Enviar mensaje ────────────────────────────────────────────────────────────
+  // 鈹€鈹€ Enviar mensaje (con guardado en Supabase) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
   async function sendMessage(text) {
     if (!text?.trim() || isLoading || !asistConfig) return;
     text = text.trim();
@@ -711,6 +456,12 @@
     isLoading = true;
     $send.disabled = true;
     showTyping();
+
+    // Si es el primer mensaje, crear la conversaci贸n en Supabase
+    const esPrimerMensaje = messages.length === 1;
+    if (esPrimerMensaje) {
+      await crearConversacion(text);
+    }
 
     try {
       const res = await fetch(`${ASIS_URL}/api/widget-chat`, {
@@ -728,7 +479,7 @@
       hideTyping();
 
       if (!res.ok) {
-        appendError('No se pudo obtener respuesta. Intentá de nuevo.');
+        appendError('No se pudo obtener respuesta. Intent谩 de nuevo.');
         messages.pop();
       } else {
         const data  = await res.json();
@@ -736,9 +487,10 @@
         appendMsg('bot', reply);
         messages.push({ role: 'assistant', content: reply });
 
-        // Auto-leer respuesta si voz activa
+        // Guardar historial actualizado en Supabase
+        await actualizarConversacion();
+
         if (vozActiva) {
-          // Pequeño delay para que el mensaje aparezca en pantalla primero
           setTimeout(() => {
             const msgs = $messages.querySelectorAll('.msg.bot');
             const ultimo = msgs[msgs.length - 1];
@@ -751,7 +503,7 @@
       }
     } catch(e) {
       hideTyping();
-      appendError('Error de conexión.');
+      appendError('Error de conexi贸n.');
       messages.pop();
     } finally {
       isLoading = false;
@@ -760,39 +512,28 @@
     }
   }
 
-  // ── Init principal ────────────────────────────────────────────────────────────
   async function init() {
+    // Generar session ID 煤nico para esta visita
+    sessionId = generarSessionId();
+
     const ok1 = await cargarComercio();
     if (!ok1) return;
-
-    // Aplicar color del comercio si tiene
     if (comercio.color) applyColor(comercio.color);
 
     const ok2 = await initAsistente();
     if (!ok2) return;
-
-    // Aplicar color de AsistenteIA si el comercio no tiene propio
-    if (!comercio.color && asistConfig?.cliente?.color) {
-      applyColor(asistConfig.cliente.color);
-    }
+    if (!comercio.color && asistConfig?.cliente?.color) applyColor(asistConfig.cliente.color);
 
     setupVoz();
-
     $loading.classList.add('hidden');
     showWelcome();
     setTimeout(() => $input.focus(), 400);
   }
 
-  // ── Eventos ───────────────────────────────────────────────────────────────────
   $send.addEventListener('click', () => sendMessage($input.value));
-
   $input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage($input.value);
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage($input.value); }
   });
-
   $input.addEventListener('input', () => {
     $input.style.height = 'auto';
     $input.style.height = Math.min($input.scrollHeight, 100) + 'px';
