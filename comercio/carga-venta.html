@@ -207,7 +207,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
           <div class="field">
             <label>Productos / servicios <span class="ia-tag" id="t-prods">IA</span></label>
-            <div id="prods-lista" style="font-size:12px;color:var(--text2);padding:8px;background:var(--surface2);border-radius:var(--radius-sm);min-height:36px;border:1px solid var(--border)">Sin productos detectados</div>
+            <div id="prods-lista" style="display:none;font-size:12px;color:var(--text2);padding:8px;background:var(--surface2);border-radius:var(--radius-sm);min-height:36px;border:1px solid var(--border)">Sin productos detectados</div>
+            <textarea id="f-prods-manual" placeholder="Ej: Remera talle M, Pantalón jean 42..." style="display:none;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;resize:vertical;min-height:72px;outline:none;color:var(--text);background:var(--surface)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
           </div>
           <div class="field">
             <label>Observaciones <span class="ia-tag" id="t-obs">IA</span></label>
@@ -321,8 +322,14 @@ function setTipo(t) {
 function continuarDesdeTipo() {
   if (S.tipo === 'sin_facturacion') {
     S.b64 = 'manual'; // marcar como manual para que no bloquee la validación
+    // En carga manual mostrar textarea de productos, ocultar el div de IA
+    document.getElementById('prods-lista').style.display = 'none';
+    document.getElementById('f-prods-manual').style.display = 'block';
     ir(3);
   } else {
+    // En carga automática mostrar el div de IA, ocultar textarea
+    document.getElementById('prods-lista').style.display = 'block';
+    document.getElementById('f-prods-manual').style.display = 'none';
     ir(2);
   }
 }
@@ -451,7 +458,16 @@ async function guardar() {
     const cuotas = parseInt(document.getElementById('f-cuotas').value) || null;
     const total  = parseFloat(document.getElementById('f-total').value) || null;
     const obs    = document.getElementById('f-obs').value.trim() || null;
-    const prods  = S.iaData?.productos_comprados || null;
+    // Productos: desde IA si es automática, desde textarea si es manual
+    let prods = null;
+    if (S.tipo === 'con_facturacion') {
+      prods = S.iaData?.productos_comprados || null;
+    } else {
+      const prodsTexto = document.getElementById('f-prods-manual').value.trim();
+      if (prodsTexto) {
+        prods = prodsTexto.split('\n').filter(Boolean).map(p => ({ descripcion: p.trim(), cantidad: 1, precio_unitario: 0, subtotal: 0 }));
+      }
+    }
 
     // 1. Subir archivo a Storage
     let archivoUrl = null;
@@ -620,6 +636,9 @@ function reset() {
   });
   document.getElementById('ia-bar').style.display = 'none';
   document.getElementById('prods-lista').textContent = 'Sin productos detectados';
+  document.getElementById('prods-lista').style.display = 'block';
+  document.getElementById('f-prods-manual').value = '';
+  document.getElementById('f-prods-manual').style.display = 'none';
   document.getElementById('drop-zone').classList.remove('has-file');
   document.getElementById('up-icon').textContent = '📄';
   document.getElementById('up-text').textContent = 'Arrastrá el archivo o hacé clic para seleccionar';
