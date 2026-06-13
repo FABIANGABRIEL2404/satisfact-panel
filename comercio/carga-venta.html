@@ -121,14 +121,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <div class="card-title">¿Cómo registrás esta venta?</div>
       <div class="tipo-grid">
         <div class="tipo-card" id="tc-con" onclick="setTipo('con_facturacion')">
-          <div class="tipo-icon">🧾</div>
-          <div class="tipo-title">Con facturación</div>
-          <div class="tipo-desc">Subí la factura o comprobante digital. La IA extrae los datos automáticamente.</div>
+          <div class="tipo-icon">⚡</div>
+          <div class="tipo-title">Carga automática</div>
+          <div class="tipo-desc">Subí el comprobante y los datos del cliente se completan solos.</div>
         </div>
         <div class="tipo-card" id="tc-sin" onclick="setTipo('sin_facturacion')">
-          <div class="tipo-icon">📝</div>
-          <div class="tipo-title">Sin facturación</div>
-          <div class="tipo-desc">Subí una foto del ticket y completá o corregí los datos del cliente.</div>
+          <div class="tipo-icon">✍️</div>
+          <div class="tipo-title">Carga manual</div>
+          <div class="tipo-desc">Subí el comprobante como respaldo y completá los datos vos.</div>
         </div>
       </div>
       <button class="btn btn-primary" id="btn-p1" disabled onclick="ir(2)">Continuar →</button>
@@ -169,16 +169,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
           <div class="field-row">
             <div class="field">
-              <label>Apellido <span class="ia-tag" id="t-ap">IA</span></label>
+              <label>Apellido <span style="color:#ef4444">*</span> <span class="ia-tag" id="t-ap">IA</span></label>
               <input type="text" id="f-ap" placeholder="García">
             </div>
             <div class="field">
-              <label>Nombre <span class="ia-tag" id="t-nom">IA</span></label>
+              <label>Nombre <span style="color:#ef4444">*</span> <span class="ia-tag" id="t-nom">IA</span></label>
               <input type="text" id="f-nom" placeholder="Juan">
             </div>
           </div>
           <div class="field">
-            <label>Teléfono / WhatsApp <span class="ia-tag" id="t-tel">IA</span></label>
+            <label>Teléfono / WhatsApp <span style="color:#ef4444">*</span> <span class="ia-tag" id="t-tel">IA</span></label>
             <input type="tel" id="f-tel" placeholder="2234567890">
           </div>
           <div class="field">
@@ -312,7 +312,9 @@ function setTipo(t) {
   document.getElementById('tc-con').classList.toggle('selected', t === 'con_facturacion');
   document.getElementById('tc-sin').classList.toggle('selected', t === 'sin_facturacion');
   document.getElementById('btn-p1').disabled = false;
-  document.getElementById('upload-title').textContent = t === 'con_facturacion' ? 'Subir factura o comprobante digital' : 'Subir foto del ticket';
+  document.getElementById('upload-title').textContent = t === 'con_facturacion' ? 'Subir comprobante — carga automática' : 'Subir comprobante — carga manual';
+  // En carga manual se oculta el botón IA
+  document.getElementById('btn-ia').style.display = t === 'con_facturacion' ? 'flex' : 'none';
 }
 
 function setBot(b) {
@@ -324,13 +326,18 @@ function setBot(b) {
 function ir(n) {
   if (n === 3 && !S.b64) { toast('Subí un comprobante antes de continuar', 'error'); return; }
   if (n === 4) {
-    if (!document.getElementById('f-ap').value.trim()) { toast('El apellido es obligatorio', 'error'); return; }
-    document.getElementById('r-nom').textContent = [document.getElementById('f-ap').value, document.getElementById('f-nom').value].filter(Boolean).join(', ') || '—';
-    document.getElementById('r-tel').textContent = document.getElementById('f-tel').value || '(sin teléfono)';
-    document.getElementById('r-dir').textContent = document.getElementById('f-dir').value || '—';
-    document.getElementById('r-loc').textContent = document.getElementById('f-loc').value || '—';
-    document.getElementById('r-tipo').textContent = S.tipo === 'con_facturacion' ? 'Con facturación' : 'Sin facturación';
-    document.getElementById('r-bot').textContent = 'Asistente IA 🤖';
+    const ap  = document.getElementById('f-ap').value.trim();
+    const nom = document.getElementById('f-nom').value.trim();
+    const tel = document.getElementById('f-tel').value.trim();
+    if (!ap)  { toast('El apellido es obligatorio', 'error');  document.getElementById('f-ap').focus();  return; }
+    if (!nom) { toast('El nombre es obligatorio', 'error');    document.getElementById('f-nom').focus(); return; }
+    if (!tel) { toast('El teléfono es obligatorio', 'error'); document.getElementById('f-tel').focus(); return; }
+    document.getElementById('r-nom').textContent  = [ap, nom].join(', ');
+    document.getElementById('r-tel').textContent  = tel;
+    document.getElementById('r-dir').textContent  = document.getElementById('f-dir').value || '—';
+    document.getElementById('r-loc').textContent  = document.getElementById('f-loc').value || '—';
+    document.getElementById('r-tipo').textContent = S.tipo === 'con_facturacion' ? 'Carga automática' : 'Carga manual';
+    document.getElementById('r-bot').textContent  = 'Asistente IA 🤖';
   }
   S.paso = n;
   [1,2,3,4].forEach(i => {
