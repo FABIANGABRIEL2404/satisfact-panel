@@ -21,7 +21,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .header-sub { font-size: 13px; color: var(--text2); margin-left: 2px; }
 .btn-back { margin-left: auto; font-size: 13px; color: var(--text2); text-decoration: none; display: flex; align-items: center; gap: 4px; padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: transparent; cursor: pointer; }
 .btn-back:hover { background: var(--surface2); }
-.container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+.container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
 .steps { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; }
 .step { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--text3); white-space: nowrap; }
 .step.active { color: var(--accent); }
@@ -30,13 +30,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .step-sep { flex: 1; height: 1px; background: var(--border); min-width: 16px; max-width: 40px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
 .card-title { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
-.tipo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.tipo-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all 0.15s; text-align: center; }
-.tipo-card:hover { border-color: var(--accent); background: var(--accent-light); }
-.tipo-card.selected { border-color: var(--accent); background: var(--accent-light); }
-.tipo-icon { font-size: 28px; margin-bottom: 8px; }
-.tipo-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-.tipo-desc { font-size: 11px; color: var(--text2); line-height: 1.4; }
 .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--surface2); position: relative; }
 .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
 .upload-zone.has-file { border-color: var(--success); background: var(--success-light); border-style: solid; }
@@ -52,22 +45,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .ia-status { font-size: 12px; color: var(--text2); flex: 1; }
 .ia-conf { font-size: 11px; font-weight: 600; white-space: nowrap; }
 .ia-conf.high { color: var(--success); } .ia-conf.med { color: var(--warning); } .ia-conf.low { color: var(--danger); }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } .tipo-grid { grid-template-columns: 1fr; } }
 .field { margin-bottom: 12px; }
 .field label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 4px; }
-.field input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--surface); transition: border-color 0.15s; font-family: inherit; }
-.field input:focus { outline: none; border-color: var(--accent); }
+.field input, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--surface); transition: border-color 0.15s; font-family: inherit; }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
 .field input.ia-ok { background: #f0fdf4; border-color: #86efac; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .ia-tag { font-size: 10px; font-weight: 600; color: var(--success); background: var(--success-light); padding: 1px 6px; border-radius: 20px; margin-left: 4px; display: none; }
-.bot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.bot-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px; cursor: pointer; transition: all 0.15s; }
-.bot-card:hover { border-color: var(--accent); }
-.bot-card.selected { border-color: var(--accent); background: var(--accent-light); }
-.bot-icon { font-size: 20px; margin-bottom: 6px; }
-.bot-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-.bot-desc { font-size: 11px; color: var(--text2); line-height: 1.4; }
+.req { color: #ef4444; }
 .btn { padding: 10px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; width: 100%; margin-top: 6px; }
 .btn-primary { background: var(--accent); color: white; }
 .btn-primary:hover { background: #5b52e0; }
@@ -93,6 +78,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; color: white; z-index: 1000; transform: translateY(80px); opacity: 0; transition: all 0.3s; max-width: 320px; pointer-events: none; }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: #16a34a; } .toast.error { background: var(--danger); } .toast.info { background: var(--accent); }
+@media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -100,45 +86,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="header">
   <div class="header-logo">SQ</div>
   <h1>Carga de venta</h1>
-  <span class="header-sub">— Circuito B</span>
+  <span class="header-sub" id="header-comercio">— Circuito B</span>
   <a href="/comercio/index.html" class="btn-back">← Volver al panel</a>
 </div>
 
 <div class="container">
-  <div class="steps" id="steps-bar">
-    <div class="step active" id="s1"><div class="step-num">1</div><span>Tipo</span></div>
+  <div class="steps">
+    <div class="step active" id="s1"><div class="step-num">1</div><span>Comprobante</span></div>
     <div class="step-sep"></div>
-    <div class="step" id="s2"><div class="step-num">2</div><span>Comprobante</span></div>
+    <div class="step" id="s2"><div class="step-num">2</div><span>Datos cliente</span></div>
     <div class="step-sep"></div>
-    <div class="step" id="s3"><div class="step-num">3</div><span>Datos cliente</span></div>
-    <div class="step-sep"></div>
-    <div class="step" id="s4"><div class="step-num">4</div><span>Confirmar</span></div>
+    <div class="step" id="s3"><div class="step-num">3</div><span>Confirmar</span></div>
   </div>
 
-  <!-- PASO 1 -->
+  <!-- PASO 1 — Subir comprobante -->
   <div id="p1">
     <div class="card">
-      <div class="card-title">¿Cómo registrás esta venta?</div>
-      <div class="tipo-grid">
-        <div class="tipo-card" id="tc-con" onclick="setTipo('con_facturacion')">
-          <div class="tipo-icon">⚡</div>
-          <div class="tipo-title">Carga automática</div>
-          <div class="tipo-desc">Subí el comprobante y los datos del cliente se completan solos.</div>
-        </div>
-        <div class="tipo-card" id="tc-sin" onclick="setTipo('sin_facturacion')">
-          <div class="tipo-icon">✍️</div>
-          <div class="tipo-title">Carga manual</div>
-          <div class="tipo-desc">Subí el comprobante como respaldo y completá los datos vos.</div>
-        </div>
-      </div>
-      <button class="btn btn-primary" id="btn-p1" disabled onclick="continuarDesdeTipo()">Continuar →</button>
-    </div>
-  </div>
-
-  <!-- PASO 2 -->
-  <div id="p2" style="display:none">
-    <div class="card">
-      <div class="card-title" id="upload-title">Subir comprobante</div>
+      <div class="card-title">📄 Subir comprobante</div>
       <div class="upload-zone" id="drop-zone">
         <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFile(event)">
         <div class="upload-icon" id="up-icon">📄</div>
@@ -147,118 +111,96 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="upload-filename" id="up-name"></div>
       </div>
       <div id="preview-container"><img id="preview-img" alt="Vista previa"></div>
-      <button class="btn btn-ia" id="btn-ia" onclick="extraer()" disabled>
+      <button class="btn btn-ia" id="btn-ia" onclick="extraer()" disabled style="margin-top:12px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         Extraer datos con IA
       </button>
-      <button class="btn btn-primary" id="btn-p2" onclick="ir(3)" disabled style="margin-top:8px">Continuar →</button>
+      <button class="btn btn-primary" id="btn-p1" onclick="ir(2)" disabled style="margin-top:8px">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- PASO 2 — Datos del cliente -->
+  <div id="p2" style="display:none">
+    <div class="card">
+      <div class="card-title">👤 Datos del cliente</div>
+      <div class="ia-bar" id="ia-bar" style="display:none">
+        <span class="ia-badge">IA</span>
+        <span class="ia-status" id="ia-status">Datos extraídos automáticamente</span>
+        <span class="ia-conf" id="ia-conf"></span>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Apellido <span class="req">*</span> <span class="ia-tag" id="t-ap">IA</span></label>
+          <input type="text" id="f-ap" placeholder="García">
+        </div>
+        <div class="field">
+          <label>Nombre <span class="req">*</span> <span class="ia-tag" id="t-nom">IA</span></label>
+          <input type="text" id="f-nom" placeholder="Juan">
+        </div>
+      </div>
+      <div class="field">
+        <label>Teléfono / WhatsApp <span class="req">*</span> <span class="ia-tag" id="t-tel">IA</span></label>
+        <input type="tel" id="f-tel" placeholder="2234567890">
+      </div>
+      <div class="field">
+        <label>Dirección <span class="ia-tag" id="t-dir">IA</span></label>
+        <input type="text" id="f-dir" placeholder="Av. Colón 1234">
+      </div>
+      <div class="field">
+        <label>Localidad <span class="ia-tag" id="t-loc">IA</span></label>
+        <input type="text" id="f-loc" placeholder="Mar del Plata">
+      </div>
+      <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
+      <div class="card-title" style="margin-bottom:10px">🛒 Detalle de la compra</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Medio de pago <span class="ia-tag" id="t-mpago">IA</span></label>
+          <input type="text" id="f-mpago" placeholder="Efectivo / Tarjeta...">
+        </div>
+        <div class="field">
+          <label>Cuotas <span class="ia-tag" id="t-cuotas">IA</span></label>
+          <input type="number" id="f-cuotas" placeholder="1" min="1">
+        </div>
+      </div>
+      <div class="field">
+        <label>Total de la compra <span class="ia-tag" id="t-total">IA</span></label>
+        <input type="number" id="f-total" placeholder="0.00" step="0.01">
+      </div>
+      <div class="field">
+        <label>Productos / servicios <span class="ia-tag" id="t-prods">IA</span></label>
+        <div id="prods-lista" style="font-size:12px;color:var(--text2);padding:8px;background:var(--surface2);border-radius:var(--radius-sm);min-height:36px;border:1px solid var(--border)">Sin productos detectados</div>
+      </div>
+      <div class="field">
+        <label>Observaciones <span class="ia-tag" id="t-obs">IA</span></label>
+        <input type="text" id="f-obs" placeholder="Descuentos, promociones, nro. pedido...">
+      </div>
+      <button class="btn btn-primary" onclick="ir(3)">Revisar y confirmar →</button>
       <button class="btn btn-secondary" onclick="ir(1)">← Atrás</button>
     </div>
   </div>
 
-  <!-- PASO 3 -->
+  <!-- PASO 3 — Confirmar -->
   <div id="p3" style="display:none">
-    <div class="grid2">
-      <div>
-        <div class="card">
-          <div class="card-title">Datos del cliente</div>
-          <div class="ia-bar" id="ia-bar" style="display:none">
-            <span class="ia-badge">IA</span>
-            <span class="ia-status" id="ia-status">Datos extraídos automáticamente</span>
-            <span class="ia-conf" id="ia-conf"></span>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label>Apellido <span style="color:#ef4444">*</span> <span class="ia-tag" id="t-ap">IA</span></label>
-              <input type="text" id="f-ap" placeholder="García">
-            </div>
-            <div class="field">
-              <label>Nombre <span style="color:#ef4444">*</span> <span class="ia-tag" id="t-nom">IA</span></label>
-              <input type="text" id="f-nom" placeholder="Juan">
-            </div>
-          </div>
-          <div class="field">
-            <label>Teléfono / WhatsApp <span style="color:#ef4444">*</span> <span class="ia-tag" id="t-tel">IA</span></label>
-            <input type="tel" id="f-tel" placeholder="2234567890">
-          </div>
-          <div class="field">
-            <label>Dirección <span class="ia-tag" id="t-dir">IA</span></label>
-            <input type="text" id="f-dir" placeholder="Av. Colón 1234">
-          </div>
-          <div class="field">
-            <label>Localidad <span class="ia-tag" id="t-loc">IA</span></label>
-            <input type="text" id="f-loc" placeholder="Mar del Plata">
-          </div>
-          <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
-          <div class="card-title" style="margin-bottom:10px">Detalle de la compra</div>
-          <div class="field-row">
-            <div class="field">
-              <label>Medio de pago <span class="ia-tag" id="t-mpago">IA</span></label>
-              <input type="text" id="f-mpago" placeholder="Efectivo / Tarjeta...">
-            </div>
-            <div class="field">
-              <label>Cuotas <span class="ia-tag" id="t-cuotas">IA</span></label>
-              <input type="number" id="f-cuotas" placeholder="1" min="1">
-            </div>
-          </div>
-          <div class="field">
-            <label>Total de la compra <span class="ia-tag" id="t-total">IA</span></label>
-            <input type="number" id="f-total" placeholder="0.00" step="0.01">
-          </div>
-          <div class="field">
-            <label>Productos / servicios <span class="ia-tag" id="t-prods">IA</span></label>
-            <div id="prods-lista" style="display:none;font-size:12px;color:var(--text2);padding:8px;background:var(--surface2);border-radius:var(--radius-sm);min-height:36px;border:1px solid var(--border)">Sin productos detectados</div>
-            <textarea id="f-prods-manual" placeholder="Ej: Remera talle M, Pantalón jean 42..." style="display:none;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;resize:vertical;min-height:72px;outline:none;color:var(--text);background:var(--surface)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
-          </div>
-          <div class="field">
-            <label>Observaciones <span class="ia-tag" id="t-obs">IA</span></label>
-            <input type="text" id="f-obs" placeholder="Descuentos, promociones, nro. pedido...">
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <div class="card-title">Bot de seguimiento</div>
-          <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:var(--radius-sm);margin-bottom:12px">
-            <div style="font-size:24px">🤖</div>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#166534">Asistente IA</div>
-              <div style="font-size:12px;color:#16a34a;margin-top:2px">El asistente de tu comercio contactará al cliente automáticamente</div>
-            </div>
-          </div>
-          <div style="padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">
-            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;font-weight:500">¿Cuándo se envía?</div>
-            <div style="font-size:12px;color:var(--text3);line-height:1.5">Al guardar la venta, si el cliente tiene teléfono registrado y el circuito B está activo.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="ir(4)">Revisar y confirmar →</button>
-    <button class="btn btn-secondary" onclick="S.tipo === 'sin_facturacion' ? ir(1) : ir(2)">← Atrás</button>
-  </div>
-
-  <!-- PASO 4 -->
-  <div id="p4" style="display:none">
     <div class="card" id="confirm-card">
-      <div class="card-title">Revisión final</div>
+      <div class="card-title">✅ Revisión final</div>
       <div class="review-grid">
         <div class="review-item"><div class="label">Apellido y nombre</div><div class="value" id="r-nom">—</div></div>
         <div class="review-item"><div class="label">Teléfono</div><div class="value" id="r-tel">—</div></div>
         <div class="review-item"><div class="label">Dirección</div><div class="value" id="r-dir">—</div></div>
         <div class="review-item"><div class="label">Localidad</div><div class="value" id="r-loc">—</div></div>
-        <div class="review-item"><div class="label">Tipo de carga</div><div class="value" id="r-tipo">—</div></div>
-        <div class="review-item"><div class="label">Bot asignado</div><div class="value" id="r-bot">—</div></div>
+        <div class="review-item"><div class="label">Total</div><div class="value" id="r-total">—</div></div>
+        <div class="review-item"><div class="label">Medio de pago</div><div class="value" id="r-mpago">—</div></div>
       </div>
       <div class="wa-note">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.68h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
-        Si el cliente tiene teléfono registrado, se enviará un WhatsApp automáticamente con el bot seleccionado.
+        Al guardar, el cliente recibirá un WhatsApp con el enlace para continuar la experiencia.
       </div>
       <button class="btn btn-primary" id="btn-guardar" onclick="guardar()">Guardar venta y enviar WhatsApp</button>
-      <button class="btn btn-secondary" onclick="ir(3)">← Volver a editar</button>
+      <button class="btn btn-secondary" onclick="ir(2)">← Volver a editar</button>
     </div>
     <div class="result-card" id="result-card">
       <div class="result-icon">✅</div>
-      <div class="result-title" id="res-title">¡Venta registrada!</div>
+      <div class="result-title">¡Venta registrada!</div>
       <div class="result-sub" id="res-sub">Los datos fueron guardados correctamente.</div>
       <div class="result-actions">
         <button class="btn btn-outline" onclick="reset()">+ Nueva carga</button>
@@ -276,19 +218,20 @@ const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const IA_ENDPOINT = 'https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/extraer-comprobante';
 
 let S = {
-  tipo: null, bot: 'asistente_ia', paso: 1,
+  bot: 'asistente_ia', paso: 1,
   archivo: null, b64: null, mime: null,
   iaData: null, comercioId: null
 };
 
-// ── Normalizar teléfono: solo dígitos, sin espacios ni guiones ──────────────
 function normalizarTelefono(tel) {
   if (!tel) return '';
   return tel.replace(/[^\d]/g, '');
 }
 
 window.onload = async () => {
-  const pathSlug = window.location.pathname.split('/').pop();
+  // Leer slug de la URL o comercioId del localStorage
+  const pathParts = window.location.pathname.split('/');
+  const pathSlug = pathParts[pathParts.length - 1];
   if (pathSlug && pathSlug !== 'carga-venta.html') {
     const res = await fetch(`${SB_URL}/rest/v1/sq_clientes?slug=eq.${pathSlug}&select=id,nombre,slug`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
@@ -296,70 +239,38 @@ window.onload = async () => {
     const data = await res.json();
     if (data && data.length > 0) {
       S.comercioId = data[0].id;
-      S.comercioNombre = data[0].nombre;
-      document.querySelector('.header-sub').textContent = '— ' + data[0].nombre;
+      document.getElementById('header-comercio').textContent = '— ' + data[0].nombre;
     }
   } else {
     S.comercioId = localStorage.getItem('sq_comercio_id') || null;
   }
+
   const zone = document.getElementById('drop-zone');
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
   zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); if (e.dataTransfer.files[0]) procFile(e.dataTransfer.files[0]); });
 };
 
-function setTipo(t) {
-  S.tipo = t;
-  document.getElementById('tc-con').classList.toggle('selected', t === 'con_facturacion');
-  document.getElementById('tc-sin').classList.toggle('selected', t === 'sin_facturacion');
-  document.getElementById('btn-p1').disabled = false;
-  document.getElementById('upload-title').textContent = 'Subir comprobante — carga automática';
-  // En carga manual se oculta el botón IA
-  document.getElementById('btn-ia').style.display = t === 'con_facturacion' ? 'flex' : 'none';
-}
-
-// El botón continuar del paso 1 salta al 2 (automática) o al 3 (manual)
-function continuarDesdeTipo() {
-  if (S.tipo === 'sin_facturacion') {
-    S.b64 = 'manual'; // marcar como manual para que no bloquee la validación
-    // En carga manual mostrar textarea de productos, ocultar el div de IA
-    document.getElementById('prods-lista').style.display = 'none';
-    document.getElementById('f-prods-manual').style.display = 'block';
-    ir(3);
-  } else {
-    // En carga automática mostrar el div de IA, ocultar textarea
-    document.getElementById('prods-lista').style.display = 'block';
-    document.getElementById('f-prods-manual').style.display = 'none';
-    ir(2);
-  }
-}
-
-function setBot(b) {
-  S.bot = b;
-  document.getElementById('b-vend').classList.toggle('selected', b === 'vendedoria');
-  document.getElementById('b-asis').classList.toggle('selected', b === 'asistente_ia');
-}
-
 function ir(n) {
-  if (n === 3 && !S.b64) { toast('Subí un comprobante antes de continuar', 'error'); return; }
-  if (n === 4) {
+  if (n === 2 && !S.b64) { toast('Subí un comprobante antes de continuar', 'error'); return; }
+  if (n === 3) {
     const ap  = document.getElementById('f-ap').value.trim();
     const nom = document.getElementById('f-nom').value.trim();
     const tel = document.getElementById('f-tel').value.trim();
     if (!ap)  { toast('El apellido es obligatorio', 'error');  document.getElementById('f-ap').focus();  return; }
     if (!nom) { toast('El nombre es obligatorio', 'error');    document.getElementById('f-nom').focus(); return; }
     if (!tel) { toast('El teléfono es obligatorio', 'error'); document.getElementById('f-tel').focus(); return; }
-    document.getElementById('r-nom').textContent  = [ap, nom].join(', ');
-    document.getElementById('r-tel').textContent  = tel;
-    document.getElementById('r-dir').textContent  = document.getElementById('f-dir').value || '—';
-    document.getElementById('r-loc').textContent  = document.getElementById('f-loc').value || '—';
-    document.getElementById('r-tipo').textContent = S.tipo === 'con_facturacion' ? 'Carga automática' : 'Carga manual';
-    document.getElementById('r-bot').textContent  = 'Asistente IA 🤖';
+    document.getElementById('r-nom').textContent   = [ap, nom].join(', ');
+    document.getElementById('r-tel').textContent   = tel;
+    document.getElementById('r-dir').textContent   = document.getElementById('f-dir').value || '—';
+    document.getElementById('r-loc').textContent   = document.getElementById('f-loc').value || '—';
+    document.getElementById('r-total').textContent = document.getElementById('f-total').value ? '$' + parseFloat(document.getElementById('f-total').value).toLocaleString('es-AR') : '—';
+    document.getElementById('r-mpago').textContent = document.getElementById('f-mpago').value || '—';
   }
   S.paso = n;
-  [1,2,3,4].forEach(i => {
-    document.getElementById('p'+i).style.display = i === n ? 'block' : 'none';
-    const el = document.getElementById('s'+i);
+  [1, 2, 3].forEach(i => {
+    document.getElementById('p' + i).style.display = i === n ? 'block' : 'none';
+    const el = document.getElementById('s' + i);
     el.className = 'step' + (i === n ? ' active' : i < n ? ' done' : '');
     const num = el.querySelector('.step-num');
     if (i < n) { num.textContent = '✓'; num.style.cssText = 'background:var(--success);color:white;border:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0'; }
@@ -387,7 +298,7 @@ function procFile(file) {
       document.getElementById('preview-container').style.display = 'block';
     }
     document.getElementById('btn-ia').disabled = false;
-    document.getElementById('btn-p2').disabled = false;
+    document.getElementById('btn-p1').disabled = false;
   };
   r.readAsDataURL(file);
 }
@@ -407,11 +318,10 @@ async function extraer() {
     S.iaData = d;
     poblarCampos(d);
     toast('Datos extraídos correctamente', 'success');
-    document.getElementById('btn-p2').disabled = false;
+    document.getElementById('btn-p1').disabled = false;
   } catch (err) {
-    console.error(err);
-    toast('No se pudo extraer automáticamente. Completá los datos manualmente.', 'info');
-    document.getElementById('btn-p2').disabled = false;
+    toast('No se pudo extraer automáticamente. Podés completar los datos manualmente.', 'info');
+    document.getElementById('btn-p1').disabled = false;
   }
   btn.disabled = false;
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Volver a extraer';
@@ -421,18 +331,19 @@ function poblarCampos(d) {
   const mapa = { ap: 'apellido', nom: 'nombre', tel: 'telefono', dir: 'direccion', loc: 'localidad' };
   const enc = d.campos_encontrados || [];
   Object.entries(mapa).forEach(([k, campo]) => {
-    const inp = document.getElementById('f-'+k);
-    const tag = document.getElementById('t-'+k);
+    const inp = document.getElementById('f-' + k);
+    const tag = document.getElementById('t-' + k);
     if (d[campo]) { inp.value = d[campo]; inp.classList.add('ia-ok'); }
     if (enc.includes(campo)) tag.style.display = 'inline';
   });
   if (d.medio_pago) { document.getElementById('f-mpago').value = d.medio_pago; document.getElementById('f-mpago').classList.add('ia-ok'); document.getElementById('t-mpago').style.display = 'inline'; }
-  if (d.cuotas) { document.getElementById('f-cuotas').value = d.cuotas; document.getElementById('f-cuotas').classList.add('ia-ok'); document.getElementById('t-cuotas').style.display = 'inline'; }
+  if (d.cuotas)     { document.getElementById('f-cuotas').value = d.cuotas; document.getElementById('f-cuotas').classList.add('ia-ok'); document.getElementById('t-cuotas').style.display = 'inline'; }
   if (d.total_compra) { document.getElementById('f-total').value = d.total_compra; document.getElementById('f-total').classList.add('ia-ok'); document.getElementById('t-total').style.display = 'inline'; }
   if (d.observaciones) { document.getElementById('f-obs').value = d.observaciones; document.getElementById('t-obs').style.display = 'inline'; }
   if (d.productos_comprados && d.productos_comprados.length > 0) {
-    const lista = d.productos_comprados.map(p => `<div style="padding:3px 0;border-bottom:1px solid var(--border)">${p.cantidad || 1}x ${p.descripcion} ${p.subtotal ? '— $'+Number(p.subtotal).toLocaleString('es-AR') : ''}</div>`).join('');
-    document.getElementById('prods-lista').innerHTML = lista;
+    document.getElementById('prods-lista').innerHTML = d.productos_comprados.map(p =>
+      `<div style="padding:3px 0;border-bottom:1px solid var(--border)">${p.cantidad || 1}x ${p.descripcion} ${p.subtotal ? '— $' + Number(p.subtotal).toLocaleString('es-AR') : ''}</div>`
+    ).join('');
     document.getElementById('t-prods').style.display = 'inline';
   }
   const bar = document.getElementById('ia-bar');
@@ -441,7 +352,7 @@ function poblarCampos(d) {
   const cel = document.getElementById('ia-conf');
   cel.textContent = Math.round(conf * 100) + '% confianza';
   cel.className = 'ia-conf ' + (conf >= 0.8 ? 'high' : conf >= 0.5 ? 'med' : 'low');
-  document.getElementById('ia-status').textContent = enc.length + ' campos del cliente detectados';
+  document.getElementById('ia-status').textContent = enc.length + ' campos detectados';
 }
 
 async function guardar() {
@@ -449,30 +360,21 @@ async function guardar() {
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner" style="border-color:white;border-top-color:transparent;display:inline-block;margin-right:6px"></div> Guardando...';
   try {
-    const ap   = document.getElementById('f-ap').value.trim();
-    const nom  = document.getElementById('f-nom').value.trim();
-    const tel  = normalizarTelefono(document.getElementById('f-tel').value.trim());
-    const dir  = document.getElementById('f-dir').value.trim();
-    const loc  = document.getElementById('f-loc').value.trim();
+    const ap     = document.getElementById('f-ap').value.trim();
+    const nom    = document.getElementById('f-nom').value.trim();
+    const tel    = normalizarTelefono(document.getElementById('f-tel').value.trim());
+    const dir    = document.getElementById('f-dir').value.trim();
+    const loc    = document.getElementById('f-loc').value.trim();
     const mpago  = document.getElementById('f-mpago').value.trim() || null;
     const cuotas = parseInt(document.getElementById('f-cuotas').value) || null;
     const total  = parseFloat(document.getElementById('f-total').value) || null;
     const obs    = document.getElementById('f-obs').value.trim() || null;
-    // Productos: desde IA si es automática, desde textarea si es manual
-    let prods = null;
-    if (S.tipo === 'con_facturacion') {
-      prods = S.iaData?.productos_comprados || null;
-    } else {
-      const prodsTexto = document.getElementById('f-prods-manual').value.trim();
-      if (prodsTexto) {
-        prods = prodsTexto.split('\n').filter(Boolean).map(p => ({ descripcion: p.trim(), cantidad: 1, precio_unitario: 0, subtotal: 0 }));
-      }
-    }
+    const prods  = S.iaData?.productos_comprados || null;
 
     // 1. Subir archivo a Storage
     let archivoUrl = null;
     if (S.archivo) {
-      const ext = S.archivo.name.split('.').pop();
+      const ext  = S.archivo.name.split('.').pop();
       const path = `comprobantes/${S.comercioId || 'sin-comercio'}/${Date.now()}.${ext}`;
       const up = await fetch(`${SB_URL}/storage/v1/object/sq-comprobantes/${path}`, {
         method: 'POST',
@@ -482,28 +384,23 @@ async function guardar() {
       if (up.ok) archivoUrl = `${SB_URL}/storage/v1/object/public/sq-comprobantes/${path}`;
     }
 
-    // 2. Upsert perfil cliente y obtener su ID
+    // 2. Upsert perfil cliente
     let clientePerfilId = null;
-    if (tel) {
-      clientePerfilId = await upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs });
-    }
+    if (tel) clientePerfilId = await upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs });
 
-    // 3. Insertar en sq_ventas (con cliente_id vinculado)
+    // 3. Insertar en sq_ventas
     const venta = {
       comercio_id: S.comercioId,
       cliente_id: clientePerfilId,
       apellido: ap, nombre: nom, telefono: tel,
       direccion: dir, localidad: loc,
       archivo_url: archivoUrl,
-      metodo_carga: S.tipo,
+      metodo_carga: 'con_facturacion',
       ia_extraccion: S.iaData,
       ia_confianza: S.iaData?.confianza || null,
       whatsapp_bot: S.bot,
-      medio_pago: mpago,
-      cuotas: cuotas,
-      total_compra: total,
-      productos_comprados: prods,
-      observaciones: obs
+      medio_pago: mpago, cuotas, total_compra: total,
+      productos_comprados: prods, observaciones: obs
     };
     const ins = await fetch(`${SB_URL}/rest/v1/sq_ventas`, {
       method: 'POST',
@@ -512,12 +409,10 @@ async function guardar() {
     });
     if (!ins.ok) { const e = await ins.json(); throw new Error(JSON.stringify(e)); }
 
-    // 4. Mostrar resultado
     document.getElementById('confirm-card').style.display = 'none';
-    document.getElementById('res-title').textContent = '¡Venta registrada!';
     document.getElementById('res-sub').textContent = tel
-      ? `Datos guardados. El WhatsApp se enviará en breve a ${tel} con Asistente IA.`
-      : 'Datos guardados. No se enviará WhatsApp (sin teléfono registrado).';
+      ? `Datos guardados. El WhatsApp se enviará en breve a ${tel}.`
+      : 'Datos guardados. No se enviará WhatsApp (sin teléfono).';
     document.getElementById('result-card').style.display = 'block';
     toast('Venta guardada', 'success');
 
@@ -529,105 +424,44 @@ async function guardar() {
   }
 }
 
-// ── Upsert perfil cliente — guarda todos los datos de la compra ──────────────
-// Devuelve el ID del perfil para vincularlo en sq_ventas
 async function upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs }) {
   if (!S.comercioId || !tel) return null;
   const hdr = { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': 'application/json' };
   const ahora = new Date().toISOString();
-
-  // Buscar por teléfono normalizado
   const buscar = await fetch(
     `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${S.comercioId}&select=id,historial_compras,medios_pago_usados,productos_frecuentes,ticket_promedio`,
     { headers: hdr }
   );
   const ex = await buscar.json();
-
-  // Armar entrada del historial de esta compra
-  const entradaCompra = {
-    fecha: ahora,
-    tipo: S.tipo,
-    total: total || 0,
-    medio_pago: mpago || null,
-    cuotas: cuotas || null,
-    productos: prods || [],
-    observaciones: obs || null
-  };
+  const entradaCompra = { fecha: ahora, tipo: 'con_facturacion', total: total || 0, medio_pago: mpago || null, cuotas: cuotas || null, productos: prods || [], observaciones: obs || null };
 
   if (ex?.length) {
-    // Cliente existente — actualizar
     const perfil = ex[0];
     const hist = [...(perfil.historial_compras || []), entradaCompra];
-
-    // Acumular medios de pago únicos
     const mediosActuales = perfil.medios_pago_usados || [];
     if (mpago && !mediosActuales.includes(mpago)) mediosActuales.push(mpago);
-
-    // Acumular productos frecuentes
     const prodsActuales = perfil.productos_frecuentes || [];
-    if (prods && prods.length > 0) {
-      prods.forEach(p => {
-        if (p.descripcion && !prodsActuales.includes(p.descripcion)) {
-          prodsActuales.push(p.descripcion);
-        }
-      });
-    }
-
-    // Recalcular ticket promedio
+    if (prods && prods.length > 0) prods.forEach(p => { if (p.descripcion && !prodsActuales.includes(p.descripcion)) prodsActuales.push(p.descripcion); });
     const totales = hist.map(h => h.total || 0).filter(t => t > 0);
-    const ticketPromedio = totales.length > 0 ? (totales.reduce((a,b) => a+b, 0) / totales.length).toFixed(2) : null;
-
+    const ticketPromedio = totales.length > 0 ? (totales.reduce((a, b) => a + b, 0) / totales.length).toFixed(2) : null;
     await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${perfil.id}`, {
-      method: 'PATCH',
-      headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        apellido: ap || undefined,
-        nombre: nom || undefined,
-        direccion: dir || undefined,
-        localidad: loc || undefined,
-        historial_compras: hist,
-        medios_pago_usados: mediosActuales,
-        productos_frecuentes: prodsActuales,
-        ticket_promedio: ticketPromedio,
-        ultima_interaccion: ahora,
-        updated_at: ahora
-      })
+      method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ apellido: ap || undefined, nombre: nom || undefined, direccion: dir || undefined, localidad: loc || undefined, historial_compras: hist, medios_pago_usados: mediosActuales, productos_frecuentes: prodsActuales, ticket_promedio: ticketPromedio, ultima_interaccion: ahora, updated_at: ahora })
     });
     return perfil.id;
-
   } else {
-    // Cliente nuevo — crear
-    const nuevo = {
-      telefono: tel,
-      comercio_id: S.comercioId,
-      apellido: ap, nombre: nom,
-      direccion: dir || null,
-      localidad: loc || null,
-      etiqueta: 'nuevo',
-      historial_compras: [entradaCompra],
-      medios_pago_usados: mpago ? [mpago] : [],
-      productos_frecuentes: prods ? prods.map(p => p.descripcion).filter(Boolean) : [],
-      ticket_promedio: total ? total.toFixed(2) : null,
-      conversaciones: [],
-      preferencias: {},
-      ultima_interaccion: ahora
-    };
+    const nuevo = { telefono: tel, comercio_id: S.comercioId, apellido: ap, nombre: nom, direccion: dir || null, localidad: loc || null, etiqueta: 'nuevo', historial_compras: [entradaCompra], medios_pago_usados: mpago ? [mpago] : [], productos_frecuentes: prods ? prods.map(p => p.descripcion).filter(Boolean) : [], ticket_promedio: total ? total.toFixed(2) : null, conversaciones: [], preferencias: {}, ultima_interaccion: ahora };
     const res = await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
-      method: 'POST',
-      headers: { ...hdr, 'Prefer': 'return=representation' },
-      body: JSON.stringify(nuevo)
+      method: 'POST', headers: { ...hdr, 'Prefer': 'return=representation' }, body: JSON.stringify(nuevo)
     });
-    if (res.ok) {
-      const data = await res.json();
-      return Array.isArray(data) ? data[0]?.id : data?.id;
-    }
+    if (res.ok) { const data = await res.json(); return Array.isArray(data) ? data[0]?.id : data?.id; }
     return null;
   }
 }
 
 function reset() {
   const cid = S.comercioId;
-  S = { tipo: null, bot: 'asistente_ia', paso: 1, archivo: null, b64: null, mime: null, iaData: null, comercioId: cid };
+  S = { bot: 'asistente_ia', paso: 1, archivo: null, b64: null, mime: null, iaData: null, comercioId: cid };
   ['f-ap','f-nom','f-tel','f-dir','f-loc','f-mpago','f-cuotas','f-total','f-obs'].forEach(id => {
     const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('ia-ok'); }
   });
@@ -636,9 +470,6 @@ function reset() {
   });
   document.getElementById('ia-bar').style.display = 'none';
   document.getElementById('prods-lista').textContent = 'Sin productos detectados';
-  document.getElementById('prods-lista').style.display = 'block';
-  document.getElementById('f-prods-manual').value = '';
-  document.getElementById('f-prods-manual').style.display = 'none';
   document.getElementById('drop-zone').classList.remove('has-file');
   document.getElementById('up-icon').textContent = '📄';
   document.getElementById('up-text').textContent = 'Arrastrá el archivo o hacé clic para seleccionar';
@@ -647,11 +478,8 @@ function reset() {
   document.getElementById('btn-ia').disabled = true;
   document.getElementById('btn-ia').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Extraer datos con IA';
   document.getElementById('btn-p1').disabled = true;
-  document.getElementById('tc-con').classList.remove('selected');
-  document.getElementById('tc-sin').classList.remove('selected');
   document.getElementById('result-card').style.display = 'none';
   document.getElementById('confirm-card').style.display = 'block';
-  S.bot = 'asistente_ia';
   ir(1);
 }
 
