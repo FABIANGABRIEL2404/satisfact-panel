@@ -85,6 +85,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
 .modal-title{font-size:15px;font-weight:600;color:var(--ad);margin-bottom:14px}
 .toast{position:fixed;bottom:16px;right:16px;background:var(--ad);color:#fff;padding:9px 16px;border-radius:var(--r);font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
 .loading{text-align:center;padding:30px;color:var(--tx3)}
+/* Plan badges */
+.plan-basico{background:#dbeafe;color:#1e40af}
+.plan-plus{background:#f3e8ff;color:#6b21a8}
+.plan-premium{background:#fef9c3;color:#854d0e}
 </style>
 </head>
 <body>
@@ -117,7 +121,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <div class="ni" onclick="showPage('compras')">Base de datos</div>
     <div class="ni" onclick="showPage('tickets')">🧾 Tickets</div>
     <div class="sb-sec" id="nav-circuitos-sec" style="display:none">Configuracion</div>
-<div class="ni" id="nav-circuitos" onclick="showPage('circuitos')" style="display:none">⚙️ Circuitos</div>
+    <div class="ni" id="nav-circuitos" onclick="showPage('circuitos')" style="display:none">⚙️ Circuitos</div>
     <div class="sb-sec" id="nav-admin-sec" style="display:none">Administracion</div>
     <div class="ni" onclick="showPage('usuarios')" id="nav-usuarios" style="display:none">Usuarios</div>
     <div class="sb-logout"><button onclick="doLogout()">Cerrar sesion</button></div>
@@ -163,8 +167,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
               <option value="ticket_ia">Subir ticket — IA extrae los items</option>
             </select>
           </div>
-          <div class="g2" style="margin-bottom:0">
-          </div>
           <div class="fg"><label class="fl">Nombre del formulario</label><input id="f-nombre" type="text" value="Encuesta"></div>
           <div class="fg"><label class="fl">Mensaje de bienvenida</label><textarea id="f-bienvenida" rows="2" style="resize:vertical">Gracias por visitarnos!</textarea></div>
           <div class="divider"></div>
@@ -192,7 +194,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
               <button class="btn btns" onclick="copiarLink()">Copiar link</button>
               <button class="btn btns" onclick="enviarWA()">WhatsApp</button>
             </div>
-            <div style="margin-top:10px;font-size:11px;color:var(--tx3)">QR en <a href="https://qr-code-generator.com" target="_blank" style="color:var(--ac)">qr-code-generator.com</a></div>
           </div>
         </div>
       </div></div>
@@ -268,13 +269,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
 
     <!-- CIRCUITOS -->
     <div id="pg-circuitos" class="pg">
-      <div class="tb"><div class="tb-title">Configuracion de circuitos</div></div>
+      <div class="tb"><div class="tb-title">Configuracion de circuitos y planes</div></div>
       <div class="ct">
-        <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Activá o desactivá los circuitos A (encuesta) y B (ventas + WhatsApp) para cada comercio.</div>
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Configurá los circuitos, el plan y las opciones de voz para cada comercio.</div>
         <div id="circuitos-grid"></div>
       </div>
     </div>
-    
+
     <!-- USUARIOS -->
     <div id="pg-usuarios" class="pg">
       <div class="tb"><div class="tb-title">Usuarios</div><button class="btn btnp" onclick="document.getElementById('modal-usuario').classList.add('open');poblarSelects()">+ Nuevo usuario</button></div>
@@ -387,10 +388,8 @@ async function doLogin(){
   var email=document.getElementById('login-email').value.trim();
   var pass=document.getElementById('login-pass').value.trim();
   if(!email||!pass){document.getElementById('login-err').style.display='block';return;}
-  // Autenticar con Supabase Auth
   var authRes=await sb.auth.signInWithPassword({email:email,password:pass});
   if(authRes.error){document.getElementById('login-err').style.display='block';return;}
-  // Buscar datos del usuario en sq_usuarios
   var res=await sb.from('sq_usuarios').select('*').eq('email',email).eq('activo',true).single();
   if(res.error||!res.data){document.getElementById('login-err').style.display='block';return;}
   currentUser=res.data;
@@ -415,7 +414,7 @@ function iniciarApp(){
     document.getElementById('nav-admin-sec').style.display='block';
     document.getElementById('nav-usuarios').style.display='flex';
     document.getElementById('nav-circuitos-sec').style.display='block';
-   document.getElementById('nav-circuitos').style.display='flex';
+    document.getElementById('nav-circuitos').style.display='flex';
   }
   if(currentUser.rol!=='superadmin'){
     document.getElementById('btn-nuevo-cli').style.display='none';
@@ -499,22 +498,9 @@ function exportarTicketsCSV(){
   filas.forEach(function(tr){
     var celdas=tr.querySelectorAll('td');
     if(celdas.length<7)return;
-    var fila=[
-      celdas[0].textContent.trim(),
-      celdas[1].textContent.trim(),
-      celdas[2].textContent.trim(),
-      celdas[3].textContent.trim(),
-      celdas[4].textContent.trim(),
-      celdas[5].textContent.trim(),
-      celdas[6].textContent.trim()
-    ].map(function(v){return'"'+v.replace(/"/g,'""')+'"';}).join(',');
-    csv+=fila+'\n';
+    csv+=[celdas[0],celdas[1],celdas[2],celdas[3],celdas[4],celdas[5],celdas[6]].map(function(c){return'"'+(c.textContent||'').trim().replace(/"/g,'""')+'"';}).join(',')+'\n';
   });
-  var a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
-  a.download='tickets.csv';
-  a.click();
-  toast('CSV descargado');
+  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='tickets.csv';a.click();toast('CSV descargado');
 }
 
 function renderDash(){
@@ -549,7 +535,7 @@ function renderClientes(){
       +'<span class="badge bg">'+(c.estado==='activo'?'Activo':'Pausado')+'</span></div>'
       +'<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">'
       +'<div style="font-size:11px;color:var(--tx2)">'+rc+' respuestas</div>'
-      +'<button class="btn btns btnd" onclick="event.stopPropagation();eliminarCliente(\''+c.code+'\',\''+( c.nombre||'').replace(/'/g,'')+'\')" style="font-size:11px;padding:3px 8px">Eliminar</button>'
+      +'<button class="btn btns btnd" onclick="event.stopPropagation();eliminarCliente(\''+c.code+'\',\''+(c.nombre||'').replace(/'/g,'')+'\')" style="font-size:11px;padding:3px 8px">Eliminar</button>'
       +'</div>';
     grid.appendChild(card);
   });
@@ -562,8 +548,8 @@ function renderClientes(){
 
 function nextCode(){if(!allClientes.length)return'CLI-001';var n=allClientes.map(function(c){return parseInt((c.code||'CLI-000').split('-')[1]||0);});return'CLI-'+String(Math.max.apply(null,n)+1).padStart(3,'0');}
 
-async function eliminarCliente(code, nombre){
-  if(!confirm('¿Eliminar el comercio "'+nombre+'" ('+code+')?\nEsto NO elimina sus respuestas ni compras.'))return;
+async function eliminarCliente(code,nombre){
+  if(!confirm('Eliminar el comercio "'+nombre+'" ('+code+')?'))return;
   var res=await sb.from('sq_clientes').delete().eq('code',code);
   if(res.error){toast('Error al eliminar: '+res.error.message);return;}
   await cargarClientes();poblarSelects();renderFormSelector();
@@ -593,7 +579,7 @@ async function guardarCliente(){
   document.querySelectorAll('#modal-cliente .tag[data-lang].on').forEach(function(t){idiomas.push(t.dataset.lang);});
   if(!idiomas.length)idiomas=['Espanol'];
   var slugBase=nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-var obj={code:editCode||nextCode(),nombre:nombre,tipo:document.getElementById('cli-tipo').value,ciudad:document.getElementById('cli-ciudad').value.trim(),emoji:document.getElementById('cli-emoji').value.trim(),email:document.getElementById('cli-email').value.trim(),idiomas:idiomas,estado:'activo',slug:editCode?undefined:slugBase};
+  var obj={code:editCode||nextCode(),nombre:nombre,tipo:document.getElementById('cli-tipo').value,ciudad:document.getElementById('cli-ciudad').value.trim(),emoji:document.getElementById('cli-emoji').value.trim(),email:document.getElementById('cli-email').value.trim(),idiomas:idiomas,estado:'activo',slug:editCode?undefined:slugBase};
   var res=editCode?await sb.from('sq_clientes').update(obj).eq('code',editCode):await sb.from('sq_clientes').insert(obj);
   if(res.error){toast('Error: '+res.error.message);return;}
   document.getElementById('modal-cliente').classList.remove('open');
@@ -788,14 +774,12 @@ async function cargarUsuarios(){
     var td3=document.createElement('td');var sp=document.createElement('span');sp.className=u.rol==='superadmin'?'badge bb':'badge bg';sp.textContent=u.rol==='superadmin'?'Super Admin':'Comercio';td3.appendChild(sp);
     var td4=document.createElement('td');td4.style.color='var(--tx2)';td4.textContent=u.comercio_code||'-';
     var td5=document.createElement('td');
-    var btnPass=document.createElement('button');btnPass.className='btn btns';btnPass.textContent='Contraseña';btnPass.style.marginRight='4px';btnPass.onclick=(function(id,email){return function(){cambiarPassword(id,email);};})(u.id,u.email);td5.appendChild(btnPass);
+    var btnPass=document.createElement('button');btnPass.className='btn btns';btnPass.textContent='Contrasena';btnPass.style.marginRight='4px';btnPass.onclick=(function(id,email){return function(){cambiarPassword(id,email);};})(u.id,u.email);td5.appendChild(btnPass);
     var btn=document.createElement('button');btn.className='btn btns btnd';btn.textContent='Eliminar';btn.onclick=(function(id){return function(){eliminarUsuario(id);};})(u.id);td5.appendChild(btn);
     tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);tr.appendChild(td5);
     tb.appendChild(tr);
   });
 }
-
-document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
 async function guardarUsuario(){
   var nombre=document.getElementById('usr-nombre').value.trim();
@@ -804,20 +788,15 @@ async function guardarUsuario(){
   var rol=document.getElementById('usr-rol').value;
   var comercio=document.getElementById('usr-comercio').value||null;
   if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
-  // 1. Crear en Supabase Auth
   var authRes=await sb.auth.admin.createUser({email:email,password:pass,email_confirm:true});
-  if(authRes.error){
-    // Si ya existe en Auth, continuar igual
-    if(!authRes.error.message.includes('already')){toast('Error Auth: '+authRes.error.message);return;}
-  }
-  // 2. Crear en sq_usuarios
+  if(authRes.error){if(!authRes.error.message.includes('already')){toast('Error Auth: '+authRes.error.message);return;}}
   var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true});
   if(res.error){toast('Error: '+res.error.message);return;}
   if(rol==='comercio'){
     var cNombre=nombre;
     if(comercio){var cli=await sb.from('sq_clientes').select('nombre').eq('code',comercio).single();if(cli.data)cNombre=cli.data.nombre;}
     try{
-      await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer sb_publishable_i7kbu8TUS9Uqja-CSlSEgA_9GV4VQ70'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
+      await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
       toast('Usuario creado. Email enviado a '+email);
     }catch(e){toast('Usuario creado (email no enviado)');}
   } else {toast('Usuario creado: '+email);}
@@ -827,23 +806,29 @@ async function guardarUsuario(){
   cargarUsuarios();
 }
 async function eliminarUsuario(id){if(!confirm('Eliminar este usuario?'))return;await sb.from('sq_usuarios').delete().eq('id',id);cargarUsuarios();toast('Usuario eliminado');}
-
-async function cambiarPassword(id, email){
-  var nueva=prompt('Nueva contraseña para '+email+':');
+async function cambiarPassword(id,email){
+  var nueva=prompt('Nueva contrasena para '+email+':');
   if(!nueva||nueva.trim()===''){return;}
   var res=await sb.from('sq_usuarios').update({password_hash:nueva.trim()}).eq('id',id);
-  if(res.error){toast('Error al cambiar contraseña');return;}
-  toast('Contraseña actualizada para '+email);
+  if(res.error){toast('Error al cambiar contrasena');return;}
+  toast('Contrasena actualizada para '+email);
 }
 
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
-// ── CIRCUITOS ──
+
+// ── CIRCUITOS Y PLANES ────────────────────────────────────────────────────────
+// Planes disponibles con sus características
+var PLANES = {
+  basico:  { label: 'Básico',  badge: 'plan-basico',  desc: 'Encuesta de satisfacción · Sin chat IA',       voz: false },
+  plus:    { label: 'Plus',    badge: 'plan-plus',    desc: 'Chat con IA · Voz robótica',                   voz: true  },
+  premium: { label: 'Premium', badge: 'plan-premium', desc: 'Chat con IA · Voz personalizada ElevenLabs',   voz: true  }
+};
+
 async function cargarCircuitos() {
   var grid = document.getElementById('circuitos-grid');
   if (!grid) return;
   grid.innerHTML = '<div class="loading">Cargando...</div>';
 
-  // Cargar configuraciones existentes
   var res = await sb.from('sq_config_comercio').select('*');
   var configs = res.data || [];
   var configMap = {};
@@ -855,87 +840,117 @@ async function cargarCircuitos() {
   }
 
   grid.innerHTML = allClientes.map(function(c) {
-    var cfg = configMap[c.id] || { circuito_a: true, circuito_b: false, bot_whatsapp: 'vendedoria', voz_activa: false };
-
+    var cfg = configMap[c.id] || { circuito_a: true, circuito_b: false, bot_whatsapp: 'asistente_ia', bot_plan: 'basico', voz_activa: false };
     var cfgId = configMap[c.id] ? configMap[c.id].id : null;
-    return '<div class="card" style="margin-bottom:12px">'
+    var planActual = cfg.bot_plan || 'basico';
+    var planInfo = PLANES[planActual] || PLANES.basico;
+
+    return '<div class="card" style="margin-bottom:14px">'
+      // Header comercio
       + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'
       + '<div style="width:40px;height:40px;border-radius:var(--r);background:var(--al);display:flex;align-items:center;justify-content:center;font-size:18px">' + (c.emoji || '🏪') + '</div>'
-      + '<div><div style="font-weight:600;font-size:14px">' + c.nombre + '</div>'
-      + '<div style="font-size:11px;color:var(--tx3)">' + c.code + ' · ' + (c.ciudad || '') + '</div></div></div>'
+      + '<div style="flex:1"><div style="font-weight:600;font-size:14px">' + c.nombre + '</div>'
+      + '<div style="font-size:11px;color:var(--tx3)">' + c.code + ' · ' + (c.ciudad || '') + '</div></div>'
+      + '<span class="badge ' + planInfo.badge + '">' + planInfo.label + '</span>'
+      + '</div>'
+
+      // Circuitos A y B
       + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'
-      // Circuito A
       + '<div style="background:var(--bg2);border-radius:var(--r);padding:12px">'
       + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
       + '<div style="font-size:12px;font-weight:600">Circuito A</div>'
       + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer">'
       + '<input type="checkbox" id="ca-' + c.id + '"' + (cfg.circuito_a ? ' checked' : '') + ' style="width:auto">'
-      + '<span style="font-size:12px">' + (cfg.circuito_a ? 'Activo' : 'Inactivo') + '</span>'
+      + '<span style="font-size:12px" id="ca-lbl-' + c.id + '">' + (cfg.circuito_a ? 'Activo' : 'Inactivo') + '</span>'
       + '</label></div>'
-      + '<div style="font-size:11px;color:var(--tx3)">Encuesta de satisfaccion</div></div>'
-      // Circuito B
+      + '<div style="font-size:11px;color:var(--tx3)">Encuesta de satisfacción</div></div>'
+
       + '<div style="background:var(--bg2);border-radius:var(--r);padding:12px">'
       + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
       + '<div style="font-size:12px;font-weight:600">Circuito B</div>'
       + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer">'
       + '<input type="checkbox" id="cb-' + c.id + '"' + (cfg.circuito_b ? ' checked' : '') + ' style="width:auto">'
-      + '<span style="font-size:12px">' + (cfg.circuito_b ? 'Activo' : 'Inactivo') + '</span>'
+      + '<span style="font-size:12px" id="cb-lbl-' + c.id + '">' + (cfg.circuito_b ? 'Activo' : 'Inactivo') + '</span>'
       + '</label></div>'
       + '<div style="font-size:11px;color:var(--tx3)">Ventas + WhatsApp bot</div></div>'
       + '</div>'
-      // Bot selector
-     + '<select id="bot-' + c.id + '" style="width:auto;font-size:12px;padding:4px 8px">'
-+ '<option value="vendedoria"' + (cfg.bot_whatsapp === 'vendedoria' ? ' selected' : '') + '>🛒 Vendedoria</option>'
-+ '<option value="asistente_ia"' + (cfg.bot_whatsapp === 'asistente_ia' ? ' selected' : '') + '>🤖 Asistente IA</option>'
-+ '</select>'
-+ '<select id="plan-' + c.id + '" style="width:auto;font-size:12px;padding:4px 8px">'
-+ '<option value="basico"' + (cfg.bot_plan === 'basico' ? ' selected' : '') + '>Básico (10k tokens)</option>'
-+ '<option value="profesional"' + (cfg.bot_plan === 'profesional' ? ' selected' : '') + '>Profesional (100k tokens)</option>'
-+ '<option value="enterprise"' + (cfg.bot_plan === 'enterprise' ? ' selected' : '') + '>Enterprise (300k tokens)</option>'
-+ '</select>'
-+ '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:10px;background:var(--bg2);border-radius:var(--r)">'
-+ '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px">'
-+ '<input type="checkbox" id="voz-' + c.id + '"' + (cfg.voz_activa ? ' checked' : '') + ' style="width:auto">'
-+ '<span>🔊 Voz activa</span>'
-+ '</label>'
-+ '<span style="font-size:11px;color:var(--tx3);flex:1">'
-+ (cfg.bot_plan === 'enterprise' ? '— ElevenLabs (premium)' : '— Voz robótica (básica)')
-+ '</span>'
-+ '</div>'      
-+ '<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId || '') + '\')">'
-+ 'Guardar</button>'
+
+      // Plan selector
+      + '<div style="margin-bottom:10px">'
+      + '<div style="font-size:11px;color:var(--tx2);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Plan</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
+      + Object.entries(PLANES).map(function(entry) {
+          var key = entry[0]; var p = entry[1];
+          return '<label style="cursor:pointer;border:1.5px solid '+(planActual===key?'var(--ac)':'var(--bd)')+';border-radius:var(--r);padding:10px;background:'+(planActual===key?'var(--al)':'var(--bg)')+';transition:all .15s" id="plan-lbl-'+c.id+'-'+key+'">'
+            + '<input type="radio" name="plan-'+c.id+'" value="'+key+'" '+(planActual===key?'checked':'')+' style="width:auto;margin-bottom:4px" onchange="actualizarPlan(\''+c.id+'\',\''+key+'\')">'
+            + '<div style="font-size:12px;font-weight:600;margin-top:4px">'+p.label+'</div>'
+            + '<div style="font-size:10px;color:var(--tx2);line-height:1.4;margin-top:2px">'+p.desc+'</div>'
+            + '</label>';
+        }).join('')
+      + '</div></div>'
+
+      // Voz activa
+      + '<div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg2);border-radius:var(--r);margin-bottom:10px">'
+      + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px">'
+      + '<input type="checkbox" id="voz-' + c.id + '"' + (cfg.voz_activa ? ' checked' : '') + ' style="width:auto">'
+      + '<span>🔊 Voz activa</span>'
+      + '</label>'
+      + '<span style="font-size:11px;color:var(--tx3);flex:1" id="voz-desc-' + c.id + '">'
+      + (planActual === 'premium' ? '— Voz ElevenLabs (premium)' : planActual === 'plus' ? '— Voz robótica' : '— No disponible en plan Básico')
+      + '</span>'
       + '</div>'
+
+      + '<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId || '') + '\')">Guardar configuración</button>'
       + '</div>';
   }).join('');
 
-  // Actualizar labels al cambiar checkboxes
+  // Eventos para checkboxes A/B
   allClientes.forEach(function(c) {
-    ['ca', 'cb'].forEach(function(prefix) {
-      var cb = document.getElementById(prefix + '-' + c.id);
-      if (cb) cb.addEventListener('change', function() {
-        this.nextElementSibling.textContent = this.checked ? 'Activo' : 'Inactivo';
-      });
-    });
+    var ca = document.getElementById('ca-' + c.id);
+    var cb = document.getElementById('cb-' + c.id);
+    if (ca) ca.addEventListener('change', function() { document.getElementById('ca-lbl-' + c.id).textContent = this.checked ? 'Activo' : 'Inactivo'; });
+    if (cb) cb.addEventListener('change', function() { document.getElementById('cb-lbl-' + c.id).textContent = this.checked ? 'Activo' : 'Inactivo'; });
   });
+}
+
+function actualizarPlan(clienteId, plan) {
+  // Actualizar estilos de las tarjetas de plan
+  Object.keys(PLANES).forEach(function(key) {
+    var lbl = document.getElementById('plan-lbl-' + clienteId + '-' + key);
+    if (lbl) {
+      lbl.style.borderColor = key === plan ? 'var(--ac)' : 'var(--bd)';
+      lbl.style.background = key === plan ? 'var(--al)' : 'var(--bg)';
+    }
+  });
+  // Actualizar descripción de voz
+  var vozDesc = document.getElementById('voz-desc-' + clienteId);
+  if (vozDesc) {
+    vozDesc.textContent = plan === 'premium' ? '— Voz ElevenLabs (premium)' : plan === 'plus' ? '— Voz robótica' : '— No disponible en plan Básico';
+  }
+  // En plan básico, deshabilitar voz
+  var vozCb = document.getElementById('voz-' + clienteId);
+  if (vozCb) {
+    vozCb.disabled = plan === 'basico';
+    if (plan === 'basico') vozCb.checked = false;
+  }
 }
 
 async function guardarCircuito(clienteId, configId) {
   var circuitoA = document.getElementById('ca-' + clienteId).checked;
   var circuitoB = document.getElementById('cb-' + clienteId).checked;
-  var bot = document.getElementById('bot-' + clienteId).value;
-  var plan = document.getElementById('plan-' + clienteId) ? document.getElementById('plan-' + clienteId).value : 'basico';
+  var planRadio = document.querySelector('input[name="plan-' + clienteId + '"]:checked');
+  var plan = planRadio ? planRadio.value : 'basico';
+  var vozActiva = document.getElementById('voz-' + clienteId) ? document.getElementById('voz-' + clienteId).checked : false;
+  if (plan === 'basico') vozActiva = false; // Básico no tiene voz
 
-  var vozActiva = document.getElementById('voz-' + clienteId) ?
-  document.getElementById('voz-' + clienteId).checked : false;
-
-var datos = {
-  comercio_id: clienteId,
-  circuito_a: circuitoA,
-  circuito_b: circuitoB,
-  bot_whatsapp: bot,
-  bot_plan: plan,
-  voz_activa: vozActiva    // ← nuevo
-};
+  var datos = {
+    comercio_id: clienteId,
+    circuito_a: circuitoA,
+    circuito_b: circuitoB,
+    bot_whatsapp: 'asistente_ia',
+    bot_plan: plan,
+    voz_activa: vozActiva
+  };
 
   var res;
   if (configId) {
@@ -946,7 +961,6 @@ var datos = {
 
   if (res.error) { toast('Error al guardar: ' + res.error.message); return; }
 
-  // Si activó Circuito B y no tiene bot_cliente_id todavía, crear en AsistenteIA/Vendedoria
   if (circuitoB) {
     var cfg = await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id', clienteId).single();
     if (!cfg.data || !cfg.data.bot_cliente_id) {
@@ -954,20 +968,21 @@ var datos = {
       var fnRes = await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-crear-bot-cliente', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SB_KEY },
-        body: JSON.stringify({ comercio_id: clienteId, bot_tipo: bot, bot_plan: plan })
+        body: JSON.stringify({ comercio_id: clienteId, bot_tipo: 'asistente_ia', bot_plan: plan })
       });
       var fnData = await fnRes.json();
-      if (fnData.error) { toast('Error creando bot cliente: ' + fnData.error); return; }
-      toast('Cliente creado en ' + (bot === 'vendedoria' ? 'Vendedoria' : 'AsistenteIA'));
+      if (fnData.error) { toast('Error creando bot: ' + fnData.error); return; }
+      toast('Configuración guardada y bot creado');
     } else {
-      toast('Configuracion guardada');
+      toast('Configuración guardada');
     }
   } else {
-    toast('Configuracion guardada');
+    toast('Configuración guardada');
   }
 
   cargarCircuitos();
-}  
+}
+
 var savedUser=sessionStorage.getItem('sq_user');
 if(savedUser){try{currentUser=JSON.parse(savedUser);iniciarApp();}catch(e){sessionStorage.removeItem('sq_user');}}
 </script>
