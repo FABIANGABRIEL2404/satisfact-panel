@@ -980,16 +980,25 @@ function cerrarFicha() {
 
 function exportClientesCSV() {
   if (!allClientes.length) { showToast('No hay clientes para exportar', true); return; }
-  const cols = ['Apellido','Nombre','Telefono','Localidad','Direccion','Compras','Ticket promedio','Medios de pago','Etiqueta','Ultima interaccion'];
-  const rows = [cols.join(','), ...allClientes.map(c => [
-    c.apellido || '', c.nombre || '', c.telefono || '', c.localidad || '', c.direccion || '',
+  const SEP = ';';
+  const cols = ['Apellido','Nombre','Telefono','Localidad','Direccion','Compras','Ticket promedio','Medios de pago','Productos frecuentes','Etiqueta','Nota interna','Ultima interaccion'];
+  const rows = [cols.join(SEP), ...allClientes.map(c => [
+    c.apellido || '',
+    c.nombre || '',
+    c.telefono || '',
+    c.localidad || '',
+    c.direccion || '',
     Array.isArray(c.historial_compras) ? c.historial_compras.length : 0,
-    c.ticket_promedio || '',
+    c.ticket_promedio ? '$' + parseFloat(c.ticket_promedio).toLocaleString('es-AR') : '',
     Array.isArray(c.medios_pago_usados) ? c.medios_pago_usados.join(' | ') : '',
+    Array.isArray(c.productos_frecuentes) ? c.productos_frecuentes.join(' | ') : '',
     c.etiqueta || 'nuevo',
+    c.nota_interna || '',
     c.ultima_interaccion ? new Date(c.ultima_interaccion).toLocaleDateString('es-AR') : ''
-  ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))];
-  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(rows.join('\n')); a.download = 'clientes.csv'; a.click(); showToast('CSV descargado');
+  ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(SEP))];
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(rows.join('\n'));
+  a.download = 'clientes.csv'; a.click(); showToast('CSV descargado');
 }
 // ── FIN CRM ───────────────────────────────────────────────────────────────────
 
