@@ -131,7 +131,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <div class="tipo-desc">Subí el comprobante como respaldo y completá los datos vos.</div>
         </div>
       </div>
-      <button class="btn btn-primary" id="btn-p1" disabled onclick="ir(2)">Continuar →</button>
+      <button class="btn btn-primary" id="btn-p1" disabled onclick="continuarDesdeTipo()">Continuar →</button>
     </div>
   </div>
 
@@ -233,7 +233,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
     </div>
     <button class="btn btn-primary" onclick="ir(4)">Revisar y confirmar →</button>
-    <button class="btn btn-secondary" onclick="ir(2)">← Atrás</button>
+    <button class="btn btn-secondary" onclick="S.tipo === 'sin_facturacion' ? ir(1) : ir(2)">← Atrás</button>
   </div>
 
   <!-- PASO 4 -->
@@ -312,9 +312,19 @@ function setTipo(t) {
   document.getElementById('tc-con').classList.toggle('selected', t === 'con_facturacion');
   document.getElementById('tc-sin').classList.toggle('selected', t === 'sin_facturacion');
   document.getElementById('btn-p1').disabled = false;
-  document.getElementById('upload-title').textContent = t === 'con_facturacion' ? 'Subir comprobante — carga automática' : 'Subir comprobante — carga manual';
+  document.getElementById('upload-title').textContent = 'Subir comprobante — carga automática';
   // En carga manual se oculta el botón IA
   document.getElementById('btn-ia').style.display = t === 'con_facturacion' ? 'flex' : 'none';
+}
+
+// El botón continuar del paso 1 salta al 2 (automática) o al 3 (manual)
+function continuarDesdeTipo() {
+  if (S.tipo === 'sin_facturacion') {
+    S.b64 = 'manual'; // marcar como manual para que no bloquee la validación
+    ir(3);
+  } else {
+    ir(2);
+  }
 }
 
 function setBot(b) {
