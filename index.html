@@ -801,7 +801,21 @@ async function guardarUsuario(){
       if(cli.data)cNombre=cli.data.nombre;
     }
     try{
-      var emailRes = await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{
+      try{
+  console.log('Enviando email a:', email, 'pass:', pass, 'comercio:', cNombre, comercio);
+  var emailRes = await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'
+    },
+    body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})
+  });
+  var respBody=await emailRes.text();
+  console.log('Email status:', emailRes.status, 'body:', respBody);
+  if(emailRes.ok){toast('Usuario creado. Email enviado a '+email);}
+  else{toast('Usuario creado (error al enviar email: '+emailRes.status+')');}
+}catch(e){console.error('Error email:', e);toast('Usuario creado (email no enviado: '+e.message+')');}
         method:'POST',
         headers:{
           'Content-Type':'application/json',
