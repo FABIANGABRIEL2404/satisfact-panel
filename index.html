@@ -598,9 +598,13 @@ async function guardarCliente(){
     var accPass=document.getElementById('cli-acceso-pass').value.trim();
     if(accEmail&&accPass){
       var accNombre=document.getElementById('cli-acceso-nombre').value.trim()||nombre;
-var resU=await sb.from('sq_usuarios').insert({nombre:accNombre,email:accEmail,password_hash:accPass,rol:'comercio',comercio_code:obj.code,activo:true});
-      if(resU.error){toast('Cliente creado pero error al crear usuario: '+resU.error.message);}
+var sbAdmin=supabase.createClient('https://tofnetwtlcwsaiieazsa.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg');
+      var authRes=await sbAdmin.auth.admin.createUser({email:accEmail,password:accPass,email_confirm:true});
+      if(authRes.error){toast('Cliente creado pero error en Auth: '+authRes.error.message);}
       else{
+        var resU=await sb.from('sq_usuarios').insert({nombre:accNombre,email:accEmail,password_hash:accPass,rol:'comercio',comercio_code:obj.code,activo:true});
+        if(resU.error){toast('Cliente creado pero error al crear usuario: '+resU.error.message);}
+        else{
         try{
           await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:nombre,email:accEmail,password:accPass,comercio_code:obj.code})});
           toast('Cliente y usuario creados. Email enviado a '+accEmail);
