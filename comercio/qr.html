@@ -51,7 +51,7 @@ async function redirigir(){
 
   if(activo&&(plan==='plus'||plan==='premium')&&botId){
     // Redirigir al chatbot
-    var urlBot='https://www.miasistenteia.com.ar/widget?clienteId='+botId+'&comercio='+encodeURIComponent(comercio.nombre);
+    var urlBot='https://satisfact-panel.vercel.app/comercio/chat.html?slug='+(comercio.slug||comercio.code);
     window.location.href=urlBot;
   } else {
     // Redirigir a la encuesta
