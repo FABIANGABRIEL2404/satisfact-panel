@@ -319,7 +319,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
         <div class="fg"><label class="fl">Nombre del usuario</label><input id="cli-acceso-nombre" type="text" placeholder="Nombre y apellido"></div>
         <div class="fg"><label class="fl">Email de acceso</label><input id="cli-acceso-email" type="email" placeholder="email@comercio.com"></div>
       </div>
-      <div class="fg"><label class="fl">Contraseña</label><input id="cli-acceso-pass" type="text" placeholder="Contraseña inicial"></div>
+      <div class="fg"><label class="fl">Contrasena</label><input id="cli-acceso-pass" type="text" placeholder="Contrasena inicial"></div>
     </div>
     <div class="row" style="justify-content:flex-end;gap:8px">
       <button class="btn" onclick="document.getElementById('modal-cliente').classList.remove('open')">Cancelar</button>
@@ -386,6 +386,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
 <script>
 var SB_URL="https://tofnetwtlcwsaiieazsa.supabase.co";
 var SB_KEY="sb_publishable_i7kbu8TUS9Uqja-CSlSEgA_9GV4VQ70";
+var SB_SERVICE="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg";
 var sb=supabase.createClient(SB_URL,SB_KEY);
 var currentUser=null,allClientes=[],allRespuestas=[],allCompras=[];
 
@@ -547,11 +548,13 @@ function renderClientes(){
       +'</div>';
     grid.appendChild(card);
   });
-  var addCard=document.createElement('div');addCard.className='card';
-  addCard.style.cssText='border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:100px;cursor:pointer';
-  addCard.onclick=function(){abrirModalCliente(null);};
-  addCard.innerHTML='<div style="text-align:center;color:var(--tx3)"><div style="font-size:26px">+</div>Agregar cliente</div>';
-  grid.appendChild(addCard);
+  if(currentUser.rol==='superadmin'){
+    var addCard=document.createElement('div');addCard.className='card';
+    addCard.style.cssText='border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:100px;cursor:pointer';
+    addCard.onclick=function(){abrirModalCliente(null);};
+    addCard.innerHTML='<div style="text-align:center;color:var(--tx3)"><div style="font-size:26px">+</div>Agregar cliente</div>';
+    grid.appendChild(addCard);
+  }
 }
 
 function nextCode(){if(!allClientes.length)return'CLI-001';var n=allClientes.map(function(c){return parseInt((c.code||'CLI-000').split('-')[1]||0);});return'CLI-'+String(Math.max.apply(null,n)+1).padStart(3,'0');}
@@ -574,6 +577,10 @@ function abrirModalCliente(code){
   document.getElementById('cli-ciudad').value=c?(c.ciudad||''):'';
   document.getElementById('cli-emoji').value=c?(c.emoji||''):'';
   document.getElementById('cli-email').value=c?(c.email||''):'';
+  document.getElementById('cli-acceso-nombre').value='';
+  document.getElementById('cli-acceso-email').value='';
+  document.getElementById('cli-acceso-pass').value='';
+  document.getElementById('acceso-wrap').style.display=c?'none':'block';
   var idiomas=c?(c.idiomas||['Espanol']):['Espanol'];
   document.querySelectorAll('#modal-cliente .tag[data-lang]').forEach(function(t){t.classList.toggle('on',idiomas.indexOf(t.dataset.lang)>-1);});
   document.getElementById('modal-cliente').classList.add('open');
@@ -598,7 +605,7 @@ async function guardarCliente(){
     var accPass=document.getElementById('cli-acceso-pass').value.trim();
     if(accEmail&&accPass){
       var accNombre=document.getElementById('cli-acceso-nombre').value.trim()||nombre;
-      var sbAdmin=supabase.createClient('https://tofnetwtlcwsaiieazsa.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg');
+      var sbAdmin=supabase.createClient(SB_URL,SB_SERVICE);
       var authRes=await sbAdmin.auth.admin.createUser({email:accEmail,password:accPass,email_confirm:true});
       if(authRes.error){toast('Cliente creado pero error en Auth: '+authRes.error.message);}
       else{
@@ -606,17 +613,14 @@ async function guardarCliente(){
         if(resU.error){toast('Cliente creado pero error al crear usuario: '+resU.error.message);}
         else{
           try{
-            await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:nombre,email:accEmail,password:accPass,comercio_code:obj.code})});
+            await fetch(SB_URL+'/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_SERVICE},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:nombre,email:accEmail,password:accPass,comercio_code:obj.code})});
             toast('Cliente y usuario creados. Email enviado a '+accEmail);
           }catch(e){toast('Cliente y usuario creados (email no enviado)');}
         }
       }
-      document.getElementById('cli-acceso-email').value='';
-      document.getElementById('cli-acceso-pass').value='';
-      document.getElementById('cli-acceso-nombre').value='';
     }
   }
-}}
+}
 
 function renderFormSelector(){
   var s=document.getElementById('sel-cli');if(!s)return;
@@ -819,6 +823,9 @@ async function guardarUsuario(){
   var rol=document.getElementById('usr-rol').value;
   var comercio=document.getElementById('usr-comercio').value||null;
   if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
+  var sbAdmin=supabase.createClient(SB_URL,SB_SERVICE);
+  var authRes=await sbAdmin.auth.admin.createUser({email:email,password:pass,email_confirm:true});
+  if(authRes.error){toast('Error en Auth: '+authRes.error.message);return;}
   var res=await sb.from('sq_usuarios').insert({nombre:nombre,email:email,password_hash:pass,rol:rol,comercio_code:comercio,activo:true});
   if(res.error){toast('Error al crear usuario: '+res.error.message);return;}
   if(rol==='comercio'){
@@ -828,9 +835,8 @@ async function guardarUsuario(){
       if(cli.data)cNombre=cli.data.nombre;
     }
     try{
-      var emailRes=await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
-      if(emailRes.ok){toast('Usuario creado. Email enviado a '+email);}
-      else{toast('Usuario creado (error al enviar email)');}
+      await fetch(SB_URL+'/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_SERVICE},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
+      toast('Usuario creado. Email enviado a '+email);
     }catch(e){toast('Usuario creado (email no enviado)');}
   } else {toast('Usuario creado: '+email);}
   document.getElementById('modal-usuario').classList.remove('open');
@@ -851,11 +857,7 @@ async function cambiarPassword(id,email){
 
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
-var PLANES = {
-  basico:  {label:'Basico',  badge:'plan-basico',  desc:'Encuesta de satisfaccion - Sin chat IA',     voz:false},
-  plus:    {label:'Plus',    badge:'plan-plus',    desc:'Chat con IA - Voz robotica',                 voz:true},
-  premium: {label:'Premium', badge:'plan-premium', desc:'Chat con IA - Voz personalizada ElevenLabs', voz:true}
-};
+var PLANES={basico:{label:'Basico',badge:'plan-basico',desc:'Encuesta de satisfaccion - Sin chat IA',voz:false},plus:{label:'Plus',badge:'plan-plus',desc:'Chat con IA - Voz robotica',voz:true},premium:{label:'Premium',badge:'plan-premium',desc:'Chat con IA - Voz personalizada ElevenLabs',voz:true}};
 
 async function cargarCircuitos(){
   var grid=document.getElementById('circuitos-grid');if(!grid)return;
@@ -905,7 +907,7 @@ async function cargarCircuitos(){
       +(planActual==='premium'?'- Voz ElevenLabs (premium)':planActual==='plus'?'- Voz robotica':'- No disponible en plan Basico')
       +'</span>'
       +'</div>'
-      +'<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId||'') + '\')" >Guardar configuracion</button>'
+      +'<button class="btn btnp btns" onclick="guardarCircuito(\''+c.id+'\',\''+(cfgId||'')+'\')">Guardar configuracion</button>'
       +'</div>';
   }).join('');
   allClientes.forEach(function(c){
@@ -940,7 +942,7 @@ async function guardarCircuito(clienteId,configId){
     var cfg=await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id',clienteId).single();
     if(!cfg.data||!cfg.data.bot_cliente_id){
       toast('Creando cliente en el bot...');
-      var fnRes=await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-crear-bot-cliente',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY},body:JSON.stringify({comercio_id:clienteId,bot_tipo:'asistente_ia',bot_plan:plan})});
+      var fnRes=await fetch(SB_URL+'/functions/v1/sq-crear-bot-cliente',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY},body:JSON.stringify({comercio_id:clienteId,bot_tipo:'asistente_ia',bot_plan:plan})});
       var fnData=await fnRes.json();
       if(fnData.error){toast('Error creando bot: '+fnData.error);return;}
       toast('Configuracion guardada y bot creado');
