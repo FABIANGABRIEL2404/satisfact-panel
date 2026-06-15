@@ -316,9 +316,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <div id="acceso-wrap">
       <div style="font-size:12px;font-weight:600;color:var(--ad);margin-bottom:8px">Crear acceso al panel (opcional)</div>
       <div class="g2" style="margin-bottom:0">
+        <div class="fg"><label class="fl">Nombre del usuario</label><input id="cli-acceso-nombre" type="text" placeholder="Nombre y apellido"></div>
         <div class="fg"><label class="fl">Email de acceso</label><input id="cli-acceso-email" type="email" placeholder="email@comercio.com"></div>
-        <div class="fg"><label class="fl">Contraseña</label><input id="cli-acceso-pass" type="text" placeholder="Contraseña inicial"></div>
       </div>
+      <div class="fg"><label class="fl">Contraseña</label><input id="cli-acceso-pass" type="text" placeholder="Contraseña inicial"></div>
     </div>
     <div class="row" style="justify-content:flex-end;gap:8px">
       <button class="btn" onclick="document.getElementById('modal-cliente').classList.remove('open')">Cancelar</button>
