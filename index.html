@@ -85,7 +85,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
 .modal-title{font-size:15px;font-weight:600;color:var(--ad);margin-bottom:14px}
 .toast{position:fixed;bottom:16px;right:16px;background:var(--ad);color:#fff;padding:9px 16px;border-radius:var(--r);font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
 .loading{text-align:center;padding:30px;color:var(--tx3)}
-/* Plan badges */
 .plan-basico{background:#dbeafe;color:#1e40af}
 .plan-plus{background:#f3e8ff;color:#6b21a8}
 .plan-premium{background:#fef9c3;color:#854d0e}
@@ -164,7 +163,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
             <select id="sel-modo-compras">
               <option value="ninguno">Sin seccion de compras</option>
               <option value="manual">Carga manual de productos</option>
-              <option value="ticket_ia">Subir ticket — IA extrae los items</option>
+              <option value="ticket_ia">Subir ticket - IA extrae los items</option>
             </select>
           </div>
           <div class="fg"><label class="fl">Nombre del formulario</label><input id="f-nombre" type="text" value="Encuesta"></div>
@@ -271,7 +270,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
     <div id="pg-circuitos" class="pg">
       <div class="tb"><div class="tb-title">Configuracion de circuitos y planes</div></div>
       <div class="ct">
-        <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Configurá los circuitos, el plan y las opciones de voz para cada comercio.</div>
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Configura los circuitos, el plan y las opciones de voz para cada comercio.</div>
         <div id="circuitos-grid"></div>
       </div>
     </div>
@@ -788,12 +787,8 @@ async function guardarUsuario(){
   var rol=document.getElementById('usr-rol').value;
   var comercio=document.getElementById('usr-comercio').value||null;
   if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
-
-  // Crear en sq_usuarios
-  var res=await sb.from('sq_usuarios').insert({nombre,email,password_hash:pass,rol,comercio_code:comercio,activo:true});
-  if(res.error){toast('Error: '+res.error.message);return;}
-
-  // Enviar email de bienvenida si es comercio
+  var res=await sb.from('sq_usuarios').insert({nombre:nombre,email:email,password_hash:pass,rol:rol,comercio_code:comercio,activo:true});
+  if(res.error){toast('Error al crear usuario: '+res.error.message);return;}
   if(rol==='comercio'){
     var cNombre=nombre;
     if(comercio){
@@ -801,32 +796,19 @@ async function guardarUsuario(){
       if(cli.data)cNombre=cli.data.nombre;
     }
     try{
-      try{
-  console.log('Enviando email a:', email, 'pass:', pass, 'comercio:', cNombre, comercio);
-  var emailRes = await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
-  var respBody=await emailRes.text();
-  console.log('Email status:', emailRes.status, 'body:', respBody);
-  if(emailRes.ok){toast('Usuario creado. Email enviado a '+email);}
-  else{toast('Usuario creado (error al enviar email: '+emailRes.status+')');}
-}catch(e){console.error('Error email:', e);toast('Usuario creado (email no enviado: '+e.message+')');}
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'
-        },
-        body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})
-      });
+      var emailRes=await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDgzNDM1MiwiZXhwIjoyMDkwNDEwMzUyfQ.Pv3-yZ5YccyLPuiRQFIWxoB4qLPPE1OHAeTWbqEjKfg'},body:JSON.stringify({tipo:'bienvenida',comercio_nombre:cNombre,email:email,password:pass,comercio_code:comercio})});
       if(emailRes.ok){toast('Usuario creado. Email enviado a '+email);}
       else{toast('Usuario creado (error al enviar email)');}
     }catch(e){toast('Usuario creado (email no enviado)');}
   } else {toast('Usuario creado: '+email);}
-
   document.getElementById('modal-usuario').classList.remove('open');
   document.getElementById('usr-nombre').value='';
   document.getElementById('usr-email').value='';
   cargarUsuarios();
 }
+
 async function eliminarUsuario(id){if(!confirm('Eliminar este usuario?'))return;await sb.from('sq_usuarios').delete().eq('id',id);cargarUsuarios();toast('Usuario eliminado');}
+
 async function cambiarPassword(id,email){
   var nueva=prompt('Nueva contrasena para '+email+':');
   if(!nueva||nueva.trim()===''){return;}
@@ -837,133 +819,103 @@ async function cambiarPassword(id,email){
 
 document.querySelectorAll('.mbg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
 
-// ── PLANES ────────────────────────────────────────────────────────────────────
 var PLANES = {
-  basico:  { label: 'Básico',  badge: 'plan-basico',  desc: 'Encuesta de satisfacción · Sin chat IA',     voz: false },
-  plus:    { label: 'Plus',    badge: 'plan-plus',    desc: 'Chat con IA · Voz robótica',                 voz: true  },
-  premium: { label: 'Premium', badge: 'plan-premium', desc: 'Chat con IA · Voz personalizada ElevenLabs', voz: true  }
+  basico:  {label:'Basico',  badge:'plan-basico',  desc:'Encuesta de satisfaccion - Sin chat IA',     voz:false},
+  plus:    {label:'Plus',    badge:'plan-plus',    desc:'Chat con IA - Voz robotica',                 voz:true},
+  premium: {label:'Premium', badge:'plan-premium', desc:'Chat con IA - Voz personalizada ElevenLabs', voz:true}
 };
 
-async function cargarCircuitos() {
-  var grid = document.getElementById('circuitos-grid');
-  if (!grid) return;
-  grid.innerHTML = '<div class="loading">Cargando...</div>';
-
-  var res = await sb.from('sq_config_comercio').select('*');
-  var configs = res.data || [];
-  var configMap = {};
-  configs.forEach(function(c) { configMap[c.comercio_id] = c; });
-
-  if (!allClientes.length) {
-    grid.innerHTML = '<div style="padding:20px;color:var(--tx3)">No hay clientes creados aun.</div>';
-    return;
-  }
-
-  grid.innerHTML = allClientes.map(function(c) {
-    var cfg = configMap[c.id] || { circuito_b: true, bot_whatsapp: 'asistente_ia', bot_plan: 'basico', voz_activa: false };
-    var cfgId = configMap[c.id] ? configMap[c.id].id : null;
-    var planActual = cfg.bot_plan || 'basico';
-    var planInfo = PLANES[planActual] || PLANES.basico;
-    var activo = cfg.circuito_b !== false;
-
+async function cargarCircuitos(){
+  var grid=document.getElementById('circuitos-grid');if(!grid)return;
+  grid.innerHTML='<div class="loading">Cargando...</div>';
+  var res=await sb.from('sq_config_comercio').select('*');
+  var configs=res.data||[];var configMap={};
+  configs.forEach(function(c){configMap[c.comercio_id]=c;});
+  if(!allClientes.length){grid.innerHTML='<div style="padding:20px;color:var(--tx3)">No hay clientes creados aun.</div>';return;}
+  grid.innerHTML=allClientes.map(function(c){
+    var cfg=configMap[c.id]||{circuito_b:true,bot_whatsapp:'asistente_ia',bot_plan:'basico',voz_activa:false};
+    var cfgId=configMap[c.id]?configMap[c.id].id:null;
+    var planActual=cfg.bot_plan||'basico';
+    var planInfo=PLANES[planActual]||PLANES.basico;
+    var activo=cfg.circuito_b!==false;
     return '<div class="card" style="margin-bottom:14px">'
-      + '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'
-      + '<div style="width:40px;height:40px;border-radius:var(--r);background:var(--al);display:flex;align-items:center;justify-content:center;font-size:18px">' + (c.emoji || '🏪') + '</div>'
-      + '<div style="flex:1"><div style="font-weight:600;font-size:14px">' + c.nombre + '</div>'
-      + '<div style="font-size:11px;color:var(--tx3)">' + c.code + ' · ' + (c.ciudad || '') + '</div></div>'
-      + '<span class="badge ' + planInfo.badge + '">' + planInfo.label + '</span>'
-      + '</div>'
-      + '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px">'
-      + '<div><div style="font-size:13px;font-weight:600">Comercio activo</div>'
-      + '<div style="font-size:11px;color:var(--tx3);margin-top:2px">Habilita el panel y las funciones para este comercio</div></div>'
-      + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer">'
-      + '<input type="checkbox" id="act-' + c.id + '"' + (activo ? ' checked' : '') + ' style="width:auto">'
-      + '<span style="font-size:12px" id="act-lbl-' + c.id + '">' + (activo ? 'Activo' : 'Inactivo') + '</span>'
-      + '</label></div>'
-      + '<div style="margin-bottom:12px">'
-      + '<div style="font-size:11px;color:var(--tx2);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Plan contratado</div>'
-      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
-      + Object.entries(PLANES).map(function(entry) {
-          var key = entry[0]; var p = entry[1];
-          return '<label style="cursor:pointer;border:1.5px solid '+(planActual===key?'var(--ac)':'var(--bd)')+';border-radius:var(--r);padding:10px;background:'+(planActual===key?'var(--al)':'var(--bg)')+';transition:all .15s" id="plan-lbl-'+c.id+'-'+key+'">'
-            + '<input type="radio" name="plan-'+c.id+'" value="'+key+'" '+(planActual===key?'checked':'')+' style="width:auto;margin-bottom:4px" onchange="actualizarPlan(\''+c.id+'\',\''+key+'\')">'
-            + '<div style="font-size:12px;font-weight:600;margin-top:4px">'+p.label+'</div>'
-            + '<div style="font-size:10px;color:var(--tx2);line-height:1.4;margin-top:2px">'+p.desc+'</div>'
-            + '</label>';
-        }).join('')
-      + '</div></div>'
-      + '<div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px">'
-      + '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px">'
-      + '<input type="checkbox" id="voz-' + c.id + '"' + (cfg.voz_activa ? ' checked' : '') + (planActual === 'basico' ? ' disabled' : '') + ' style="width:auto">'
-      + '<span>🔊 Voz activa</span>'
-      + '</label>'
-      + '<span style="font-size:11px;color:var(--tx3);flex:1" id="voz-desc-' + c.id + '">'
-      + (planActual === 'premium' ? '— Voz ElevenLabs (premium)' : planActual === 'plus' ? '— Voz robótica' : '— No disponible en plan Básico')
-      + '</span>'
-      + '</div>'
-      + '<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId || '') + '\')">Guardar configuración</button>'
-      + '</div>';
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">'
+      +'<div style="width:40px;height:40px;border-radius:var(--r);background:var(--al);display:flex;align-items:center;justify-content:center;font-size:18px">'+(c.emoji||'🏪')+'</div>'
+      +'<div style="flex:1"><div style="font-weight:600;font-size:14px">'+c.nombre+'</div>'
+      +'<div style="font-size:11px;color:var(--tx3)">'+c.code+' - '+(c.ciudad||'')+'</div></div>'
+      +'<span class="badge '+planInfo.badge+'">'+planInfo.label+'</span>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px">'
+      +'<div><div style="font-size:13px;font-weight:600">Comercio activo</div>'
+      +'<div style="font-size:11px;color:var(--tx3);margin-top:2px">Habilita el panel y las funciones para este comercio</div></div>'
+      +'<label style="display:flex;align-items:center;gap:6px;cursor:pointer">'
+      +'<input type="checkbox" id="act-'+c.id+'"'+(activo?' checked':'')+' style="width:auto">'
+      +'<span style="font-size:12px" id="act-lbl-'+c.id+'">'+(activo?'Activo':'Inactivo')+'</span>'
+      +'</label></div>'
+      +'<div style="margin-bottom:12px">'
+      +'<div style="font-size:11px;color:var(--tx2);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Plan contratado</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
+      +Object.entries(PLANES).map(function(entry){
+        var key=entry[0];var p=entry[1];
+        return '<label style="cursor:pointer;border:1.5px solid '+(planActual===key?'var(--ac)':'var(--bd)')+';border-radius:var(--r);padding:10px;background:'+(planActual===key?'var(--al)':'var(--bg)')+';transition:all .15s" id="plan-lbl-'+c.id+'-'+key+'">'
+          +'<input type="radio" name="plan-'+c.id+'" value="'+key+'" '+(planActual===key?'checked':'')+' style="width:auto;margin-bottom:4px" onchange="actualizarPlan(\''+c.id+'\',\''+key+'\')">'
+          +'<div style="font-size:12px;font-weight:600;margin-top:4px">'+p.label+'</div>'
+          +'<div style="font-size:10px;color:var(--tx2);line-height:1.4;margin-top:2px">'+p.desc+'</div>'
+          +'</label>';
+      }).join('')
+      +'</div></div>'
+      +'<div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg2);border-radius:var(--r);margin-bottom:12px">'
+      +'<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px">'
+      +'<input type="checkbox" id="voz-'+c.id+'"'+(cfg.voz_activa?' checked':'')+(planActual==='basico'?' disabled':'')+' style="width:auto">'
+      +'<span>Voz activa</span>'
+      +'</label>'
+      +'<span style="font-size:11px;color:var(--tx3);flex:1" id="voz-desc-'+c.id+'">'
+      +(planActual==='premium'?'- Voz ElevenLabs (premium)':planActual==='plus'?'- Voz robotica':'- No disponible en plan Basico')
+      +'</span>'
+      +'</div>'
+      +'<button class="btn btnp btns" onclick="guardarCircuito(\'' + c.id + '\',\'' + (cfgId||'') + '\')" >Guardar configuracion</button>'
+      +'</div>';
   }).join('');
-
-  allClientes.forEach(function(c) {
-    var cb = document.getElementById('act-' + c.id);
-    if (cb) cb.addEventListener('change', function() {
-      document.getElementById('act-lbl-' + c.id).textContent = this.checked ? 'Activo' : 'Inactivo';
-    });
+  allClientes.forEach(function(c){
+    var cb=document.getElementById('act-'+c.id);
+    if(cb)cb.addEventListener('change',function(){document.getElementById('act-lbl-'+c.id).textContent=this.checked?'Activo':'Inactivo';});
   });
 }
 
-function actualizarPlan(clienteId, plan) {
-  Object.keys(PLANES).forEach(function(key) {
-    var lbl = document.getElementById('plan-lbl-' + clienteId + '-' + key);
-    if (lbl) { lbl.style.borderColor = key === plan ? 'var(--ac)' : 'var(--bd)'; lbl.style.background = key === plan ? 'var(--al)' : 'var(--bg)'; }
+function actualizarPlan(clienteId,plan){
+  Object.keys(PLANES).forEach(function(key){
+    var lbl=document.getElementById('plan-lbl-'+clienteId+'-'+key);
+    if(lbl){lbl.style.borderColor=key===plan?'var(--ac)':'var(--bd)';lbl.style.background=key===plan?'var(--al)':'var(--bg)';}
   });
-  var vozDesc = document.getElementById('voz-desc-' + clienteId);
-  if (vozDesc) { vozDesc.textContent = plan === 'premium' ? '— Voz ElevenLabs (premium)' : plan === 'plus' ? '— Voz robótica' : '— No disponible en plan Básico'; }
-  var vozCb = document.getElementById('voz-' + clienteId);
-  if (vozCb) { vozCb.disabled = plan === 'basico'; if (plan === 'basico') vozCb.checked = false; }
+  var vozDesc=document.getElementById('voz-desc-'+clienteId);
+  if(vozDesc){vozDesc.textContent=plan==='premium'?'- Voz ElevenLabs (premium)':plan==='plus'?'- Voz robotica':'- No disponible en plan Basico';}
+  var vozCb=document.getElementById('voz-'+clienteId);
+  if(vozCb){vozCb.disabled=plan==='basico';if(plan==='basico')vozCb.checked=false;}
 }
 
-async function guardarCircuito(clienteId, configId) {
-  var activo = document.getElementById('act-' + clienteId).checked;
-  var planRadio = document.querySelector('input[name="plan-' + clienteId + '"]:checked');
-  var plan = planRadio ? planRadio.value : 'basico';
-  var vozActiva = document.getElementById('voz-' + clienteId) ? document.getElementById('voz-' + clienteId).checked : false;
-  if (plan === 'basico') vozActiva = false;
-
-  var datos = {
-    comercio_id: clienteId,
-    circuito_a: activo,
-    circuito_b: activo,
-    bot_whatsapp: 'asistente_ia',
-    bot_plan: plan,
-    voz_activa: vozActiva
-  };
-
+async function guardarCircuito(clienteId,configId){
+  var activo=document.getElementById('act-'+clienteId).checked;
+  var planRadio=document.querySelector('input[name="plan-'+clienteId+'"]:checked');
+  var plan=planRadio?planRadio.value:'basico';
+  var vozActiva=document.getElementById('voz-'+clienteId)?document.getElementById('voz-'+clienteId).checked:false;
+  if(plan==='basico')vozActiva=false;
+  var datos={comercio_id:clienteId,circuito_a:activo,circuito_b:activo,bot_whatsapp:'asistente_ia',bot_plan:plan,voz_activa:vozActiva};
   var res;
-  if (configId) { res = await sb.from('sq_config_comercio').update(datos).eq('id', configId); }
-  else { res = await sb.from('sq_config_comercio').insert(datos); }
-
-  if (res.error) { toast('Error al guardar: ' + res.error.message); return; }
-
-  if (activo) {
-    var cfg = await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id', clienteId).single();
-    if (!cfg.data || !cfg.data.bot_cliente_id) {
+  if(configId){res=await sb.from('sq_config_comercio').update(datos).eq('id',configId);}
+  else{res=await sb.from('sq_config_comercio').insert(datos);}
+  if(res.error){toast('Error al guardar: '+res.error.message);return;}
+  if(activo){
+    var cfg=await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id',clienteId).single();
+    if(!cfg.data||!cfg.data.bot_cliente_id){
       toast('Creando cliente en el bot...');
-      var fnRes = await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-crear-bot-cliente', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SB_KEY },
-        body: JSON.stringify({ comercio_id: clienteId, bot_tipo: 'asistente_ia', bot_plan: plan })
-      });
-      var fnData = await fnRes.json();
-      if (fnData.error) { toast('Error creando bot: ' + fnData.error); return; }
-      toast('Configuración guardada y bot creado');
-    } else { toast('Configuración guardada'); }
-  } else { toast('Configuración guardada'); }
-
+      var fnRes=await fetch('https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/sq-crear-bot-cliente',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY},body:JSON.stringify({comercio_id:clienteId,bot_tipo:'asistente_ia',bot_plan:plan})});
+      var fnData=await fnRes.json();
+      if(fnData.error){toast('Error creando bot: '+fnData.error);return;}
+      toast('Configuracion guardada y bot creado');
+    } else {toast('Configuracion guardada');}
+  } else {toast('Configuracion guardada');}
   cargarCircuitos();
 }
-
 
 var savedUser=sessionStorage.getItem('sq_user');
 if(savedUser){try{currentUser=JSON.parse(savedUser);iniciarApp();}catch(e){sessionStorage.removeItem('sq_user');}}
