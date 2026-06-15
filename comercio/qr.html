@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SatisfactQ</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3a5f,#2563eb);color:white}
+.wrap{text-align:center;padding:40px 20px}
+.logo{font-size:48px;margin-bottom:16px}
+h1{font-size:22px;font-weight:700;margin-bottom:8px}
+p{font-size:14px;opacity:.8;margin-bottom:24px}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:16px;margin-top:16px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">📊</div>
+  <h1>SatisfactQ</h1>
+  <p id="msg">Redirigiendo...</p>
+  <div class="spinner" id="spinner"></div>
+  <div class="error" id="error" style="display:none"></div>
+</div>
+<script>
+var SB_URL="https://tofnetwtlcwsaiieazsa.supabase.co";
+var SB_KEY="sb_publishable_i7kbu8TUS9Uqja-CSlSEgA_9GV4VQ70";
+var sb=supabase.createClient(SB_URL,SB_KEY);
+
+async function redirigir(){
+  var params=new URLSearchParams(window.location.search);
+  var cliente=params.get('cliente');
+  if(!cliente){mostrarError('No se especificó el comercio.');return;}
+
+  // Buscar el cliente por code o slug
+  var r=await sb.from('sq_clientes').select('id,code,nombre,slug').or('code.eq.'+cliente+',slug.eq.'+cliente).single();
+  if(r.error||!r.data){mostrarError('Comercio no encontrado.');return;}
+
+  var comercio=r.data;
+  document.getElementById('msg').textContent='Bienvenido a '+comercio.nombre;
+
+  // Buscar configuración del plan
+  var cfg=await sb.from('sq_config_comercio').select('bot_plan,bot_cliente_id,circuito_b').eq('comercio_id',comercio.id).single();
+
+  var plan=(cfg.data&&cfg.data.bot_plan)||'basico';
+  var botId=(cfg.data&&cfg.data.bot_cliente_id)||null;
+  var activo=(cfg.data&&cfg.data.circuito_b!==false);
+
+  if(activo&&(plan==='plus'||plan==='premium')&&botId){
+    // Redirigir al chatbot
+    var urlBot='https://www.miasistenteia.com.ar/widget?clienteId='+botId+'&comercio='+encodeURIComponent(comercio.nombre);
+    window.location.href=urlBot;
+  } else {
+    // Redirigir a la encuesta
+    var slug=comercio.slug||comercio.code;
+    var urlEncuesta='https://menteactiva.com.ar/satisfactq-encuesta/?cliente='+slug;
+    window.location.href=urlEncuesta;
+  }
+}
+
+function mostrarError(msg){
+  document.getElementById('spinner').style.display='none';
+  document.getElementById('msg').textContent='Ocurrió un problema';
+  var e=document.getElementById('error');e.textContent=msg;e.style.display='block';
+}
+
+redirigir();
+</script>
+</body>
+</html>
