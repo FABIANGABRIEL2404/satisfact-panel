@@ -788,7 +788,7 @@ async function guardarUsuario(){
   var comercio=document.getElementById('usr-comercio').value||null;
   if(!nombre||!email||!pass){toast('Completa todos los campos');return;}
   console.log('INSERT datos:',nombre,email,pass,rol,comercio);var res=await sb.from('sq_usuarios').insert({nombre:nombre,email:email,password_hash:pass,rol:rol,comercio_code:comercio,activo:true});console.log('INSERT res:',JSON.stringify(res));
-  if(res.error){toast('Error al crear usuario: '+res.error.message);return;}console.log('ROL CHECK:',rol,rol==='comercio');
+  console.log('ANTES IF ERROR');if(res.error){toast('Error al crear usuario: '+res.error.message);return;}console.log('DESPUES IF ERROR, rol:',JSON.stringify(rol));if(rol==='comercio'){console.log('DENTRO COMERCIO');}
   if(rol==='comercio'){
     var cNombre=nombre;
     if(comercio){
