@@ -1012,7 +1012,7 @@ function renderQR() {
   const slug = currentComercio.slug || currentUser.comercio_code;
   urlQROperario = 'https://satisfactq.menteactiva.com.ar/carga/' + slug;
   const botId = currentComercio.bot_cliente_id || '';
-  urlQRCliente = botId ? 'https://www.miasistenteia.com.ar/widget?clienteId=' + botId + '&comercio=' + encodeURIComponent(currentComercio.nombre || slug) : 'https://menteactiva.com.ar/satisfactq-encuesta/?cliente=' + slug;
+ urlQRCliente = 'https://satisfact-panel.vercel.app/comercio/qr.html?cliente=' + slug;
   document.getElementById('qr-url-operario').textContent = urlQROperario;
   document.getElementById('qr-url-cliente').textContent = urlQRCliente;
   const wrapOp = document.getElementById('qr-operario');
