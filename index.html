@@ -312,6 +312,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
         <span class="tag" data-lang="Portugues" onclick="this.classList.toggle('on')">Portugues</span>
       </div>
     </div>
+    <div class="divider"></div>
+    <div id="acceso-wrap">
+      <div style="font-size:12px;font-weight:600;color:var(--ad);margin-bottom:8px">Crear acceso al panel (opcional)</div>
+      <div class="g2" style="margin-bottom:0">
+        <div class="fg"><label class="fl">Email de acceso</label><input id="cli-acceso-email" type="email" placeholder="email@comercio.com"></div>
+        <div class="fg"><label class="fl">Contraseña</label><input id="cli-acceso-pass" type="text" placeholder="Contraseña inicial"></div>
+      </div>
+    </div>
     <div class="row" style="justify-content:flex-end;gap:8px">
       <button class="btn" onclick="document.getElementById('modal-cliente').classList.remove('open')">Cancelar</button>
       <button class="btn btnp" onclick="guardarCliente()">Guardar</button>
