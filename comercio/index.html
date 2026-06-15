@@ -750,6 +750,8 @@ async function guardarPassword() {
   if (nueva.length < 6) { errEl.textContent = 'La nueva contraseña debe tener al menos 6 caracteres'; errEl.style.display = 'block'; return; }
   const { error } = await sb.from('sq_usuarios').update({ password_hash: nueva }).eq('id', currentUser.id);
   if (error) { errEl.textContent = 'Error al guardar: ' + error.message; errEl.style.display = 'block'; return; }
+  const { error: authError } = await sb.auth.updateUser({ password: nueva });
+  if (authError) { errEl.textContent = 'Error al actualizar auth: ' + authError.message; errEl.style.display = 'block'; return; }
   currentUser.password_hash = nueva; cerrarModal('modal-password'); showToast('Contraseña actualizada correctamente');
 }
 
