@@ -597,7 +597,8 @@ async function guardarCliente(){
     var accEmail=document.getElementById('cli-acceso-email').value.trim();
     var accPass=document.getElementById('cli-acceso-pass').value.trim();
     if(accEmail&&accPass){
-      var resU=await sb.from('sq_usuarios').insert({nombre:nombre,email:accEmail,password_hash:accPass,rol:'comercio',comercio_code:obj.code,activo:true});
+      var accNombre=document.getElementById('cli-acceso-nombre').value.trim()||nombre;
+var resU=await sb.from('sq_usuarios').insert({nombre:accNombre,email:accEmail,password_hash:accPass,rol:'comercio',comercio_code:obj.code,activo:true});
       if(resU.error){toast('Cliente creado pero error al crear usuario: '+resU.error.message);}
       else{
         try{
