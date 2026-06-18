@@ -1082,8 +1082,8 @@ if (cfg?.sugerencias) window._sqSugerencias = cfg.sugerencias;
 function renderMiAsistente() {
   const c = document.getElementById('asistente-content');
   if (!botCliente) { c.innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>No se pudo cargar el asistente.</p></div>'; return; }
+  const sugerencias = (window._sqSugerencias && window._sqSugerencias.length) ? window._sqSugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
   c.innerHTML = `
-  const sugerencias = (botCliente && window._sqSugerencias) ? window._sqSugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     <div class="card"><h3>⚙️ Configuración del asistente</h3>
       <div class="form-row">
         <div class="form-group"><label>Nombre del asistente</label><input type="text" id="bot-nombre" value="${botCliente.nombre || ''}" placeholder="Ej: Sofía, Alex..."></div>
