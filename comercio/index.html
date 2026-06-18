@@ -1082,6 +1082,7 @@ function renderMiAsistente() {
   const c = document.getElementById('asistente-content');
   if (!botCliente) { c.innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>No se pudo cargar el asistente.</p></div>'; return; }
   c.innerHTML = `
+  const sugerencias = (cfg?.data?.sugerencias) || ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     <div class="card"><h3>⚙️ Configuración del asistente</h3>
       <div class="form-row">
         <div class="form-group"><label>Nombre del asistente</label><input type="text" id="bot-nombre" value="${botCliente.nombre || ''}" placeholder="Ej: Sofía, Alex..."></div>
@@ -1090,6 +1091,13 @@ function renderMiAsistente() {
       <div class="form-group"><label>Personalidad y tono</label><textarea id="bot-personalidad" rows="3" placeholder="Describí cómo debe hablar el asistente...">${botCliente.descripcion || ''}</textarea></div>
       <div class="form-group"><label>Web del negocio</label><input type="url" id="bot-web" value="${botCliente.web || ''}" placeholder="https://..."></div>
       <button class="btn btn-primary" onclick="guardarConfigBot()">💾 Guardar configuración</button>
+    </div>
+    <div class="card"><h3>💬 Sugerencias del chat</h3>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Estas son las opciones que ve el cliente al abrir el chat.</p>
+      <div class="form-group"><label>Sugerencia 1</label><input type="text" id="sug-1" value="${sugerencias[0]||''}"></div>
+      <div class="form-group"><label>Sugerencia 2</label><input type="text" id="sug-2" value="${sugerencias[1]||''}"></div>
+      <div class="form-group"><label>Sugerencia 3</label><input type="text" id="sug-3" value="${sugerencias[2]||''}"></div>
+      <button class="btn btn-primary" onclick="guardarSugerencias()">💾 Guardar sugerencias</button>
     </div>
     <div class="card"><h3>🔍 Fuentes de información</h3>
       <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Seleccioná qué fuentes usa el asistente y en qué orden las consulta.</p>
