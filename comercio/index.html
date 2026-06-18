@@ -1067,7 +1067,8 @@ let botCliente = null, botKB = [], botFuentes = [], editKBId = null;
 
 async function cargarMiAsistente() {
   if (!currentComercio) return;
-  const { data: cfg } = await sb.from('sq_config_comercio').select('bot_cliente_id').eq('comercio_id', currentComercio.id).single();
+  const { data: cfg } = await sb.from('sq_config_comercio').select('bot_cliente_id,sugerencias').eq('comercio_id', currentComercio.id).single();
+if (cfg?.sugerencias) window._sqSugerencias = cfg.sugerencias;
   if (!cfg?.bot_cliente_id) { document.getElementById('asistente-content').innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>El asistente aún no está configurado. Contactá al administrador.</p></div>'; return; }
   const [r1, r2, r3] = await Promise.all([
     sbAsis.from('asis_clientes').select('*').eq('id', cfg.bot_cliente_id).single(),
@@ -1082,7 +1083,7 @@ function renderMiAsistente() {
   const c = document.getElementById('asistente-content');
   if (!botCliente) { c.innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>No se pudo cargar el asistente.</p></div>'; return; }
   c.innerHTML = `
-  const sugerencias = (cfg?.data?.sugerencias) || ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
+  const sugerencias = (botCliente && window._sqSugerencias) ? window._sqSugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     <div class="card"><h3>⚙️ Configuración del asistente</h3>
       <div class="form-row">
         <div class="form-group"><label>Nombre del asistente</label><input type="text" id="bot-nombre" value="${botCliente.nombre || ''}" placeholder="Ej: Sofía, Alex..."></div>
