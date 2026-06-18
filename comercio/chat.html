@@ -393,20 +393,45 @@
     document.getElementById('headerName').textContent   = nombre;
     document.getElementById('headerSub').textContent    = asistente;
     document.title = nombre;
-   const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
+
+    const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
+
     $messages.innerHTML = `
-      <div class="welcome">
+      <div class="welcome" id="welcome-screen">
         <div class="welcome-icon">${emoji}</div>
         <div class="welcome-title">¡Hola! Soy ${asistente}</div>
         <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` · ${rubro}` : ''}.<br>¿En qué puedo ayudarte hoy?</div>
+        <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;margin:16px 0;text-align:left">
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#475569">Para darte un mejor servicio (opcional)</div>
+          <input type="text" id="guest-nombre" placeholder="Tu nombre" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:8px;outline:none">
+          <input type="tel" id="guest-tel" placeholder="Tu teléfono" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;outline:none">
+        </div>
         <div class="suggestions">
           ${sugs.map(s => `<button class="suggestion">${s}</button>`).join('')}
         </div>
+        <button style="width:100%;margin-top:12px;padding:12px;background:#6c63ff;color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="iniciarChat()">Comenzar →</button>
       </div>
     `;
-    $messages.querySelectorAll('.suggestion').forEach(btn => {
-      btn.addEventListener('click', () => sendMessage(btn.textContent));
+    document.querySelectorAll('.suggestion').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('guest-nombre') && guardarDatosGuest();
+        sendMessage(btn.textContent);
+      });
     });
+  }
+
+  function guardarDatosGuest() {
+    const nombre = document.getElementById('guest-nombre')?.value.trim();
+    const tel = document.getElementById('guest-tel')?.value.trim();
+    if (nombre) window._guestNombre = nombre;
+    if (tel) window._guestTel = tel;
+  }
+
+  function iniciarChat() {
+    guardarDatosGuest();
+    const welcome = document.getElementById('welcome-screen');
+    if (welcome) welcome.remove();
+    setTimeout(() => $input.focus(), 200);
   }
 
   function appendMsg(role, text) {
