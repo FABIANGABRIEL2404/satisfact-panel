@@ -1072,7 +1072,7 @@ if (cfg?.sugerencias) window._sqSugerencias = cfg.sugerencias;
   if (!cfg?.bot_cliente_id) { document.getElementById('asistente-content').innerHTML = '<div class="empty"><div class="empty-icon">🤖</div><p>El asistente aún no está configurado. Contactá al administrador.</p></div>'; return; }
   const [r1, r2, r3] = await Promise.all([
     sbAsis.from('asis_clientes').select('*').eq('id', cfg.bot_cliente_id).single(),
-    sbAsis.from('asis_base_conocimiento').select('*').eq('cliente_id', cfg.bot_cliente_id).eq('activo', true).order('created_at', { ascending: false }),
+   sbAsis.from('asis_base_conocimiento').select('*').eq('cliente_id', cfg.bot_cliente_id).eq('activo', true),se_conocimiento').select('*').eq('cliente_id', cfg.bot_cliente_id).eq('activo', true).order('created_at', { ascending: false }),
     sbAsis.from('asis_fuentes_config').select('*').eq('cliente_id', cfg.bot_cliente_id).order('orden', { ascending: true })
   ]);
   botCliente = r1.data; botKB = r2.data || []; botFuentes = r3.data || [];
