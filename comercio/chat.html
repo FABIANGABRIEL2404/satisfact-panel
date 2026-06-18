@@ -394,8 +394,6 @@
     document.getElementById('headerSub').textContent    = asistente;
     document.title = nombre;
 
-    const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
-
     $messages.innerHTML = `
       <div class="welcome" id="welcome-screen">
         <div class="welcome-icon">${emoji}</div>
@@ -406,18 +404,34 @@
           <input type="text" id="guest-nombre" placeholder="Tu nombre" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:8px;outline:none">
           <input type="tel" id="guest-tel" placeholder="Tu teléfono" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;outline:none">
         </div>
+        <button style="width:100%;padding:12px;background:#6c63ff;color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="mostrarSugerencias()">Continuar →</button>
+      </div>
+    `;
+  }
+
+  function mostrarSugerencias() {
+    guardarDatosGuest();
+    const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
+    const welcome = document.getElementById('welcome-screen');
+    if (welcome) {
+      welcome.innerHTML = `
+        <div style="font-size:14px;color:#475569;margin-bottom:12px">¿En qué puedo ayudarte?</div>
         <div class="suggestions">
           ${sugs.map(s => `<button class="suggestion">${s}</button>`).join('')}
         </div>
-        <button style="width:100%;margin-top:12px;padding:12px;background:#6c63ff;color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="iniciarChat()">Comenzar →</button>
-      </div>
-    `;
-    document.querySelectorAll('.suggestion').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.getElementById('guest-nombre') && guardarDatosGuest();
-        sendMessage(btn.textContent);
+      `;
+      welcome.querySelectorAll('.suggestion').forEach(btn => {
+        btn.addEventListener('click', () => sendMessage(btn.textContent));
       });
-    });
+    }
+    setTimeout(() => $input.focus(), 200);
+  }
+
+  function guardarDatosGuest() {
+    const nombre = document.getElementById('guest-nombre')?.value.trim();
+    const tel = document.getElementById('guest-tel')?.value.trim();
+    if (nombre) window._guestNombre = nombre;
+    if (tel) window._guestTel = tel;
   }
 
   function guardarDatosGuest() {
