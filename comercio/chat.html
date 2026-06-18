@@ -393,15 +393,14 @@
     document.getElementById('headerName').textContent   = nombre;
     document.getElementById('headerSub').textContent    = asistente;
     document.title = nombre;
+   const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     $messages.innerHTML = `
       <div class="welcome">
         <div class="welcome-icon">${emoji}</div>
         <div class="welcome-title">¡Hola! Soy ${asistente}</div>
         <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` · ${rubro}` : ''}.<br>¿En qué puedo ayudarte hoy?</div>
         <div class="suggestions">
-          <button class="suggestion">¿Cuáles son sus horarios de atención?</button>
-          <button class="suggestion">¿Qué servicios ofrecen?</button>
-          <button class="suggestion">¿Cómo puedo contactarlos?</button>
+          ${sugs.map(s => `<button class="suggestion">${s}</button>`).join('')}
         </div>
       </div>
     `;
