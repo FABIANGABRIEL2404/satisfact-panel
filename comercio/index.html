@@ -1136,7 +1136,21 @@ async function guardarConfigBot() {
   if (error) { showToast('Error al guardar: ' + error.message, true); return; }
   Object.assign(botCliente, updates); showToast('Configuración guardada correctamente');
 }
-
+async function guardarSugerencias() {
+  if (!currentComercio) return;
+  const sugerencias = [
+    document.getElementById('sug-1').value.trim(),
+    document.getElementById('sug-2').value.trim(),
+    document.getElementById('sug-3').value.trim()
+  ].filter(Boolean);
+  if (sugerencias.length === 0) { showToast('Ingresá al menos una sugerencia', true); return; }
+  const { data: cfg } = await sb.from('sq_config_comercio').select('id').eq('comercio_id', currentComercio.id).single();
+  if (!cfg) { showToast('No hay configuración guardada', true); return; }
+  const { error } = await sb.from('sq_config_comercio').update({ sugerencias }).eq('id', cfg.id);
+  if (error) { showToast('Error al guardar: ' + error.message, true); return; }
+  showToast('Sugerencias guardadas correctamente');
+}
+  
 async function guardarFuentesBot() {
   if (!botCliente) return;
   const fuentes = ['kb', 'web', 'internet'].map(f => ({ cliente_id: botCliente.id, fuente: f, activa: document.getElementById(`bf-activa-${f}`)?.checked || false, orden: parseInt(document.getElementById(`bf-orden-${f}`)?.value || '1') }));
