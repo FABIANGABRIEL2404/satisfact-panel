@@ -279,7 +279,7 @@
     comercio = d1[0];
 
     const r2 = await fetch(
-      `${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${comercio.id}&select=bot_cliente_id,voz_activa,bot_plan,bot_whatsapp&limit=1`,
+      `${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${comercio.id}&select=bot_cliente_id,voz_activa,bot_plan,bot_whatsapp,sugerencias&limit=1`,
       { headers: hdr }
     );
     const d2 = await r2.json();
