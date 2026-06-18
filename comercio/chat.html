@@ -433,14 +433,9 @@
     if (nombre) window._guestNombre = nombre;
     if (tel) window._guestTel = tel;
   }
-
-  function guardarDatosGuest() {
-    const nombre = document.getElementById('guest-nombre')?.value.trim();
-    const tel = document.getElementById('guest-tel')?.value.trim();
-    if (nombre) window._guestNombre = nombre;
-    if (tel) window._guestTel = tel;
-  }
-
+window.mostrarSugerencias = mostrarSugerencias;
+window.guardarDatosGuest = guardarDatosGuest;
+  
   function iniciarChat() {
     guardarDatosGuest();
     const welcome = document.getElementById('welcome-screen');
