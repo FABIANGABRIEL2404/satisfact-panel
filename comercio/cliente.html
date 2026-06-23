@@ -223,7 +223,58 @@ async function continuar() {
         medio_pago: S.iaData?.medio_pago || null
       })
     });
-
+// 4. Upsert perfil cliente
+if (S.venta.telefono) {
+  const ahora = new Date().toISOString();
+  const entradaCompra = {
+    fecha: ahora,
+    tipo: 'con_facturacion',
+    total: S.iaData?.total_compra || 0,
+    medio_pago: S.iaData?.medio_pago || null,
+    productos: S.iaData?.productos_comprados || []
+  };
+  const hdr = {
+    'Authorization': `Bearer ${SB_KEY}`,
+    'apikey': SB_KEY,
+    'Content-Type': 'application/json'
+  };
+  const buscar = await fetch(
+    `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(S.venta.telefono)}&comercio_id=eq.${S.venta.comercio_id}&select=id,historial_compras,medios_pago_usados,productos_frecuentes,ticket_promedio`,
+    { headers: hdr }
+  );
+  const ex = await buscar.json();
+  if (ex?.length) {
+    const perfil = ex[0];
+    const hist = [...(perfil.historial_compras || []), entradaCompra];
+    const medios = perfil.medios_pago_usados || [];
+    if (S.iaData?.medio_pago && !medios.includes(S.iaData.medio_pago)) medios.push(S.iaData.medio_pago);
+    const prods = perfil.productos_frecuentes || [];
+    if (S.iaData?.productos_comprados) S.iaData.productos_comprados.forEach(p => { if (p.descripcion && !prods.includes(p.descripcion)) prods.push(p.descripcion); });
+    const totales = hist.map(h => h.total || 0).filter(t => t > 0);
+    const ticketPromedio = totales.length > 0 ? (totales.reduce((a, b) => a + b, 0) / totales.length).toFixed(2) : null;
+    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${perfil.id}`, {
+      method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ historial_compras: hist, medios_pago_usados: medios, productos_frecuentes: prods, ticket_promedio: ticketPromedio, ultima_interaccion: ahora, updated_at: ahora })
+    });
+  } else {
+    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
+      method: 'POST', headers: { ...hdr, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        telefono: S.venta.telefono,
+        comercio_id: S.venta.comercio_id,
+        apellido: S.venta.apellido,
+        nombre: S.venta.nombre,
+        etiqueta: 'nuevo',
+        historial_compras: [entradaCompra],
+        medios_pago_usados: S.iaData?.medio_pago ? [S.iaData.medio_pago] : [],
+        productos_frecuentes: S.iaData?.productos_comprados ? S.iaData.productos_comprados.map(p => p.descripcion).filter(Boolean) : [],
+        ticket_promedio: S.iaData?.total_compra ? S.iaData.total_compra.toFixed(2) : null,
+        ultima_interaccion: ahora
+      })
+    });
+  }
+}
+    
     // 4. Leer plan del comercio y redirigir
     const resConfig = await fetch(`${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${S.venta.comercio_id}&select=bot_plan`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
