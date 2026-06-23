@@ -277,7 +277,7 @@ if (S.venta.telefono) {
     });
   }
 }
-    
+    alert('telefono venta: ' + S.venta.telefono);
     // 4. Leer plan del comercio y redirigir
     const resConfig = await fetch(`${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${S.venta.comercio_id}&select=bot_plan`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
