@@ -813,9 +813,10 @@ function renderVentas(lista) {
 
 function exportVentasCSV() {
   if (!allVentas.length) { showToast('No hay ventas para exportar', true); return; }
+  const SEP = ';';
   const cols = ['Fecha','Apellido','Nombre','Telefono','Direccion','Localidad','Total','Medio pago','Cuotas','Bot WA','WA enviado'];
-  const rows = [cols.join(','), ...allVentas.map(v => [v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '', v.apellido || '', v.nombre || '', v.telefono || '', v.direccion || '', v.localidad || '', v.total_compra || '', v.medio_pago || '', v.cuotas || '', v.whatsapp_bot || '', v.whatsapp_enviado ? 'Si' : 'No'].map(c => '"' + String(c).replace(/"/g, '""') + '"').join(','))];
-  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.join('\n')); a.download = 'ventas.csv'; a.click(); showToast('CSV descargado');
+  const rows = [cols.join(SEP), ...allVentas.map(v => [v.created_at ? new Date(v.created_at).toLocaleDateString('es-AR') : '', v.apellido || '', v.nombre || '', v.telefono || '', v.direccion || '', v.localidad || '', v.total_compra || '', v.medio_pago || '', v.cuotas || '', v.whatsapp_bot || '', v.whatsapp_enviado ? 'Si' : 'No'].map(c => '"' + String(c).replace(/"/g, '""') + '"').join(SEP))];
+  const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(rows.join('\n')); a.download = 'ventas.csv'; a.click(); showToast('CSV descargado');
 }
 
 // ── CRM CLIENTES ──────────────────────────────────────────────────────────────
