@@ -71,12 +71,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="card-sub" id="card-sub">Tomá una foto o subí el archivo de tu ticket o factura para continuar.</div>
 
   <div class="upload-zone" id="drop-zone">
-    <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFile(event)">
-    <div class="upload-icon" id="up-icon">📄</div>
-    <div class="upload-text" id="up-text">Tocá para seleccionar o arrastrá el archivo</div>
-    <div class="upload-sub">JPG, PNG o PDF — hasta 10MB</div>
-    <div class="upload-filename" id="up-name"></div>
+  <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFile(event)" style="display:none">
+  <input type="file" id="camera-input" accept="image/*" capture="environment" onchange="onFile(event)" style="display:none">
+  <div class="upload-icon" id="up-icon">📄</div>
+  <div class="upload-text" id="up-text">Seleccioná cómo subir tu comprobante</div>
+  <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+    <button onclick="document.getElementById('file-input').click()" style="padding:9px 18px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">📁 Subir archivo</button>
+    <button onclick="document.getElementById('camera-input').click()" style="padding:9px 18px;border:1.5px solid var(--accent);border-radius:var(--radius-sm);background:var(--accent-light);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">📷 Tomar foto</button>
   </div>
+  <div class="upload-sub" style="margin-top:10px">JPG, PNG o PDF — hasta 10MB</div>
+  <div class="upload-filename" id="up-name"></div>
+</div>
 
   <div id="preview-container">
     <img id="preview-img" alt="Vista previa">
