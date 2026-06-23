@@ -537,12 +537,12 @@ async function cargarTodo() {
   const code = currentUser.comercio_code;
   if (!code) return;
   cargarVentas();
-  const [r1, r2, r3] = await Promise.all([
+  const [r1, r2] = await Promise.all([
     sb.from('sq_respuestas').select('*').eq('comercio_code', code).order('created_at', { ascending: false }),
     sb.from('sq_formularios').select('*').eq('comercio_code', code).limit(1).single()
   ]);
   allRespuestas = r1.data || [];
-  currentFormulario = r3.data || null;
+  currentFormulario = r2.data || null;
   renderDashboard();
   if (currentFormulario) cargarFormularioEditor();
 }
