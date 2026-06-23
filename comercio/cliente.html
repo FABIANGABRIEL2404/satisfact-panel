@@ -261,7 +261,6 @@ if (S.venta.telefono) {
     });
    });
     alert('perfil actualizado');
-  } else { 
   } else {
     await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
       method: 'POST', headers: { ...hdr, 'Prefer': 'return=minimal' },
