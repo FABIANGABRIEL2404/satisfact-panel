@@ -6,79 +6,57 @@
 <title>Carga de venta — SatisfactQ</title>
 <style>
 :root {
-  --bg: #f8f9fa; --surface: #ffffff; --surface2: #f1f3f5;
+  --bg: #f8f9fa; --surface: #ffffff;
   --accent: #6c63ff; --accent-light: #ede9fe;
   --success: #22c55e; --success-light: #dcfce7;
-  --warning: #f59e0b; --danger: #ef4444;
+  --danger: #ef4444;
   --text: #1e1e2e; --text2: #6b7280; --text3: #9ca3af;
   --border: #e5e7eb; --radius: 12px; --radius-sm: 8px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
 .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
 .header-logo { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px; flex-shrink: 0; }
 .header h1 { font-size: 15px; font-weight: 600; }
 .header-sub { font-size: 13px; color: var(--text2); margin-left: 2px; }
 .btn-back { margin-left: auto; font-size: 13px; color: var(--text2); text-decoration: none; display: flex; align-items: center; gap: 4px; padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: transparent; cursor: pointer; }
-.btn-back:hover { background: var(--surface2); }
-.container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
-.steps { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; }
-.step { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--text3); white-space: nowrap; }
-.step.active { color: var(--accent); }
-.step.done { color: var(--success); }
-.step-num { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
-.step-sep { flex: 1; height: 1px; background: var(--border); min-width: 16px; max-width: 40px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; }
-.card-title { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
-.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--surface2); position: relative; }
-.upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
-.upload-zone.has-file { border-color: var(--success); background: var(--success-light); border-style: solid; }
-.upload-icon { font-size: 32px; margin-bottom: 8px; }
-.upload-text { font-size: 13px; color: var(--text2); }
-.upload-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
-.upload-filename { font-size: 13px; font-weight: 600; color: #16a34a; margin-top: 4px; }
-#file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-#preview-container { margin-top: 12px; display: none; text-align: center; }
-#preview-img { max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; }
-.ia-bar { background: #f5f3ff; border: 1px solid #c4beff; border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
-.ia-badge { background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.04em; white-space: nowrap; }
-.ia-status { font-size: 12px; color: var(--text2); flex: 1; }
-.ia-conf { font-size: 11px; font-weight: 600; white-space: nowrap; }
-.ia-conf.high { color: var(--success); } .ia-conf.med { color: var(--warning); } .ia-conf.low { color: var(--danger); }
-.field { margin-bottom: 12px; }
-.field label { display: block; font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 4px; }
-.field input, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--surface); transition: border-color 0.15s; font-family: inherit; }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
-.field input.ia-ok { background: #f0fdf4; border-color: #86efac; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.ia-tag { font-size: 10px; font-weight: 600; color: var(--success); background: var(--success-light); padding: 1px 6px; border-radius: 20px; margin-left: 4px; display: none; }
-.req { color: #ef4444; }
-.btn { padding: 10px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; width: 100%; margin-top: 6px; }
+.btn-back:hover { background: #f1f3f5; }
+
+.container { max-width: 480px; margin: 0 auto; padding: 40px 16px; }
+
+.hero { text-align: center; margin-bottom: 32px; }
+.hero-icon { font-size: 40px; margin-bottom: 12px; }
+.hero h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+.field input { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; color: var(--text); background: var(--surface); transition: border-color 0.15s; font-family: inherit; }
+.field input:focus { outline: none; border-color: var(--accent); }
+.req { color: var(--danger); }
+
+.btn { width: 100%; padding: 13px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; margin-top: 4px; }
 .btn-primary { background: var(--accent); color: white; }
 .btn-primary:hover { background: #5b52e0; }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-secondary { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
-.btn-secondary:hover { background: #e5e7eb; }
-.btn-ia { background: var(--accent-light); color: var(--accent); border: 1px solid #c4beff; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn-ia:hover { background: #ddd9fe; }
-.btn-ia:disabled { opacity: 0.5; cursor: not-allowed; }
-.spinner { width: 15px; height: 15px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; flex-shrink: 0; }
+
+.spinner { width: 16px; height: 16px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; margin-right: 8px; vertical-align: middle; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--surface2); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; }
-.review-item .label { font-size: 11px; color: var(--text3); margin-bottom: 2px; }
-.review-item .value { font-size: 14px; font-weight: 500; }
-.wa-note { font-size: 12px; color: var(--text2); display: flex; align-items: flex-start; gap: 6px; padding: 12px; background: var(--surface2); border-radius: var(--radius-sm); margin-bottom: 14px; line-height: 1.5; }
-.result-card { background: var(--success-light); border: 1px solid #86efac; border-radius: var(--radius); padding: 24px; text-align: center; display: none; }
-.result-icon { font-size: 44px; margin-bottom: 8px; }
-.result-title { font-size: 17px; font-weight: 600; color: #15803d; margin-bottom: 6px; }
-.result-sub { font-size: 13px; color: #166534; line-height: 1.5; }
-.result-actions { display: flex; gap: 8px; margin-top: 18px; }
-.btn-outline { background: transparent; border: 1.5px solid #16a34a; color: #15803d; flex: 1; }
-.btn-outline:hover { background: white; }
-.toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; color: white; z-index: 1000; transform: translateY(80px); opacity: 0; transition: all 0.3s; max-width: 320px; pointer-events: none; }
+
+.result { background: var(--success-light); border: 1px solid #86efac; border-radius: var(--radius); padding: 32px 24px; text-align: center; display: none; }
+.result-icon { font-size: 48px; margin-bottom: 12px; }
+.result-title { font-size: 18px; font-weight: 700; color: #15803d; margin-bottom: 8px; }
+.result-sub { font-size: 14px; color: #166534; line-height: 1.6; margin-bottom: 24px; }
+.btn-nueva { display: inline-block; padding: 11px 28px; background: white; border: 1.5px solid #16a34a; color: #15803d; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.btn-nueva:hover { background: #f0fdf4; }
+
+.toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; color: white; z-index: 1000; transform: translateY(80px); opacity: 0; transition: all 0.3s; pointer-events: none; }
 .toast.show { transform: translateY(0); opacity: 1; }
-.toast.success { background: #16a34a; } .toast.error { background: var(--danger); } .toast.info { background: var(--accent); }
-@media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
+.toast.success { background: #16a34a; }
+.toast.error { background: var(--danger); }
 </style>
 </head>
 <body>
@@ -86,402 +64,161 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="header">
   <div class="header-logo">SQ</div>
   <h1>Carga de venta</h1>
-  <span class="header-sub" id="header-comercio">— Circuito B</span>
-  <a href="" class="btn-back" id="btn-back">← Nueva carga</a>
+  <span class="header-sub" id="header-comercio">—</span>
+  <a href="#" class="btn-back" id="btn-nueva-carga">+ Nueva carga</a>
 </div>
 
 <div class="container">
-  <div class="steps">
-    <div class="step active" id="s1"><div class="step-num">1</div><span>Comprobante</span></div>
-    <div class="step-sep"></div>
-    <div class="step" id="s2"><div class="step-num">2</div><span>Datos cliente</span></div>
-    <div class="step-sep"></div>
-    <div class="step" id="s3"><div class="step-num">3</div><span>Confirmar</span></div>
-  </div>
 
-  <!-- PASO 1 — Subir comprobante -->
-  <div id="p1">
+  <!-- FORMULARIO -->
+  <div id="form-section">
+    <div class="hero">
+      <div class="hero-icon">🧾</div>
+      <h2>Datos del cliente</h2>
+      <p>Ingresá los datos del cliente. Le llegará un email con el link para subir su comprobante y acceder al asistente.</p>
+    </div>
+
     <div class="card">
-      <div class="card-title">📄 Subir comprobante</div>
-      <div class="upload-zone" id="drop-zone">
-        <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFile(event)">
-        <div class="upload-icon" id="up-icon">📄</div>
-        <div class="upload-text" id="up-text">Arrastrá el archivo o hacé clic para seleccionar</div>
-        <div class="upload-sub">JPG, PNG o PDF — hasta 10MB</div>
-        <div class="upload-filename" id="up-name"></div>
+      <div class="field">
+        <label>Nombre y apellido <span class="req">*</span></label>
+        <input type="text" id="f-nombre" placeholder="Juan García" autocomplete="name">
       </div>
-      <div id="preview-container"><img id="preview-img" alt="Vista previa"></div>
-      <button class="btn btn-ia" id="btn-ia" onclick="extraer()" disabled style="margin-top:12px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Extraer datos con IA
-      </button>
-      <button class="btn btn-primary" id="btn-p1" onclick="ir(2)" disabled style="margin-top:8px">Continuar →</button>
+      <div class="field">
+        <label>Teléfono / WhatsApp <span class="req">*</span></label>
+        <input type="tel" id="f-telefono" placeholder="2234567890" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" id="f-email" placeholder="juan@email.com" autocomplete="email">
+      </div>
+      <button class="btn btn-primary" id="btn-enviar" onclick="enviar()">Enviar →</button>
     </div>
   </div>
 
-  <!-- PASO 2 — Datos del cliente -->
-  <div id="p2" style="display:none">
-    <div class="card">
-      <div class="card-title">👤 Datos del cliente</div>
-      <div class="ia-bar" id="ia-bar" style="display:none">
-        <span class="ia-badge">IA</span>
-        <span class="ia-status" id="ia-status">Datos extraídos automáticamente</span>
-        <span class="ia-conf" id="ia-conf"></span>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Apellido <span class="req">*</span> <span class="ia-tag" id="t-ap">IA</span></label>
-          <input type="text" id="f-ap" placeholder="García">
-        </div>
-        <div class="field">
-          <label>Nombre <span class="req">*</span> <span class="ia-tag" id="t-nom">IA</span></label>
-          <input type="text" id="f-nom" placeholder="Juan">
-        </div>
-      </div>
-      <div class="field">
-        <label>Teléfono / WhatsApp <span class="req">*</span> <span class="ia-tag" id="t-tel">IA</span></label>
-        <input type="tel" id="f-tel" placeholder="2234567890">
-      </div>
-      <div class="field">
-        <label>Dirección <span class="ia-tag" id="t-dir">IA</span></label>
-        <input type="text" id="f-dir" placeholder="Av. Colón 1234">
-      </div>
-      <div class="field">
-        <label>Localidad <span class="ia-tag" id="t-loc">IA</span></label>
-        <input type="text" id="f-loc" placeholder="Mar del Plata">
-      </div>
-      <div style="border-top:1px solid var(--border);margin:14px 0 12px"></div>
-      <div class="card-title" style="margin-bottom:10px">🛒 Detalle de la compra</div>
-      <div class="field-row">
-        <div class="field">
-          <label>Medio de pago <span class="ia-tag" id="t-mpago">IA</span></label>
-          <input type="text" id="f-mpago" placeholder="Efectivo / Tarjeta...">
-        </div>
-        <div class="field">
-          <label>Cuotas <span class="ia-tag" id="t-cuotas">IA</span></label>
-          <input type="number" id="f-cuotas" placeholder="1" min="1">
-        </div>
-      </div>
-      <div class="field">
-        <label>Total de la compra <span class="ia-tag" id="t-total">IA</span></label>
-        <input type="number" id="f-total" placeholder="0.00" step="0.01">
-      </div>
-      <div class="field">
-        <label>Productos / servicios <span class="ia-tag" id="t-prods">IA</span></label>
-        <div id="prods-lista" style="font-size:12px;color:var(--text2);padding:8px;background:var(--surface2);border-radius:var(--radius-sm);min-height:36px;border:1px solid var(--border)">Sin productos detectados</div>
-      </div>
-      <div class="field">
-        <label>Observaciones <span class="ia-tag" id="t-obs">IA</span></label>
-        <input type="text" id="f-obs" placeholder="Descuentos, promociones, nro. pedido...">
-      </div>
-      <button class="btn btn-primary" onclick="ir(3)">Revisar y confirmar →</button>
-      <button class="btn btn-secondary" onclick="ir(1)">← Atrás</button>
-    </div>
-  </div>
-
-  <!-- PASO 3 — Confirmar -->
-  <div id="p3" style="display:none">
-    <div class="card" id="confirm-card">
-      <div class="card-title">✅ Revisión final</div>
-      <div class="review-grid">
-        <div class="review-item"><div class="label">Apellido y nombre</div><div class="value" id="r-nom">—</div></div>
-        <div class="review-item"><div class="label">Teléfono</div><div class="value" id="r-tel">—</div></div>
-        <div class="review-item"><div class="label">Dirección</div><div class="value" id="r-dir">—</div></div>
-        <div class="review-item"><div class="label">Localidad</div><div class="value" id="r-loc">—</div></div>
-        <div class="review-item"><div class="label">Total</div><div class="value" id="r-total">—</div></div>
-        <div class="review-item"><div class="label">Medio de pago</div><div class="value" id="r-mpago">—</div></div>
-      </div>
-      <div class="wa-note">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.68h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
-        Al guardar, el cliente recibirá un WhatsApp con el enlace para continuar la experiencia.
-      </div>
-      <button class="btn btn-primary" id="btn-guardar" onclick="guardar()">Guardar venta y enviar WhatsApp</button>
-      <button class="btn btn-secondary" onclick="ir(2)">← Volver a editar</button>
-    </div>
-    <div class="result-card" id="result-card">
-      <div class="result-icon">✅</div>
-      <div class="result-title">¡Venta registrada!</div>
-      <div class="result-sub" id="res-sub">Los datos fueron guardados correctamente.</div>
-      <div class="result-actions">
-        <button class="btn btn-outline" onclick="reset()">+ Nueva carga</button>
-        <button class="btn btn-primary" onclick="window.location.href='/comercio/index.html'" style="flex:1;margin-top:0">Ir al panel</button>
-      </div>
-    </div>
+  <!-- RESULTADO -->
+  <div class="result" id="result-section">
+    <div class="result-icon">✅</div>
+    <div class="result-title">¡Listo!</div>
+    <div class="result-sub" id="result-msg">El cliente recibirá el email en breve.</div>
+    <button class="btn-nueva" onclick="reset()">+ Nueva carga</button>
   </div>
 
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
-const IA_ENDPOINT = 'https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/extraer-comprobante';
 
-let S = {
-  bot: 'asistente_ia', paso: 1,
-  archivo: null, b64: null, mime: null,
-  iaData: null, comercioId: null
-};
-
-function normalizarTelefono(tel) {
-  if (!tel) return '';
-  return tel.replace(/[^\d]/g, '');
-}
+let S = { comercioId: null, slug: null, comercioNombre: null };
 
 window.onload = async () => {
-  // Leer slug de la URL o comercioId del localStorage
   const pathParts = window.location.pathname.split('/');
   const pathSlug = pathParts[pathParts.length - 1];
+
   if (pathSlug && pathSlug !== 'carga-venta.html') {
+    S.slug = pathSlug;
     const res = await fetch(`${SB_URL}/rest/v1/sq_clientes?slug=eq.${pathSlug}&select=id,nombre,slug`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
     });
     const data = await res.json();
     if (data && data.length > 0) {
       S.comercioId = data[0].id;
+      S.comercioNombre = data[0].nombre;
       document.getElementById('header-comercio').textContent = '— ' + data[0].nombre;
-    document.getElementById('btn-back').href = '/carga/' + pathSlug;  
     }
-  } else {
-    S.comercioId = localStorage.getItem('sq_comercio_id') || null;
   }
 
-  const zone = document.getElementById('drop-zone');
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); if (e.dataTransfer.files[0]) procFile(e.dataTransfer.files[0]); });
+  document.getElementById('btn-nueva-carga').href = window.location.href;
 };
 
-function ir(n) {
-  if (n === 2 && !S.b64) { toast('Subí un comprobante antes de continuar', 'error'); return; }
-  if (n === 3) {
-    const ap  = document.getElementById('f-ap').value.trim();
-    const nom = document.getElementById('f-nom').value.trim();
-    const tel = document.getElementById('f-tel').value.trim();
-    if (!ap)  { toast('El apellido es obligatorio', 'error');  document.getElementById('f-ap').focus();  return; }
-    if (!nom) { toast('El nombre es obligatorio', 'error');    document.getElementById('f-nom').focus(); return; }
-    if (!tel) { toast('El teléfono es obligatorio', 'error'); document.getElementById('f-tel').focus(); return; }
-    document.getElementById('r-nom').textContent   = [ap, nom].join(', ');
-    document.getElementById('r-tel').textContent   = tel;
-    document.getElementById('r-dir').textContent   = document.getElementById('f-dir').value || '—';
-    document.getElementById('r-loc').textContent   = document.getElementById('f-loc').value || '—';
-    document.getElementById('r-total').textContent = document.getElementById('f-total').value ? '$' + parseFloat(document.getElementById('f-total').value).toLocaleString('es-AR') : '—';
-    document.getElementById('r-mpago').textContent = document.getElementById('f-mpago').value || '—';
-  }
-  S.paso = n;
-  [1, 2, 3].forEach(i => {
-    document.getElementById('p' + i).style.display = i === n ? 'block' : 'none';
-    const el = document.getElementById('s' + i);
-    el.className = 'step' + (i === n ? ' active' : i < n ? ' done' : '');
-    const num = el.querySelector('.step-num');
-    if (i < n) { num.textContent = '✓'; num.style.cssText = 'background:var(--success);color:white;border:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0'; }
-    else { num.style.cssText = ''; }
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+async function enviar() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const telefono = document.getElementById('f-telefono').value.trim();
+  const email = document.getElementById('f-email').value.trim();
 
-function onFile(e) { if (e.target.files[0]) procFile(e.target.files[0]); }
+  if (!nombre) { toast('El nombre es obligatorio', 'error'); document.getElementById('f-nombre').focus(); return; }
+  if (!telefono) { toast('El teléfono es obligatorio', 'error'); document.getElementById('f-telefono').focus(); return; }
+  if (!email || !email.includes('@')) { toast('El email no es válido', 'error'); document.getElementById('f-email').focus(); return; }
 
-function procFile(file) {
-  if (file.size > 10 * 1024 * 1024) { toast('El archivo no puede superar 10MB', 'error'); return; }
-  S.archivo = file;
-  const r = new FileReader();
-  r.onload = e => {
-    const [, b64] = e.target.result.split(',');
-    S.b64 = b64; S.mime = file.type || 'image/jpeg';
-    const zone = document.getElementById('drop-zone');
-    zone.classList.add('has-file');
-    document.getElementById('up-icon').textContent = file.type.includes('pdf') ? '📑' : '🖼️';
-    document.getElementById('up-text').textContent = '¡Archivo listo!';
-    document.getElementById('up-name').textContent = file.name;
-    if (file.type.startsWith('image/')) {
-      document.getElementById('preview-img').src = e.target.result;
-      document.getElementById('preview-container').style.display = 'block';
-    }
-    document.getElementById('btn-ia').disabled = false;
-    document.getElementById('btn-p1').disabled = false;
-  };
-  r.readAsDataURL(file);
-}
-
-async function extraer() {
-  const btn = document.getElementById('btn-ia');
+  const btn = document.getElementById('btn-enviar');
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Analizando...';
+  btn.innerHTML = '<span class="spinner"></span> Enviando...';
+
   try {
-    const res = await fetch(IA_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ b64: S.b64, mime: S.mime })
-    });
-    if (!res.ok) throw new Error('endpoint error');
-    const d = await res.json();
-    S.iaData = d;
-    poblarCampos(d);
-    toast('Datos extraídos correctamente', 'success');
-    document.getElementById('btn-p1').disabled = false;
-  } catch (err) {
-    toast('No se pudo extraer automáticamente. Podés completar los datos manualmente.', 'info');
-    document.getElementById('btn-p1').disabled = false;
-  }
-  btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Volver a extraer';
-}
+    // Generar token único para el cliente
+    const token = crypto.randomUUID();
 
-function poblarCampos(d) {
-  const mapa = { ap: 'apellido', nom: 'nombre', tel: 'telefono', dir: 'direccion', loc: 'localidad' };
-  const enc = d.campos_encontrados || [];
-  Object.entries(mapa).forEach(([k, campo]) => {
-    const inp = document.getElementById('f-' + k);
-    const tag = document.getElementById('t-' + k);
-    if (d[campo]) { inp.value = d[campo]; inp.classList.add('ia-ok'); }
-    if (enc.includes(campo)) tag.style.display = 'inline';
-  });
-  if (d.medio_pago) { document.getElementById('f-mpago').value = d.medio_pago; document.getElementById('f-mpago').classList.add('ia-ok'); document.getElementById('t-mpago').style.display = 'inline'; }
-  if (d.cuotas)     { document.getElementById('f-cuotas').value = d.cuotas; document.getElementById('f-cuotas').classList.add('ia-ok'); document.getElementById('t-cuotas').style.display = 'inline'; }
-  if (d.total_compra) { document.getElementById('f-total').value = d.total_compra; document.getElementById('f-total').classList.add('ia-ok'); document.getElementById('t-total').style.display = 'inline'; }
-  if (d.observaciones) { document.getElementById('f-obs').value = d.observaciones; document.getElementById('t-obs').style.display = 'inline'; }
-  if (d.productos_comprados && d.productos_comprados.length > 0) {
-    document.getElementById('prods-lista').innerHTML = d.productos_comprados.map(p =>
-      `<div style="padding:3px 0;border-bottom:1px solid var(--border)">${p.cantidad || 1}x ${p.descripcion} ${p.subtotal ? '— $' + Number(p.subtotal).toLocaleString('es-AR') : ''}</div>`
-    ).join('');
-    document.getElementById('t-prods').style.display = 'inline';
-  }
-  const bar = document.getElementById('ia-bar');
-  bar.style.display = 'flex';
-  const conf = d.confianza || 0;
-  const cel = document.getElementById('ia-conf');
-  cel.textContent = Math.round(conf * 100) + '% confianza';
-  cel.className = 'ia-conf ' + (conf >= 0.8 ? 'high' : conf >= 0.5 ? 'med' : 'low');
-  document.getElementById('ia-status').textContent = enc.length + ' campos detectados';
-}
-
-async function guardar() {
-  const btn = document.getElementById('btn-guardar');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="border-color:white;border-top-color:transparent;display:inline-block;margin-right:6px"></div> Guardando...';
-  try {
-    const ap     = document.getElementById('f-ap').value.trim();
-    const nom    = document.getElementById('f-nom').value.trim();
-    const tel    = normalizarTelefono(document.getElementById('f-tel').value.trim());
-    const dir    = document.getElementById('f-dir').value.trim();
-    const loc    = document.getElementById('f-loc').value.trim();
-    const mpago  = document.getElementById('f-mpago').value.trim() || null;
-    const cuotas = parseInt(document.getElementById('f-cuotas').value) || null;
-    const total  = parseFloat(document.getElementById('f-total').value) || null;
-    const obs    = document.getElementById('f-obs').value.trim() || null;
-    const prods  = S.iaData?.productos_comprados || null;
-
-    // 1. Subir archivo a Storage
-    let archivoUrl = null;
-    if (S.archivo) {
-      const ext  = S.archivo.name.split('.').pop();
-      const path = `comprobantes/${S.comercioId || 'sin-comercio'}/${Date.now()}.${ext}`;
-      const up = await fetch(`${SB_URL}/storage/v1/object/sq-comprobantes/${path}`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': S.mime, 'x-upsert': 'true' },
-        body: S.archivo
-      });
-      if (up.ok) archivoUrl = `${SB_URL}/storage/v1/object/public/sq-comprobantes/${path}`;
-    }
-
-    // 2. Upsert perfil cliente
-    let clientePerfilId = null;
-    if (tel) clientePerfilId = await upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs });
-
-    // 3. Insertar en sq_ventas
+    // Guardar venta en Supabase
     const venta = {
       comercio_id: S.comercioId,
-      cliente_id: clientePerfilId,
-      apellido: ap, nombre: nom, telefono: tel,
-      direccion: dir, localidad: loc,
-      archivo_url: archivoUrl,
-      metodo_carga: 'con_facturacion',
-      ia_extraccion: S.iaData,
-      ia_confianza: S.iaData?.confianza || null,
-      whatsapp_bot: S.bot,
-      medio_pago: mpago, cuotas, total_compra: total,
-      productos_comprados: prods, observaciones: obs
+      nombre: nombre.split(' ').slice(1).join(' ') || nombre,
+      apellido: nombre.split(' ')[0],
+      telefono: telefono.replace(/[^\d]/g, ''),
+      email: email,
+      metodo_carga: 'vendedor_simplificado',
+      whatsapp_bot: 'asistente_ia',
+      token_cliente: token
     };
+
     const ins = await fetch(`${SB_URL}/rest/v1/sq_ventas`, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+      headers: {
+        'Authorization': `Bearer ${SB_KEY}`,
+        'apikey': SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
       body: JSON.stringify(venta)
     });
-    if (!ins.ok) { const e = await ins.json(); throw new Error(JSON.stringify(e)); }
 
-    document.getElementById('confirm-card').style.display = 'none';
-    document.getElementById('res-sub').textContent = tel
-      ? `Datos guardados. El WhatsApp se enviará en breve a ${tel}.`
-      : 'Datos guardados. No se enviará WhatsApp (sin teléfono).';
-    document.getElementById('result-card').style.display = 'block';
-    toast('Venta guardada', 'success');
+    if (!ins.ok) {
+      const e = await ins.json();
+      throw new Error(JSON.stringify(e));
+    }
+
+    const ventaData = await ins.json();
+    const ventaId = Array.isArray(ventaData) ? ventaData[0]?.id : ventaData?.id;
+
+    // Llamar a Edge Function para enviar email
+    await fetch(`${SB_URL}/functions/v1/sq-email-cliente`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SB_KEY}`
+      },
+      body: JSON.stringify({
+        venta_id: ventaId,
+        nombre,
+        email,
+        slug: S.slug,
+        token,
+        comercio_nombre: S.comercioNombre
+      })
+    });
+
+    document.getElementById('result-msg').textContent =
+      `Le enviamos el link a ${email}. El cliente podrá subir su comprobante y acceder al asistente.`;
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
 
   } catch (err) {
     console.error(err);
-    toast('Error al guardar. Revisá la consola.', 'error');
+    toast('Error al enviar. Intentá de nuevo.', 'error');
     btn.disabled = false;
-    btn.innerHTML = 'Guardar venta y enviar WhatsApp';
-  }
-}
-
-async function upsertPerfil({ ap, nom, tel, dir, loc, mpago, cuotas, total, prods, obs }) {
-  if (!S.comercioId || !tel) return null;
-  const hdr = { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': 'application/json' };
-  const ahora = new Date().toISOString();
-  const buscar = await fetch(
-    `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${S.comercioId}&select=id,historial_compras,medios_pago_usados,productos_frecuentes,ticket_promedio`,
-    { headers: hdr }
-  );
-  const ex = await buscar.json();
-  const entradaCompra = { fecha: ahora, tipo: 'con_facturacion', total: total || 0, medio_pago: mpago || null, cuotas: cuotas || null, productos: prods || [], observaciones: obs || null };
-
-  if (ex?.length) {
-    const perfil = ex[0];
-    const hist = [...(perfil.historial_compras || []), entradaCompra];
-    const mediosActuales = perfil.medios_pago_usados || [];
-    if (mpago && !mediosActuales.includes(mpago)) mediosActuales.push(mpago);
-    const prodsActuales = perfil.productos_frecuentes || [];
-    if (prods && prods.length > 0) prods.forEach(p => { if (p.descripcion && !prodsActuales.includes(p.descripcion)) prodsActuales.push(p.descripcion); });
-    const totales = hist.map(h => h.total || 0).filter(t => t > 0);
-    const ticketPromedio = totales.length > 0 ? (totales.reduce((a, b) => a + b, 0) / totales.length).toFixed(2) : null;
-    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${perfil.id}`, {
-      method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ apellido: ap || undefined, nombre: nom || undefined, direccion: dir || undefined, localidad: loc || undefined, historial_compras: hist, medios_pago_usados: mediosActuales, productos_frecuentes: prodsActuales, ticket_promedio: ticketPromedio, ultima_interaccion: ahora, updated_at: ahora })
-    });
-    return perfil.id;
-  } else {
-    const nuevo = { telefono: tel, comercio_id: S.comercioId, apellido: ap, nombre: nom, direccion: dir || null, localidad: loc || null, etiqueta: 'nuevo', historial_compras: [entradaCompra], medios_pago_usados: mpago ? [mpago] : [], productos_frecuentes: prods ? prods.map(p => p.descripcion).filter(Boolean) : [], ticket_promedio: total ? total.toFixed(2) : null, conversaciones: [], preferencias: {}, ultima_interaccion: ahora };
-    const res = await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
-      method: 'POST', headers: { ...hdr, 'Prefer': 'return=representation' }, body: JSON.stringify(nuevo)
-    });
-    if (res.ok) { const data = await res.json(); return Array.isArray(data) ? data[0]?.id : data?.id; }
-    return null;
+    btn.innerHTML = 'Enviar →';
   }
 }
 
 function reset() {
-  const cid = S.comercioId;
-  S = { bot: 'asistente_ia', paso: 1, archivo: null, b64: null, mime: null, iaData: null, comercioId: cid };
-  ['f-ap','f-nom','f-tel','f-dir','f-loc','f-mpago','f-cuotas','f-total','f-obs'].forEach(id => {
-    const el = document.getElementById(id); if (el) { el.value = ''; el.classList.remove('ia-ok'); }
-  });
-  ['t-ap','t-nom','t-tel','t-dir','t-loc','t-mpago','t-cuotas','t-total','t-prods','t-obs'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.style.display = 'none';
-  });
-  document.getElementById('ia-bar').style.display = 'none';
-  document.getElementById('prods-lista').textContent = 'Sin productos detectados';
-  document.getElementById('drop-zone').classList.remove('has-file');
-  document.getElementById('up-icon').textContent = '📄';
-  document.getElementById('up-text').textContent = 'Arrastrá el archivo o hacé clic para seleccionar';
-  document.getElementById('up-name').textContent = '';
-  document.getElementById('preview-container').style.display = 'none';
-  document.getElementById('btn-ia').disabled = true;
-  document.getElementById('btn-ia').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Extraer datos con IA';
-  document.getElementById('btn-p1').disabled = true;
-  document.getElementById('result-card').style.display = 'none';
-  document.getElementById('confirm-card').style.display = 'block';
-  ir(1);
+  document.getElementById('f-nombre').value = '';
+  document.getElementById('f-telefono').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('btn-enviar').disabled = false;
+  document.getElementById('btn-enviar').innerHTML = 'Enviar →';
+  document.getElementById('form-section').style.display = 'block';
+  document.getElementById('result-section').style.display = 'none';
 }
 
 function toast(msg, type) {
