@@ -138,11 +138,13 @@ window.onload = async () => {
 };
 
 async function enviar() {
-  const nombre = document.getElementById('f-nombre').value.trim();
+  const apellido = document.getElementById('f-apellido').value.trim();
+const nombre = document.getElementById('f-nombre').value.trim();
   const telefono = document.getElementById('f-telefono').value.trim();
   const email = document.getElementById('f-email').value.trim();
 
-  if (!nombre) { toast('El nombre es obligatorio', 'error'); document.getElementById('f-nombre').focus(); return; }
+  if (!apellido) { toast('El apellido es obligatorio', 'error'); document.getElementById('f-apellido').focus(); return; }
+if (!nombre) { toast('El nombre es obligatorio', 'error'); document.getElementById('f-nombre').focus(); return; }
   if (!telefono) { toast('El teléfono es obligatorio', 'error'); document.getElementById('f-telefono').focus(); return; }
   if (!email || !email.includes('@')) { toast('El email no es válido', 'error'); document.getElementById('f-email').focus(); return; }
 
@@ -157,8 +159,8 @@ async function enviar() {
     // Guardar venta en Supabase
     const venta = {
       comercio_id: S.comercioId,
-      nombre: nombre.split(' ').slice(1).join(' ') || nombre,
-      apellido: nombre.split(' ')[0],
+      nombre: nombre,
+apellido: apellido,
       telefono: telefono.replace(/[^\d]/g, ''),
       email: email,
       metodo_carga: 'con_facturacion',
