@@ -259,7 +259,6 @@ if (S.venta.telefono) {
       method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
       body: JSON.stringify({ historial_compras: hist, medios_pago_usados: medios, productos_frecuentes: prods, ticket_promedio: ticketPromedio, ultima_interaccion: ahora, updated_at: ahora })
     });
-    alert('perfil actualizado');
   } else {
     await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
       method: 'POST', headers: { ...hdr, 'Prefer': 'return=minimal' },
@@ -277,9 +276,7 @@ if (S.venta.telefono) {
       })
     });
   }
- alert('perfil creado'); 
 }
-    alert('telefono venta: ' + S.venta.telefono);
     // 4. Leer plan del comercio y redirigir
     const resConfig = await fetch(`${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${S.venta.comercio_id}&select=bot_plan`, {
       headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
