@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu comprobante — SatisfactQ</title>
+<style>
+:root {
+  --bg: #f8f9fa; --surface: #ffffff;
+  --accent: #6c63ff; --accent-light: #ede9fe;
+  --success: #22c55e; --success-light: #dcfce7;
+  --danger: #ef4444;
+  --text: #1e1e2e; --text2: #6b7280; --text3: #9ca3af;
+  --border: #e5e7eb; --radius: 12px; --radius-sm: 8px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px; }
+
+.logo { width: 48px; height: 48px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 20px; margin: 0 auto 20px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 28px; width: 100%; max-width: 440px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+
+.card-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; text-align: center; }
+.card-sub { font-size: 14px; color: var(--text2); text-align: center; line-height: 1.6; margin-bottom: 28px; }
+
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 36px 16px; text-align: center; cursor: pointer; transition: all 0.15s; background: #fafafa; position: relative; margin-bottom: 16px; }
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
+.upload-zone.has-file { border-color: var(--success); background: var(--success-light); border-style: solid; }
+.upload-icon { font-size: 36px; margin-bottom: 10px; }
+.upload-text { font-size: 14px; color: var(--text2); font-weight: 500; }
+.upload-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
+.upload-filename { font-size: 13px; font-weight: 600; color: #16a34a; margin-top: 6px; }
+#file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+#preview-container { display: none; text-align: center; margin-bottom: 16px; }
+#preview-img { max-width: 100%; max-height: 180px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; }
+
+.ia-bar { background: #f5f3ff; border: 1px solid #c4beff; border-radius: var(--radius-sm); padding: 11px 14px; margin-bottom: 16px; display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--text2); }
+.ia-badge { background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+
+.btn { width: 100%; padding: 13px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #5b52e0; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.spinner { width: 16px; height: 16px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; margin-right: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.step-indicator { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 28px; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.step-dot.active { background: var(--accent); }
+.step-dot.done { background: var(--success); }
+
+.error-card { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 24px; text-align: center; display: none; }
+.error-icon { font-size: 36px; margin-bottom: 10px; }
+.error-title { font-size: 16px; font-weight: 700; color: #991b1b; margin-bottom: 6px; }
+.error-sub { font-size: 13px; color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<div class="logo">SQ</div>
+
+<!-- ESTADO: subir comprobante -->
+<div class="card" id="card-upload">
+  <div class="step-indicator">
+    <div class="step-dot active" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+  </div>
+  <div class="card-title" id="card-title">Subí tu comprobante</div>
+  <div class="card-sub" id="card-sub">Tomá una foto o subí el archivo de tu ticket o factura para continuar.</div>
+
+  <div class="upload-zone" id="drop-zone">
+    <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFile(event)">
+    <div class="upload-icon" id="up-icon">📄</div>
+    <div class="upload-text" id="up-text">Tocá para seleccionar o arrastrá el archivo</div>
+    <div class="upload-sub">JPG, PNG o PDF — hasta 10MB</div>
+    <div class="upload-filename" id="up-name"></div>
+  </div>
+
+  <div id="preview-container">
+    <img id="preview-img" alt="Vista previa">
+  </div>
+
+  <div class="ia-bar" id="ia-bar">
+    <span class="ia-badge">IA</span>
+    <span id="ia-status">Analizando tu comprobante...</span>
+  </div>
+
+  <button class="btn btn-primary" id="btn-continuar" onclick="continuar()" disabled>
+    Continuar →
+  </button>
+</div>
+
+<!-- ESTADO: error -->
+<div class="error-card" id="card-error">
+  <div class="error-icon">⚠️</div>
+  <div class="error-title">Link inválido o expirado</div>
+  <div class="error-sub">Este link no es válido. Consultá al comercio para obtener uno nuevo.</div>
+</div>
+
+<script>
+const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
+const IA_ENDPOINT = 'https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/extraer-comprobante';
+
+let S = { token: null, venta: null, archivo: null, b64: null, mime: null, iaData: null };
+
+window.onload = async () => {
+  // Leer token de la URL: /cliente/[token]
+  const pathParts = window.location.pathname.split('/');
+  S.token = pathParts[pathParts.length - 1];
+
+  if (!S.token) { mostrarError(); return; }
+
+  // Buscar la venta por token
+  const res = await fetch(`${SB_URL}/rest/v1/sq_ventas?token_cliente=eq.${S.token}&select=*`, {
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+  });
+  const data = await res.json();
+
+  if (!data || data.length === 0) { mostrarError(); return; }
+  S.venta = data[0];
+
+  // Personalizar saludo
+  const nombre = [S.venta.nombre, S.venta.apellido].filter(Boolean).join(' ') || 'Cliente';
+  document.getElementById('card-title').textContent = `Hola ${nombre.split(' ')[0]} 👋`;
+
+  // Leer nombre del comercio
+  const resC = await fetch(`${SB_URL}/rest/v1/sq_clientes?id=eq.${S.venta.comercio_id}&select=nombre`, {
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+  });
+  const dataC = await resC.json();
+  const comercioNombre = dataC?.[0]?.nombre || 'el comercio';
+  document.getElementById('card-sub').textContent = `Gracias por tu compra en ${comercioNombre}. Subí tu ticket o factura para continuar.`;
+
+  // Drag & drop
+  const zone = document.getElementById('drop-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); if (e.dataTransfer.files[0]) procFile(e.dataTransfer.files[0]); });
+};
+
+function onFile(e) { if (e.target.files[0]) procFile(e.target.files[0]); }
+
+function procFile(file) {
+  if (file.size > 10 * 1024 * 1024) { alert('El archivo no puede superar 10MB'); return; }
+  S.archivo = file;
+  const r = new FileReader();
+  r.onload = e => {
+    const [, b64] = e.target.result.split(',');
+    S.b64 = b64; S.mime = file.type || 'image/jpeg';
+    const zone = document.getElementById('drop-zone');
+    zone.classList.add('has-file');
+    document.getElementById('up-icon').textContent = file.type.includes('pdf') ? '📑' : '🖼️';
+    document.getElementById('up-text').textContent = '¡Archivo listo!';
+    document.getElementById('up-name').textContent = file.name;
+    if (file.type.startsWith('image/')) {
+      document.getElementById('preview-img').src = e.target.result;
+      document.getElementById('preview-container').style.display = 'block';
+    }
+    document.getElementById('btn-continuar').disabled = false;
+  };
+  r.readAsDataURL(file);
+}
+
+async function continuar() {
+  const btn = document.getElementById('btn-continuar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Procesando...';
+
+  // Mostrar barra IA
+  const iaBar = document.getElementById('ia-bar');
+  iaBar.style.display = 'flex';
+
+  try {
+    // 1. Subir archivo a Storage
+    let archivoUrl = null;
+    if (S.archivo) {
+      const ext = S.archivo.name.split('.').pop();
+      const path = `comprobantes/${S.venta.comercio_id}/${Date.now()}.${ext}`;
+      const up = await fetch(`${SB_URL}/storage/v1/object/sq-comprobantes/${path}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': S.mime, 'x-upsert': 'true' },
+        body: S.archivo
+      });
+      if (up.ok) archivoUrl = `${SB_URL}/storage/v1/object/public/sq-comprobantes/${path}`;
+    }
+
+    // 2. Extraer datos con IA
+    document.getElementById('ia-status').textContent = 'Analizando tu comprobante con IA...';
+    try {
+      const iaRes = await fetch(IA_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ b64: S.b64, mime: S.mime })
+      });
+      if (iaRes.ok) S.iaData = await iaRes.json();
+    } catch(e) {
+      console.warn('IA no disponible, continuando sin extracción');
+    }
+
+    // 3. Actualizar la venta con el comprobante y datos IA
+    await fetch(`${SB_URL}/rest/v1/sq_ventas?id=eq.${S.venta.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${SB_KEY}`,
+        'apikey': SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        archivo_url: archivoUrl,
+        ia_extraccion: S.iaData || null,
+        ia_confianza: S.iaData?.confianza || null,
+        productos_comprados: S.iaData?.productos_comprados || null,
+        total_compra: S.iaData?.total_compra || null,
+        medio_pago: S.iaData?.medio_pago || null
+      })
+    });
+
+    // 4. Leer plan del comercio y redirigir
+    const resConfig = await fetch(`${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${S.venta.comercio_id}&select=bot_plan`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const config = await resConfig.json();
+    const plan = config?.[0]?.bot_plan || 'basico';
+
+    // Obtener slug del comercio
+    const resSlug = await fetch(`${SB_URL}/rest/v1/sq_clientes?id=eq.${S.venta.comercio_id}&select=slug`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const dataSlug = await resSlug.json();
+    const slug = dataSlug?.[0]?.slug;
+
+    if (plan === 'basico') {
+      window.location.href = `https://satisfactq.menteactiva.com.ar/comercio/qr?cliente=${slug}`;
+    } else {
+      window.location.href = `https://satisfactq.menteactiva.com.ar/comercio/chat.html?slug=${slug}`;
+    }
+
+  } catch (err) {
+    console.error(err);
+    btn.disabled = false;
+    btn.innerHTML = 'Continuar →';
+    iaBar.style.display = 'none';
+    alert('Hubo un error. Intentá de nuevo.');
+  }
+}
+
+function mostrarError() {
+  document.getElementById('card-upload').style.display = 'none';
+  document.getElementById('card-error').style.display = 'block';
+}
+</script>
+</body>
+</html>
