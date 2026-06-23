@@ -769,6 +769,7 @@ async function verificarCircuitoB() {
 let allVentas = [];
 
 async function cargarVentas() {
+  console.log('cargarVentas - currentComercio:', currentComercio);
   if (!currentComercio) return;
   const { data } = await sb.from('sq_ventas').select('*').eq('comercio_id', currentComercio.id).order('created_at', { ascending: false });
   allVentas = data || [];
