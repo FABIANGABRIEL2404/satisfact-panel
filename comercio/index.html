@@ -539,11 +539,9 @@ async function cargarTodo() {
   cargarVentas();
   const [r1, r2, r3] = await Promise.all([
     sb.from('sq_respuestas').select('*').eq('comercio_code', code).order('created_at', { ascending: false }),
-    sb.from('sq_compras').select('*').eq('comercio_code', code).order('created_at', { ascending: false }),
     sb.from('sq_formularios').select('*').eq('comercio_code', code).limit(1).single()
   ]);
   allRespuestas = r1.data || [];
-  allCompras = r2.data || [];
   currentFormulario = r3.data || null;
   renderDashboard();
   if (currentFormulario) cargarFormularioEditor();
@@ -558,7 +556,7 @@ function renderDashboard() {
   const bajas = allRespuestas.filter(r => (r.estrellas > 0 && r.estrellas <= 2) || (r.emocion > 0 && r.emocion <= 2));
   document.getElementById('dash-stats').innerHTML =
     statCard('📋', 'Total Respuestas', total) + statCard('⭐', 'Prom. Estrellas', avgStars) +
-    statCard('⚠️', 'Alertas', bajas.length, bajas.length > 0 ? '#fee2e2' : '') + statCard('🛍️', 'Compras', allCompras.length);
+    statCard('⚠️', 'Alertas', bajas.length, bajas.length > 0 ? '#fee2e2' : '') ;
   const alertEl = document.getElementById('dash-alertas');
   if (bajas.length === 0) { alertEl.innerHTML = '<div class="empty"><div class="empty-icon">✅</div><p>Sin alertas.</p></div>'; }
   else { alertEl.innerHTML = bajas.slice(0, 5).map(r => { const puntos = r.estrellas <= 2 && r.estrellas > 0 ? r.estrellas + ' ⭐' : emojiFromVal(r.emocion); return '<div class="alert-banner">⚠️ <strong>' + (r.nombre || 'Anónimo') + '</strong> — Puntuación: ' + puntos + ' — ' + (r.fecha || '') + '</div>'; }).join(''); }
@@ -717,7 +715,6 @@ function showPage(p) {
   document.querySelectorAll('.nav-item').forEach(el => { if ((el.getAttribute('onclick') || '').includes("'" + p + "'")) { el.classList.add('active'); el.style.display = 'flex'; } });
   if (p === 'respuestas') renderRespuestas();
   if (p === 'estadisticas') renderEstadisticas();
-  if (p === 'compras') renderCompras();
   if (p === 'tickets') cargarTickets();
   if (p === 'qr') renderQR();
   if (p === 'wa-msg') cargarMensajeWA();
