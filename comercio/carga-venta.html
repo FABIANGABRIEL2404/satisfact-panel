@@ -240,6 +240,7 @@ window.onload = async () => {
     if (data && data.length > 0) {
       S.comercioId = data[0].id;
       document.getElementById('header-comercio').textContent = '— ' + data[0].nombre;
+    document.getElementById('btn-back').href = '/carga/' + pathSlug;  
     }
   } else {
     S.comercioId = localStorage.getItem('sq_comercio_id') || null;
