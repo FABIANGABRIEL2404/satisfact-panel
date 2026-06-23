@@ -259,7 +259,6 @@ if (S.venta.telefono) {
       method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
       body: JSON.stringify({ historial_compras: hist, medios_pago_usados: medios, productos_frecuentes: prods, ticket_promedio: ticketPromedio, ultima_interaccion: ahora, updated_at: ahora })
     });
-   });
     alert('perfil actualizado');
   } else {
     await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
