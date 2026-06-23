@@ -223,6 +223,9 @@ async function continuar() {
         medio_pago: S.iaData?.medio_pago || null
       })
     });
+
+ console.log('venta:', S.venta);
+console.log('iaData:', S.iaData);   
 // 4. Upsert perfil cliente
 if (S.venta.telefono) {
   const ahora = new Date().toISOString();
