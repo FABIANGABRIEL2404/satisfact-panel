@@ -908,20 +908,7 @@ function abrirFicha(id) {
   html += '</div></div>';
 
   // Perfil de compra
-  // Conversaciones
-  html += '<div class="ficha-section">';
-  html += '<div class="ficha-section-title">💬 Conversaciones</div>';
-  html += '<div id="ficha-conversaciones"><div style="font-size:13px;color:var(--text-2)">Cargando...</div></div>';
-  html += '</div>';
-  html += '<div class="ficha-section">';
-  html += '<div class="ficha-section-title">Perfil de compra</div>';
-  html += '<div class="ficha-datos-grid">';
-  html += '<div class="ficha-dato"><div class="label">Total compras</div><div class="value">' + (Array.isArray(c.historial_compras) ? c.historial_compras.length : 0) + '</div></div>';
-  html += '<div class="ficha-dato"><div class="label">Ticket promedio</div><div class="value">' + (c.ticket_promedio ? '$' + parseFloat(c.ticket_promedio).toLocaleString('es-AR') : '-') + '</div></div>';
-  html += '<div class="ficha-dato" style="grid-column:1/-1"><div class="label">Medios de pago usados</div><div class="value">' + (Array.isArray(c.medios_pago_usados) && c.medios_pago_usados.length ? c.medios_pago_usados.join(', ') : '-') + '</div></div>';
-  html += '<div class="ficha-dato" style="grid-column:1/-1"><div class="label">Productos frecuentes</div><div class="value" style="font-size:12px;font-weight:500">' + (Array.isArray(c.productos_frecuentes) && c.productos_frecuentes.length ? c.productos_frecuentes.slice(0,5).join(' · ') : '-') + '</div></div>';
-  html += '</div></div>';
-
+  
   // Historial de compras
   const hist = Array.isArray(c.historial_compras) ? c.historial_compras : [];
   html += '<div class="ficha-section">';
@@ -944,7 +931,12 @@ function abrirFicha(id) {
     }).join('');
   }
   html += '</div>';
-
+  // Conversaciones
+  html += '<div class="ficha-section">';
+  html += '<div class="ficha-section-title">💬 Conversaciones</div>';
+  html += '<div id="ficha-conversaciones"><div style="font-size:13px;color:var(--text-2)">Cargando...</div></div>';
+  html += '</div>';
+  
   // Etiqueta y nota
   const etiquetaActual = c.etiqueta || 'nuevo';
   html += '<div class="ficha-section">';
