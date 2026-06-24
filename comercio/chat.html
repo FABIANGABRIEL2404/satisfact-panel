@@ -408,9 +408,49 @@
       </div>
     `;
   }
-
+  async function vincularClientePerfil() {
+  const nombre = window._guestNombre || '';
+  const tel = window._guestTel || '';
+  if (!tel || !comercio?.id) return;
+  const hdr = {
+    'apikey': SB_KEY,
+    'Authorization': `Bearer ${SB_KEY}`,
+    'Content-Type': 'application/json'
+  };
+  const ahora = new Date().toISOString();
+  const buscar = await fetch(
+    `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${comercio.id}&select=id`,
+    { headers: hdr }
+  );
+  const ex = await buscar.json();
+  if (ex?.length) {
+    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${ex[0].id}`, {
+      method: 'PATCH',
+      headers: { ...hdr, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ nombre: nombre.split(' ').slice(1).join(' ') || nombre, apellido: nombre.split(' ')[0], ultima_interaccion: ahora, updated_at: ahora })
+    });
+  } else {
+    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
+      method: 'POST',
+      headers: { ...hdr, 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        telefono: tel,
+        comercio_id: comercio.id,
+        nombre: nombre.split(' ').slice(1).join(' ') || nombre,
+        apellido: nombre.split(' ')[0],
+        etiqueta: 'nuevo',
+        historial_compras: [],
+        medios_pago_usados: [],
+        productos_frecuentes: [],
+        ultima_interaccion: ahora
+      })
+    });
+  }
+}
+  
   function mostrarSugerencias() {
     guardarDatosGuest();
+    vincularClientePerfil();
     const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     const welcome = document.getElementById('welcome-screen');
     if (welcome) {
