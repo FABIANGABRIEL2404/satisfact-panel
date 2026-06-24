@@ -427,7 +427,7 @@
     await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${ex[0].id}`, {
       method: 'PATCH',
       headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ nombre: nombre.split(' ').slice(1).join(' ') || nombre, apellido: nombre.split(' ')[0], ultima_interaccion: ahora, updated_at: ahora })
+      body: JSON.stringify({ nombre: nombre.split(' ').slice(1).join(' ') || nombre, apellido: nombre.split(' ')[0], ultima_interaccion: ahora, updated_at: ahora, session_id: sessionId })
     });
   } else {
     await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
@@ -442,7 +442,8 @@
         historial_compras: [],
         medios_pago_usados: [],
         productos_frecuentes: [],
-        ultima_interaccion: ahora
+       ultima_interaccion: ahora,
+       session_id: sessionId
       })
     });
   }
