@@ -464,7 +464,7 @@ function toggleVoz() {
   
   function mostrarSugerencias() {
     guardarDatosGuest();
-    vincularClientePerfil();
+   setTimeout(() => vincularClientePerfil(), 500);
     const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     const welcome = document.getElementById('welcome-screen');
     if (welcome) {
