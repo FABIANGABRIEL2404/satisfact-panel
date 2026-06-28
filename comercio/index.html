@@ -539,7 +539,7 @@ async function cargarTodo() {
   cargarVentas();
   const [r1, r2] = await Promise.all([
     sb.from('sq_respuestas').select('*').eq('comercio_code', code).order('created_at', { ascending: false }),
-    sb.from('sq_formularios').select('*').eq('comercio_code', code).limit(1).single()
+    sb.from('sq_formularios').select('*').eq('comercio_code', code).limit(1).maybeSingle()
   ]);
   allRespuestas = r1.data || [];
   currentFormulario = r2.data || null;
