@@ -532,6 +532,29 @@ window.guardarDatosGuest = guardarDatosGuest;
   }
   function hideTyping() { document.getElementById('typing')?.remove(); }
 
+  async function guardarMensajeConversacion(rol, mensaje) {
+  if (!config?.bot_cliente_id || !sessionId) return;
+  try {
+    const hdr = {
+      'apikey': ASIS_SB_KEY,
+      'Authorization': `Bearer ${ASIS_SB_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
+      method: 'POST',
+      headers: hdr,
+      body: JSON.stringify({
+        cliente_id: config.bot_cliente_id,
+        session_id: sessionId,
+        rol,
+        mensaje,
+        fecha: new Date().toISOString()
+      })
+    });
+  } catch(e) {
+    console.warn('[SatisfactQ] No se pudo guardar mensaje:', e);
+  }
+}
   // ── Enviar mensaje (con guardado en Supabase) ────────────────────────────────
   async function sendMessage(text) {
     if (!text?.trim() || isLoading || !asistConfig) return;
@@ -577,7 +600,7 @@ window.guardarDatosGuest = guardarDatosGuest;
         messages.push({ role: 'assistant', content: reply });
 
         // Guardar historial actualizado en Supabase
-        await actualizarConversacion();
+        await guardarMensajeConversacion('assistant', reply);
 
         if (vozActiva) {
           setTimeout(() => {
