@@ -172,38 +172,28 @@
 
   // Crea el registro de conversación en asis_conversaciones al primer mensaje
   async function crearConversacion(primerMensaje) {
-    if (!config?.bot_cliente_id) return;
-    try {
-      const hdr = {
-        'apikey': ASIS_SB_KEY,
-        'Authorization': `Bearer ${ASIS_SB_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      };
-      const body = {
-        cliente_id:  config.bot_cliente_id,
-        session_id:  sessionId,
-        origen:      'satisfactq_chat',
-        comercio_id: comercio?.id || null,
-        mensajes:    JSON.stringify(messages), // array completo hasta ahora
-        resumen:     primerMensaje.slice(0, 120),
-        created_at:  new Date().toISOString(),
-        updated_at:  new Date().toISOString()
-      };
-      const res = await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
-        method: 'POST',
-        headers: hdr,
-        body: JSON.stringify(body)
-      });
-      if (res.ok) {
-        const data = await res.json();
-        convId = Array.isArray(data) ? data[0]?.id : data?.id;
-      }
-    } catch(e) {
-      console.warn('[SatisfactQ] No se pudo crear conversación:', e);
-    }
+  if (!config?.bot_cliente_id) return;
+  try {
+    const hdr = {
+      'apikey': ASIS_SB_KEY,
+      'Authorization': `Bearer ${ASIS_SB_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
+      method: 'POST',
+      headers: hdr,
+      body: JSON.stringify({
+        cliente_id: config.bot_cliente_id,
+        session_id: sessionId,
+        rol: 'user',
+        mensaje: primerMensaje,
+        fecha: new Date().toISOString()
+      })
+    });
+  } catch(e) {
+    console.warn('[SatisfactQ] No se pudo crear conversación:', e);
   }
-
+}
   // Actualiza el registro existente con el historial completo
   async function actualizarConversacion() {
     if (!convId || !config?.bot_cliente_id) return;
