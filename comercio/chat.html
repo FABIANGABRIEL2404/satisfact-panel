@@ -549,7 +549,7 @@ window.guardarDatosGuest = guardarDatosGuest;
     // Si es el primer mensaje, crear la conversación en Supabase
     const esPrimerMensaje = messages.length === 1;
     if (esPrimerMensaje) {
-      await crearConversacion(text);
+      await guardarMensajeConversacion('user', text);
     }
 
     try {
