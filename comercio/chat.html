@@ -333,6 +333,7 @@ function toggleVoz() {
     if (synth) synth.cancel();
   }
 }
+window.toggleVoz = toggleVoz;
   
   function initMic() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
