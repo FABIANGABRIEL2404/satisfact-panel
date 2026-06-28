@@ -331,7 +331,9 @@ async function irPaso3() {
     const slug = S.comercio.slug || S.comercio.code;
     setTimeout(() => {
       if (plan === 'plus' || plan === 'premium') {
-        window.location.href = `https://satisfactq.menteactiva.com.ar/comercio/chat.html?slug=${slug}`;
+       const tel = document.getElementById('f-telefono').value.replace(/[^\d]/g, '');
+const nomCompleto = encodeURIComponent(apellido + ' ' + nombre);
+window.location.href = `https://satisfactq.menteactiva.com.ar/comercio/chat.html?slug=${slug}&nombre=${nomCompleto}&tel=${tel}`;
       } else {
         window.location.href = `https://menteactiva.com.ar/satisfactq-encuesta/?cliente=${slug}`;
       }
