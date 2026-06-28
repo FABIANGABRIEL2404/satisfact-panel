@@ -606,14 +606,13 @@ window.guardarDatosGuest = guardarDatosGuest;
 
     setupVoz();
     $loading.classList.add('hidden');
-    const urlNombre = params.get('nombre');
+  const urlNombre = params.get('nombre');
 const urlTel = params.get('tel');
 if (urlNombre) window._guestNombre = decodeURIComponent(urlNombre);
 if (urlTel) window._guestTel = urlTel;
+showWelcome();
 if (urlNombre && urlTel) {
   mostrarSugerencias();
-} else {
-  showWelcome();
 }
     setTimeout(() => $input.focus(), 400);
   }
