@@ -990,20 +990,28 @@ async function cargarConversacionesFicha(sessionId) {
     el.innerHTML = '<div style="font-size:13px;color:var(--text-2)">Sin conversaciones registradas</div>';
     return;
   }
-  // Agrupar mensajes por sesión
-  let html = '';
-  let fecha = data[0]?.fecha ? new Date(data[0].fecha).toLocaleDateString('es-AR') : '';
-  html += `<div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${fecha} · ${data.length} mensajes</div>`;
-  html += '<div style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto">';
+  const fecha = data[0]?.fecha ? new Date(data[0].fecha).toLocaleDateString('es-AR') : '';
+  const convId = 'conv-' + Date.now();
+  let mensajesHtml = '<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">';
   data.forEach(m => {
     const esUser = m.rol === 'user';
-    html += `<div style="padding:8px 12px;border-radius:8px;font-size:13px;${esUser ? 'background:#ede9fe;color:#4c1d95;align-self:flex-end;margin-left:20px' : 'background:#f1f5f9;color:var(--text);margin-right:20px'}">
-      <div style="font-size:10px;color:var(--text-2);margin-bottom:3px">${esUser ? '👤 Cliente' : '🤖 Asistente'}</div>
-      ${m.mensaje}
+    mensajesHtml += `<div style="display:flex;flex-direction:column;gap:2px;align-items:${esUser ? 'flex-end' : 'flex-start'}">
+      <div style="font-size:10px;color:var(--text-2)">${esUser ? '👤 Cliente' : '🤖 Asistente'}</div>
+      <div style="padding:8px 12px;border-radius:10px;font-size:13px;max-width:90%;${esUser ? 'background:#ede9fe;color:#4c1d95' : 'background:#f1f5f9;color:var(--text)'}">${m.mensaje}</div>
     </div>`;
   });
-  html += '</div>';
-  el.innerHTML = html;
+  mensajesHtml += '</div>';
+
+  el.innerHTML = `
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <div onclick="document.getElementById('${convId}').style.display=document.getElementById('${convId}').style.display==='none'?'block':'none'" style="padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:#f8fafc">
+        <div style="font-size:13px;font-weight:600">📅 ${fecha} · ${data.length} mensajes</div>
+        <div style="font-size:12px;color:var(--text-2)">▼ Ver conversación</div>
+      </div>
+      <div id="${convId}" style="display:none;padding:12px 14px;max-height:400px;overflow-y:auto;border-top:1px solid var(--border)">
+        ${mensajesHtml}
+      </div>
+    </div>`;
 }
   
 function cerrarFicha() {
