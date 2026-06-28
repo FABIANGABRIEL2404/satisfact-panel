@@ -2,72 +2,372 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SatisfactQ</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3a5f,#2563eb);color:white}
-.wrap{text-align:center;padding:40px 20px}
-.logo{font-size:48px;margin-bottom:16px}
-h1{font-size:22px;font-weight:700;margin-bottom:8px}
-p{font-size:14px;opacity:.8;margin-bottom:24px}
-.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
-@keyframes spin{to{transform:rotate(360deg)}}
-.error{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:16px;margin-top:16px;font-size:13px}
+:root {
+  --accent: #6c63ff; --accent-light: #ede9fe;
+  --success: #22c55e; --success-light: #dcfce7;
+  --danger: #ef4444;
+  --text: #1e1e2e; --text2: #6b7280; --text3: #9ca3af;
+  --border: #e5e7eb; --radius: 12px; --radius-sm: 8px;
+  --surface: #ffffff; --bg: #f8f9fa;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px; }
+
+.logo { width: 52px; height: 52px; background: var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 22px; margin: 0 auto 16px; }
+.comercio-nombre { font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+.comercio-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 28px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 420px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+
+.steps { display: flex; align-items: center; gap: 6px; margin-bottom: 24px; }
+.step { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text3); }
+.step.active { color: var(--accent); }
+.step.done { color: var(--success); }
+.step-num { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+.step-sep { flex: 1; height: 1px; background: var(--border); }
+
+.section { display: none; }
+.section.active { display: block; }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 5px; }
+.field input { width: 100%; padding: 11px 13px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; color: var(--text); font-family: inherit; outline: none; transition: border-color 0.15s; }
+.field input:focus { border-color: var(--accent); }
+.req { color: var(--danger); }
+
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 16px; text-align: center; cursor: pointer; transition: all 0.15s; background: #fafafa; position: relative; margin-bottom: 14px; }
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
+.upload-zone.has-file { border-color: var(--success); background: var(--success-light); border-style: solid; }
+.upload-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-text { font-size: 13px; color: var(--text2); font-weight: 500; }
+.upload-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.upload-filename { font-size: 12px; font-weight: 600; color: #16a34a; margin-top: 6px; }
+#file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+#camera-input { display: none; }
+
+#preview-container { display: none; text-align: center; margin-bottom: 14px; }
+#preview-img { max-width: 100%; max-height: 160px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; }
+
+.btn-group { display: flex; gap: 8px; margin-bottom: 14px; }
+.btn-file { flex: 1; padding: 9px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: white; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.btn-file:hover { border-color: var(--accent); color: var(--accent); }
+.btn-camera { flex: 1; padding: 9px; border: 1.5px solid var(--accent); border-radius: var(--radius-sm); background: var(--accent-light); color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+.ia-bar { background: #f5f3ff; border: 1px solid #c4beff; border-radius: var(--radius-sm); padding: 10px 13px; margin-bottom: 14px; display: none; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); }
+.ia-badge { background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; white-space: nowrap; }
+
+.btn { width: 100%; padding: 13px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; transition: all 0.15s; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #5b52e0; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.spinner { width: 16px; height: 16px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; margin-right: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-screen { text-align: center; padding: 40px 20px; }
+.loading-logo { font-size: 48px; margin-bottom: 16px; animation: bounce 0.8s ease-in-out infinite alternate; }
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+
+.error-card { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 24px; text-align: center; max-width: 420px; width: 100%; }
+.error-icon { font-size: 36px; margin-bottom: 10px; }
+.error-title { font-size: 16px; font-weight: 700; color: #991b1b; margin-bottom: 6px; }
+.error-sub { font-size: 13px; color: #b91c1c; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; color: white; z-index: 1000; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.error { background: var(--danger); }
+.toast.info { background: var(--accent); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="logo">📊</div>
-  <h1>SatisfactQ</h1>
-  <p id="msg">Redirigiendo...</p>
-  <div class="spinner" id="spinner"></div>
-  <div class="error" id="error" style="display:none"></div>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-logo">📊</div>
+  <div style="font-size:14px;color:var(--text2)">Cargando...</div>
 </div>
+
+<!-- ERROR -->
+<div class="error-card" id="error-screen" style="display:none">
+  <div class="error-icon">⚠️</div>
+  <div class="error-title">No disponible</div>
+  <div class="error-sub" id="error-msg">Comercio no encontrado.</div>
+</div>
+
+<!-- FORMULARIO -->
+<div id="main-screen" style="display:none;width:100%;max-width:420px">
+  <div class="logo">SQ</div>
+  <div class="comercio-nombre" id="comercio-nombre">—</div>
+  <div class="comercio-sub">Completá tus datos para continuar</div>
+
+  <div class="card">
+    <div class="steps">
+      <div class="step active" id="s1"><div class="step-num">1</div><span>Tus datos</span></div>
+      <div class="step-sep"></div>
+      <div class="step" id="s2"><div class="step-num">2</div><span>Comprobante</span></div>
+      <div class="step-sep"></div>
+      <div class="step" id="s3"><div class="step-num">3</div><span>Listo</span></div>
+    </div>
+
+    <!-- PASO 1: DATOS CLIENTE -->
+    <div class="section active" id="p1">
+      <div class="field">
+        <label>Apellido <span class="req">*</span></label>
+        <input type="text" id="f-apellido" placeholder="García" autocomplete="family-name">
+      </div>
+      <div class="field">
+        <label>Nombre <span class="req">*</span></label>
+        <input type="text" id="f-nombre" placeholder="Juan" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label>Teléfono <span class="req">*</span></label>
+        <input type="tel" id="f-telefono" placeholder="2234567890" autocomplete="tel">
+      </div>
+      <button class="btn btn-primary" onclick="irPaso2()">Continuar →</button>
+    </div>
+
+    <!-- PASO 2: COMPROBANTE -->
+    <div class="section" id="p2">
+      <div class="btn-group">
+        <button class="btn-file" onclick="document.getElementById('file-input').click()">📁 Subir archivo</button>
+        <button class="btn-camera" onclick="document.getElementById('camera-input').click()">📷 Tomar foto</button>
+      </div>
+      <input type="file" id="camera-input" accept="image/*" capture="environment" onchange="onFile(event)">
+
+      <div class="upload-zone" id="drop-zone">
+        <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFile(event)">
+        <div class="upload-icon" id="up-icon">📄</div>
+        <div class="upload-text" id="up-text">Seleccioná tu ticket o factura</div>
+        <div class="upload-sub">JPG, PNG o PDF — hasta 10MB</div>
+        <div class="upload-filename" id="up-name"></div>
+      </div>
+
+      <div id="preview-container">
+        <img id="preview-img" alt="Vista previa">
+      </div>
+
+      <div class="ia-bar" id="ia-bar">
+        <span class="ia-badge">IA</span>
+        <span id="ia-status">Analizando tu comprobante...</span>
+      </div>
+
+      <button class="btn btn-primary" id="btn-continuar" onclick="irPaso3()" disabled>
+        Continuar →
+      </button>
+    </div>
+
+    <!-- PASO 3: PROCESANDO -->
+    <div class="section" id="p3">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:40px;margin-bottom:12px">⏳</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:6px">Procesando...</div>
+        <div style="font-size:13px;color:var(--text2)" id="p3-msg">Guardando tu información</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-var SB_URL="https://tofnetwtlcwsaiieazsa.supabase.co";
-var SB_KEY="sb_publishable_i7kbu8TUS9Uqja-CSlSEgA_9GV4VQ70";
-var sb=supabase.createClient(SB_URL,SB_KEY);
+const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
+const IA_ENDPOINT = 'https://tofnetwtlcwsaiieazsa.supabase.co/functions/v1/extraer-comprobante';
 
-async function redirigir(){
-  var params=new URLSearchParams(window.location.search);
-  var cliente=params.get('cliente');
-  if(!cliente){mostrarError('No se especificó el comercio.');return;}
+let S = { comercio: null, config: null, archivo: null, b64: null, mime: null, iaData: null };
 
-  // Buscar el cliente por code o slug
-  var r=await sb.from('sq_clientes').select('id,code,nombre,slug').or('code.eq.'+cliente+',slug.eq.'+cliente).single();
-  if(r.error||!r.data){mostrarError('Comercio no encontrado.');return;}
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const cliente = params.get('cliente');
 
-  var comercio=r.data;
-  document.getElementById('msg').textContent='Bienvenido a '+comercio.nombre;
+  if (!cliente) { mostrarError('No se especificó el comercio.'); return; }
 
-  // Buscar configuración del plan
-  var cfg=await sb.from('sq_config_comercio').select('bot_plan,bot_cliente_id,circuito_b').eq('comercio_id',comercio.id).single();
+  const res = await fetch(`${SB_URL}/rest/v1/sq_clientes?or=(code.eq.${cliente},slug.eq.${cliente})&select=id,code,nombre,slug,emoji&limit=1`, {
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+  });
+  const data = await res.json();
+  if (!data || data.length === 0) { mostrarError('Comercio no encontrado.'); return; }
+  S.comercio = data[0];
 
-  var plan=(cfg.data&&cfg.data.bot_plan)||'basico';
-  var botId=(cfg.data&&cfg.data.bot_cliente_id)||null;
-  var activo=(cfg.data&&cfg.data.circuito_b!==false);
+  const resC = await fetch(`${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${S.comercio.id}&select=bot_plan,bot_cliente_id,circuito_b&limit=1`, {
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+  });
+  const dataC = await resC.json();
+  S.config = dataC?.[0] || null;
 
-  if(activo&&(plan==='plus'||plan==='premium')&&botId){
-    // Redirigir al chatbot
-    var urlBot='https://satisfact-panel.vercel.app/comercio/chat.html?slug='+(comercio.slug||comercio.code);
-    window.location.href=urlBot;
-  } else {
-    // Redirigir a la encuesta
-    var slug=comercio.slug||comercio.code;
-    var urlEncuesta='https://menteactiva.com.ar/satisfactq-encuesta/?cliente='+slug;
-    window.location.href=urlEncuesta;
+  document.getElementById('comercio-nombre').textContent = (S.comercio.emoji || '🏪') + ' ' + S.comercio.nombre;
+  document.title = S.comercio.nombre;
+
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display = 'block';
+
+  const zone = document.getElementById('drop-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); if (e.dataTransfer.files[0]) procFile(e.dataTransfer.files[0]); });
+};
+
+function irPaso2() {
+  const apellido = document.getElementById('f-apellido').value.trim();
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const telefono = document.getElementById('f-telefono').value.trim();
+  if (!apellido) { toast('El apellido es obligatorio', 'error'); document.getElementById('f-apellido').focus(); return; }
+  if (!nombre) { toast('El nombre es obligatorio', 'error'); document.getElementById('f-nombre').focus(); return; }
+  if (!telefono) { toast('El teléfono es obligatorio', 'error'); document.getElementById('f-telefono').focus(); return; }
+  activarPaso(2);
+}
+
+function onFile(e) { if (e.target.files[0]) procFile(e.target.files[0]); }
+
+function procFile(file) {
+  if (file.size > 10 * 1024 * 1024) { toast('El archivo no puede superar 10MB', 'error'); return; }
+  S.archivo = file;
+  const r = new FileReader();
+  r.onload = e => {
+    const [, b64] = e.target.result.split(',');
+    S.b64 = b64; S.mime = file.type || 'image/jpeg';
+    const zone = document.getElementById('drop-zone');
+    zone.classList.add('has-file');
+    document.getElementById('up-icon').textContent = file.type.includes('pdf') ? '📑' : '🖼️';
+    document.getElementById('up-text').textContent = '¡Archivo listo!';
+    document.getElementById('up-name').textContent = file.name;
+    if (file.type.startsWith('image/')) {
+      document.getElementById('preview-img').src = e.target.result;
+      document.getElementById('preview-container').style.display = 'block';
+    }
+    document.getElementById('btn-continuar').disabled = false;
+  };
+  r.readAsDataURL(file);
+}
+
+async function irPaso3() {
+  activarPaso(3);
+  const apellido = document.getElementById('f-apellido').value.trim();
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const telefono = document.getElementById('f-telefono').value.replace(/[^\d]/g, '');
+
+  try {
+    // 1. Subir archivo
+    document.getElementById('p3-msg').textContent = 'Subiendo comprobante...';
+    let archivoUrl = null;
+    if (S.archivo) {
+      const ext = S.archivo.name.split('.').pop();
+      const path = `comprobantes/${S.comercio.id}/${Date.now()}.${ext}`;
+      const up = await fetch(`${SB_URL}/storage/v1/object/sq-comprobantes/${path}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': S.mime, 'x-upsert': 'true' },
+        body: S.archivo
+      });
+      if (up.ok) archivoUrl = `${SB_URL}/storage/v1/object/public/sq-comprobantes/${path}`;
+    }
+
+    // 2. Extraer con IA
+    document.getElementById('p3-msg').textContent = 'Analizando comprobante con IA...';
+    try {
+      const iaRes = await fetch(IA_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ b64: S.b64, mime: S.mime })
+      });
+      if (iaRes.ok) S.iaData = await iaRes.json();
+    } catch(e) { console.warn('IA no disponible'); }
+
+    // 3. Crear venta
+    document.getElementById('p3-msg').textContent = 'Guardando tu información...';
+    const venta = {
+      comercio_id: S.comercio.id,
+      apellido,
+      nombre,
+      telefono,
+      metodo_carga: 'qr_cliente',
+      whatsapp_bot: 'asistente_ia',
+      archivo_url: archivoUrl,
+      ia_extraccion: S.iaData || null,
+      ia_confianza: S.iaData?.confianza || null,
+      productos_comprados: S.iaData?.productos_comprados || null,
+      total_compra: S.iaData?.total_compra || null,
+      medio_pago: S.iaData?.medio_pago || null
+    };
+
+    const ins = await fetch(`${SB_URL}/rest/v1/sq_ventas`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+      body: JSON.stringify(venta)
+    });
+
+    // 4. Upsert perfil cliente
+    const ahora = new Date().toISOString();
+    const entradaCompra = { fecha: ahora, tipo: 'qr_cliente', total: S.iaData?.total_compra || 0, medio_pago: S.iaData?.medio_pago || null, productos: S.iaData?.productos_comprados || [] };
+    const hdr = { 'Authorization': `Bearer ${SB_KEY}`, 'apikey': SB_KEY, 'Content-Type': 'application/json' };
+    const buscar = await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(telefono)}&comercio_id=eq.${S.comercio.id}&select=id,historial_compras,medios_pago_usados,productos_frecuentes,ticket_promedio`, { headers: hdr });
+    const ex = await buscar.json();
+    if (ex?.length) {
+      const perfil = ex[0];
+      const hist = [...(perfil.historial_compras || []), entradaCompra];
+      const medios = perfil.medios_pago_usados || [];
+      if (S.iaData?.medio_pago && !medios.includes(S.iaData.medio_pago)) medios.push(S.iaData.medio_pago);
+      const prods = perfil.productos_frecuentes || [];
+      if (S.iaData?.productos_comprados) S.iaData.productos_comprados.forEach(p => { if (p.descripcion && !prods.includes(p.descripcion)) prods.push(p.descripcion); });
+      const totales = hist.map(h => h.total || 0).filter(t => t > 0);
+      const ticketPromedio = totales.length > 0 ? (totales.reduce((a, b) => a + b, 0) / totales.length).toFixed(2) : null;
+      await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${perfil.id}`, {
+        method: 'PATCH', headers: { ...hdr, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ apellido, nombre, historial_compras: hist, medios_pago_usados: medios, productos_frecuentes: prods, ticket_promedio: ticketPromedio, ultima_interaccion: ahora, updated_at: ahora })
+      });
+    } else {
+      await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
+        method: 'POST', headers: { ...hdr, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ telefono, comercio_id: S.comercio.id, apellido, nombre, etiqueta: 'nuevo', historial_compras: [entradaCompra], medios_pago_usados: S.iaData?.medio_pago ? [S.iaData.medio_pago] : [], productos_frecuentes: S.iaData?.productos_comprados ? S.iaData.productos_comprados.map(p => p.descripcion).filter(Boolean) : [], ticket_promedio: S.iaData?.total_compra ? S.iaData.total_compra.toFixed(2) : null, ultima_interaccion: ahora })
+      });
+    }
+
+    // 5. Redirigir según plan
+    document.getElementById('p3-msg').textContent = '¡Listo! Redirigiendo...';
+    const plan = S.config?.bot_plan || 'basico';
+    const slug = S.comercio.slug || S.comercio.code;
+    setTimeout(() => {
+      if (plan === 'plus' || plan === 'premium') {
+        window.location.href = `https://satisfactq.menteactiva.com.ar/comercio/chat.html?slug=${slug}`;
+      } else {
+        window.location.href = `https://menteactiva.com.ar/satisfactq-encuesta/?cliente=${slug}`;
+      }
+    }, 800);
+
+  } catch(err) {
+    console.error(err);
+    toast('Hubo un error. Intentá de nuevo.', 'error');
+    activarPaso(2);
   }
 }
 
-function mostrarError(msg){
-  document.getElementById('spinner').style.display='none';
-  document.getElementById('msg').textContent='Ocurrió un problema';
-  var e=document.getElementById('error');e.textContent=msg;e.style.display='block';
+function activarPaso(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('p' + i).classList.toggle('active', i === n);
+    const s = document.getElementById('s' + i);
+    s.className = 'step' + (i === n ? ' active' : i < n ? ' done' : '');
+    const num = s.querySelector('.step-num');
+    if (i < n) num.textContent = '✓';
+    else num.textContent = i;
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-redirigir();
+function mostrarError(msg) {
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('error-screen').style.display = 'block';
+  document.getElementById('error-msg').textContent = msg;
+}
+
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.className = 'toast', 3500);
+}
 </script>
 </body>
 </html>
