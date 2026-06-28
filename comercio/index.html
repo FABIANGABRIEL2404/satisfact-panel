@@ -711,7 +711,8 @@ async function borrarCompra(id) {
 function showPage(p) {
   document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  document.getElementById('page-' + p).classList.add('active');
+  const pg = document.getElementById('page-' + p);
+if (pg) pg.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(el => { if ((el.getAttribute('onclick') || '').includes("'" + p + "'")) { el.classList.add('active'); el.style.display = 'flex'; } });
   if (p === 'respuestas') renderRespuestas();
   if (p === 'estadisticas') renderEstadisticas();
