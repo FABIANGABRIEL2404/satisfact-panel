@@ -27,9 +27,11 @@
     .header-sub { color: rgba(255,255,255,.75); font-size: 12px; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; display: inline-block; box-shadow: 0 0 0 2px rgba(74,222,128,.3); animation: pulse-dot 2s infinite; }
     @keyframes pulse-dot { 0%,100% { box-shadow: 0 0 0 2px rgba(74,222,128,.3); } 50% { box-shadow: 0 0 0 4px rgba(74,222,128,.15); } }
-    #voz-badge { display: none; align-items: center; gap: 4px; background: rgba(255,255,255,.2); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: #fff; flex-shrink: 0; }
+    #voz-badge { display: none; align-items: center; gap: 6px; background: rgba(0,0,0,.25); border: 1.5px solid rgba(255,255,255,.4); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; cursor: pointer; min-width: 110px; justify-content: center; }
     #voz-badge.visible { display: flex; }
-    #voz-badge .voz-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+    #voz-badge:hover { background: rgba(0,0,0,.35); }
+    #voz-badge .voz-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+    #voz-badge.silenciado .voz-dot { background: #ef4444; }
     #loading-screen { position: absolute; inset: 0; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 10; transition: opacity .3s; }
     #loading-screen.hidden { opacity: 0; pointer-events: none; }
     .loading-logo { width: 56px; height: 56px; border-radius: 16px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 26px; animation: logo-bounce .8s ease-in-out infinite alternate; }
@@ -111,10 +113,10 @@
         <span id="headerSub">En línea</span>
       </div>
     </div>
-  <div id="voz-badge" onclick="toggleVoz()" style="cursor:pointer;min-width:80px;padding:6px 14px">
-  <span class="voz-dot"></span>
-  <span id="voz-label">Voz activa</span>
-</div>
+    <div id="voz-badge" onclick="toggleVoz()">
+      <span class="voz-dot"></span>
+      <span id="voz-label">Voz activa</span>
+    </div>
   </div>
   <div id="el-banner">
     <span class="el-badge">PREMIUM</span>
@@ -141,14 +143,10 @@
 (function () {
   'use strict';
 
-  // Supabase SatisfactQ — para leer comercio y config
   const SB_URL = 'https://tofnetwtlcwsaiieazsa.supabase.co';
   const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvZm5ldHd0bGN3c2FpaWVhenNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MzQzNTIsImV4cCI6MjA5MDQxMDM1Mn0.pE2vvf6FjDCVAE2UXjOU8dTKPoP-HligAnBBLsNjgYk';
-
-  // Supabase AsistenteIA — para guardar conversaciones en asis_conversaciones
   const ASIS_SB_URL = 'https://ixctqxxtzoesotniisoq.supabase.co';
   const ASIS_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4Y3RxeHh0em9lc290bmlpc29xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODIxNjYsImV4cCI6MjA5MDY1ODE2Nn0.SOTz5PSmpA7y13ATfEr73gViBkj3ujq9OBY7tcf3BTI';
-
   const ASIS_URL = 'https://www.miasistenteia.com.ar';
 
   const params      = new URLSearchParams(window.location.search);
@@ -160,67 +158,34 @@
   let asistConfig = null;
   let messages    = [];
   let isLoading   = false;
-
-  // ── Conversación en Supabase ─────────────────────────────────────────────────
-  // Genera un ID de sesión único por visita
-  let sessionId = null;
-  let convId    = null; // ID del registro en asis_conversaciones
+  let sessionId   = null;
 
   function generarSessionId() {
     return 'sq_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
   }
 
-  // Crea el registro de conversación en asis_conversaciones al primer mensaje
-  async function crearConversacion(primerMensaje) {
-  if (!config?.bot_cliente_id) return;
-  try {
-    const hdr = {
-      'apikey': ASIS_SB_KEY,
-      'Authorization': `Bearer ${ASIS_SB_KEY}`,
-      'Content-Type': 'application/json'
-    };
-    await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
-      method: 'POST',
-      headers: hdr,
-      body: JSON.stringify({
-        cliente_id: config.bot_cliente_id,
-        session_id: sessionId,
-        rol: 'user',
-        mensaje: primerMensaje,
-        fecha: new Date().toISOString()
-      })
-    });
-  } catch(e) {
-    console.warn('[SatisfactQ] No se pudo crear conversación:', e);
+  async function guardarMensajeConversacion(rol, mensaje) {
+    if (!config?.bot_cliente_id || !sessionId) return;
+    try {
+      await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
+        method: 'POST',
+        headers: {
+          'apikey': ASIS_SB_KEY,
+          'Authorization': `Bearer ${ASIS_SB_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          cliente_id: config.bot_cliente_id,
+          session_id: sessionId,
+          rol,
+          mensaje,
+          fecha: new Date().toISOString()
+        })
+      });
+    } catch(e) {
+      console.warn('[SatisfactQ] No se pudo guardar mensaje:', e);
+    }
   }
-}
-  // Actualiza el registro existente con el historial completo
-  async function actualizarConversacion() {
-  if (!config?.bot_cliente_id || !sessionId) return;
-  try {
-    const hdr = {
-      'apikey': ASIS_SB_KEY,
-      'Authorization': `Bearer ${ASIS_SB_KEY}`,
-      'Content-Type': 'application/json'
-    };
-    const ultimoMsg = messages[messages.length - 1];
-    if (!ultimoMsg) return;
-    await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
-      method: 'POST',
-      headers: hdr,
-      body: JSON.stringify({
-        cliente_id: config.bot_cliente_id,
-        session_id: sessionId,
-        rol: ultimoMsg.role === 'user' ? 'user' : 'assistant',
-        mensaje: ultimoMsg.content,
-        fecha: new Date().toISOString()
-      })
-    });
-  } catch(e) {
-    console.warn('[SatisfactQ] No se pudo actualizar conversación:', e);
-  }
-}
-  // ────────────────────────────────────────────────────────────────────────────
 
   let vozActiva  = false;
   let vozTipo    = 'robotica';
@@ -272,7 +237,6 @@
     const d1 = await r1.json();
     if (!d1 || !d1.length) { showErrorScreen('Comercio no encontrado.'); return false; }
     comercio = d1[0];
-
     const r2 = await fetch(
       `${SB_URL}/rest/v1/sq_config_comercio?comercio_id=eq.${comercio.id}&select=bot_cliente_id,voz_activa,bot_plan,bot_whatsapp,sugerencias&limit=1`,
       { headers: hdr }
@@ -315,21 +279,22 @@
     initMic();
     if (synth && synth.getVoices().length === 0) synth.addEventListener('voiceschanged', () => {}, { once: true });
   }
-function toggleVoz() {
-  vozActiva = !vozActiva;
-  const badge = document.getElementById('voz-badge');
-  const label = document.getElementById('voz-label');
-  if (vozActiva) {
-    badge.classList.add('visible');
-    label.textContent = vozTipo === 'elevenlabs' ? 'Voz premium' : 'Voz activa';
-    if (synth) synth.cancel();
-  } else {
-    label.textContent = 'Voz silenciada';
-    if (synth) synth.cancel();
+
+  function toggleVoz() {
+    vozActiva = !vozActiva;
+    const badge = document.getElementById('voz-badge');
+    const label = document.getElementById('voz-label');
+    if (vozActiva) {
+      badge.classList.remove('silenciado');
+      label.textContent = vozTipo === 'elevenlabs' ? 'Voz premium' : 'Voz activa';
+    } else {
+      badge.classList.add('silenciado');
+      label.textContent = 'Voz silenciada';
+      if (synth) synth.cancel();
+    }
   }
-}
-window.toggleVoz = toggleVoz;
-  
+  window.toggleVoz = toggleVoz;
+
   function initMic() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -369,13 +334,7 @@ window.toggleVoz = toggleVoz;
     synth.speak(utterance);
   }
 
-  function detenerVozRobotica(btnEl) {
-    if (synth) synth.cancel();
-    if (btnEl) { btnEl.textContent = '🔊'; btnEl.classList.remove('hablando'); }
-  }
-
   async function leerTextoElevenLabs(text, btnEl) {
-    // PENDIENTE: activar cuando haya API key de ElevenLabs
     leerTextoRobotico(text, btnEl);
   }
 
@@ -410,57 +369,43 @@ window.toggleVoz = toggleVoz;
         <div class="welcome-sub">Asistente de <strong>${nombre}</strong>${rubro ? ` · ${rubro}` : ''}.<br>¿En qué puedo ayudarte hoy?</div>
         <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;margin:16px 0;text-align:left">
           <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#475569">Para darte un mejor servicio (opcional)</div>
-          <input type="text" id="guest-nombre" placeholder="Tu nombre" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:8px;outline:none">
-          <input type="tel" id="guest-tel" placeholder="Tu teléfono" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;outline:none">
+          <input type="text" id="guest-nombre" placeholder="Tu nombre" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:8px;outline:none;color:#1e1e2e">
+          <input type="tel" id="guest-tel" placeholder="Tu teléfono" style="width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;outline:none;color:#1e1e2e">
         </div>
         <button style="width:100%;padding:12px;background:#6c63ff;color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="mostrarSugerencias()">Continuar →</button>
       </div>
     `;
   }
+
   async function vincularClientePerfil() {
-  const nombre = window._guestNombre || '';
-  const tel = window._guestTel || '';
-  if (!tel || !comercio?.id) return;
-  const hdr = {
-    'apikey': SB_KEY,
-    'Authorization': `Bearer ${SB_KEY}`,
-    'Content-Type': 'application/json'
-  };
-  const ahora = new Date().toISOString();
-  const buscar = await fetch(
-    `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${comercio.id}&select=id`,
-    { headers: hdr }
-  );
-  const ex = await buscar.json();
-  if (ex?.length) {
-    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${ex[0].id}`, {
-      method: 'PATCH',
-      headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ nombre: nombre.split(' ').slice(1).join(' ') || nombre, apellido: nombre.split(' ')[0], ultima_interaccion: ahora, updated_at: ahora, session_id: sessionId })
-    });
-  } else {
-    await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
-      method: 'POST',
-      headers: { ...hdr, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        telefono: tel,
-        comercio_id: comercio.id,
-        nombre: nombre.split(' ').slice(1).join(' ') || nombre,
-        apellido: nombre.split(' ')[0],
-        etiqueta: 'nuevo',
-        historial_compras: [],
-        medios_pago_usados: [],
-        productos_frecuentes: [],
-       ultima_interaccion: ahora,
-       session_id: sessionId
-      })
-    });
+    const nombre = window._guestNombre || '';
+    const tel = window._guestTel || '';
+    if (!tel || !comercio?.id) return;
+    const hdr = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
+    const ahora = new Date().toISOString();
+    const buscar = await fetch(
+      `${SB_URL}/rest/v1/sq_clientes_perfil?telefono=eq.${encodeURIComponent(tel)}&comercio_id=eq.${comercio.id}&select=id`,
+      { headers: hdr }
+    );
+    const ex = await buscar.json();
+    if (ex?.length) {
+      await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil?id=eq.${ex[0].id}`, {
+        method: 'PATCH',
+        headers: { ...hdr, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ nombre: nombre.split(' ').slice(1).join(' ') || nombre, apellido: nombre.split(' ')[0], ultima_interaccion: ahora, updated_at: ahora, session_id: sessionId })
+      });
+    } else {
+      await fetch(`${SB_URL}/rest/v1/sq_clientes_perfil`, {
+        method: 'POST',
+        headers: { ...hdr, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ telefono: tel, comercio_id: comercio.id, nombre: nombre.split(' ').slice(1).join(' ') || nombre, apellido: nombre.split(' ')[0], etiqueta: 'nuevo', historial_compras: [], medios_pago_usados: [], productos_frecuentes: [], ultima_interaccion: ahora, session_id: sessionId })
+      });
+    }
   }
-}
-  
+
   function mostrarSugerencias() {
     guardarDatosGuest();
-   setTimeout(() => vincularClientePerfil(), 500);
+    setTimeout(() => vincularClientePerfil(), 500);
     const sugs = (config?.sugerencias && config.sugerencias.length) ? config.sugerencias : ['¿Cuáles son sus horarios de atención?','¿Qué servicios ofrecen?','¿Cómo puedo contactarlos?'];
     const welcome = document.getElementById('welcome-screen');
     if (welcome) {
@@ -483,9 +428,9 @@ window.toggleVoz = toggleVoz;
     if (nombre) window._guestNombre = nombre;
     if (tel) window._guestTel = tel;
   }
-window.mostrarSugerencias = mostrarSugerencias;
-window.guardarDatosGuest = guardarDatosGuest;
-  
+  window.mostrarSugerencias = mostrarSugerencias;
+  window.guardarDatosGuest = guardarDatosGuest;
+
   function iniciarChat() {
     guardarDatosGuest();
     const welcome = document.getElementById('welcome-screen');
@@ -532,30 +477,6 @@ window.guardarDatosGuest = guardarDatosGuest;
   }
   function hideTyping() { document.getElementById('typing')?.remove(); }
 
-  async function guardarMensajeConversacion(rol, mensaje) {
-  if (!config?.bot_cliente_id || !sessionId) return;
-  try {
-    const hdr = {
-      'apikey': ASIS_SB_KEY,
-      'Authorization': `Bearer ${ASIS_SB_KEY}`,
-      'Content-Type': 'application/json'
-    };
-    await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
-      method: 'POST',
-      headers: hdr,
-      body: JSON.stringify({
-        cliente_id: config.bot_cliente_id,
-        session_id: sessionId,
-        rol,
-        mensaje,
-        fecha: new Date().toISOString()
-      })
-    });
-  } catch(e) {
-    console.warn('[SatisfactQ] No se pudo guardar mensaje:', e);
-  }
-}
-  // ── Enviar mensaje (con guardado en Supabase) ────────────────────────────────
   async function sendMessage(text) {
     if (!text?.trim() || isLoading || !asistConfig) return;
     text = text.trim();
@@ -569,6 +490,7 @@ window.guardarDatosGuest = guardarDatosGuest;
     $send.disabled = true;
     showTyping();
 
+    // Guardar mensaje del usuario siempre
     await guardarMensajeConversacion('user', text);
 
     try {
@@ -595,7 +517,7 @@ window.guardarDatosGuest = guardarDatosGuest;
         appendMsg('bot', reply);
         messages.push({ role: 'assistant', content: reply });
 
-        // Guardar historial actualizado en Supabase
+        // Guardar respuesta del bot
         await guardarMensajeConversacion('assistant', reply);
 
         if (vozActiva) {
@@ -621,7 +543,6 @@ window.guardarDatosGuest = guardarDatosGuest;
   }
 
   async function init() {
-    // Generar session ID único para esta visita
     sessionId = generarSessionId();
 
     const ok1 = await cargarComercio();
@@ -634,14 +555,15 @@ window.guardarDatosGuest = guardarDatosGuest;
 
     setupVoz();
     $loading.classList.add('hidden');
-  const urlNombre = params.get('nombre');
-const urlTel = params.get('tel');
-if (urlNombre) window._guestNombre = decodeURIComponent(urlNombre);
-if (urlTel) window._guestTel = urlTel;
-showWelcome();
-if (urlNombre && urlTel) {
-  mostrarSugerencias();
-}
+
+    const urlNombre = params.get('nombre');
+    const urlTel = params.get('tel');
+    if (urlNombre) window._guestNombre = decodeURIComponent(urlNombre);
+    if (urlTel) window._guestTel = urlTel;
+    showWelcome();
+    if (urlNombre && urlTel) {
+      mostrarSugerencias();
+    }
     setTimeout(() => $input.focus(), 400);
   }
 
