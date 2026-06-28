@@ -569,11 +569,7 @@ window.guardarDatosGuest = guardarDatosGuest;
     $send.disabled = true;
     showTyping();
 
-    // Si es el primer mensaje, crear la conversación en Supabase
-    const esPrimerMensaje = messages.length === 1;
-    if (esPrimerMensaje) {
-      await guardarMensajeConversacion('user', text);
-    }
+    await guardarMensajeConversacion('user', text);
 
     try {
       const res = await fetch(`${ASIS_URL}/api/widget-chat`, {
