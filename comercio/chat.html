@@ -196,25 +196,30 @@
 }
   // Actualiza el registro existente con el historial completo
   async function actualizarConversacion() {
-    if (!convId || !config?.bot_cliente_id) return;
-    try {
-      const hdr = {
-        'apikey': ASIS_SB_KEY,
-        'Authorization': `Bearer ${ASIS_SB_KEY}`,
-        'Content-Type': 'application/json'
-      };
-      await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones?id=eq.${convId}`, {
-        method: 'PATCH',
-        headers: hdr,
-        body: JSON.stringify({
-          mensajes:   JSON.stringify(messages),
-          updated_at: new Date().toISOString()
-        })
-      });
-    } catch(e) {
-      console.warn('[SatisfactQ] No se pudo actualizar conversación:', e);
-    }
+  if (!config?.bot_cliente_id || !sessionId) return;
+  try {
+    const hdr = {
+      'apikey': ASIS_SB_KEY,
+      'Authorization': `Bearer ${ASIS_SB_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    const ultimoMsg = messages[messages.length - 1];
+    if (!ultimoMsg) return;
+    await fetch(`${ASIS_SB_URL}/rest/v1/asis_conversaciones`, {
+      method: 'POST',
+      headers: hdr,
+      body: JSON.stringify({
+        cliente_id: config.bot_cliente_id,
+        session_id: sessionId,
+        rol: ultimoMsg.role === 'user' ? 'user' : 'assistant',
+        mensaje: ultimoMsg.content,
+        fecha: new Date().toISOString()
+      })
+    });
+  } catch(e) {
+    console.warn('[SatisfactQ] No se pudo actualizar conversación:', e);
   }
+}
   // ────────────────────────────────────────────────────────────────────────────
 
   let vozActiva  = false;
